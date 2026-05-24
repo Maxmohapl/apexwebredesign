@@ -1,0 +1,3002 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apexwebdesign — Modernizace webů a online prezentace</title>
+<link rel="icon" type="image/png" href="assets/apex-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #F1EFEA;
+    --bg-2:      #E8E4DA;
+    --surface:   #FFFFFF;
+    --ink:       #0E1217;
+    --ink-2:     #4D525A;
+    --ink-3:     #8A8E94;
+    --line:      #DCD7CC;
+    --line-2:    #C9C3B3;
+
+    --dark:      #0E1217;
+    --dark-2:    #161B22;
+    --dark-line: #232932;
+    --dark-ink:  #E9E5DA;
+    --dark-ink2: #8A8E94;
+
+    --new:       #2570B3;
+    --new-soft:  #E2EDF7;
+    --new-deep:  #18548A;
+    --old:       oklch(0.72 0.15 55);
+    --old-soft:  oklch(0.94 0.05 75);
+    --old-deep:  oklch(0.50 0.12 50);
+    --green:     oklch(0.68 0.15 145);
+
+    --r-sm: 6px;
+    --r-md: 12px;
+    --r-lg: 20px;
+
+    --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; background: var(--bg); overflow-x: hidden; }
+  html{ scroll-behavior: smooth; scroll-padding-top: 32px; }
+  body{
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  ::selection{ background: var(--new); color: #fff; }
+  a{ color: inherit; }
+  img{ max-width: 100%; display: block; }
+
+  .wrap{ max-width: 1320px; margin: 0 auto; padding: 0 32px; position: relative; }
+  @media (max-width: 720px){ .wrap{ padding: 0 18px; } }
+
+  /* ============ NAV ============ */
+  section[id]{ scroll-margin-top: 32px; }
+
+  @media (min-width: 981px){
+    body{ padding-left: 94px; }
+  }
+
+  .nav{
+    position: fixed;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    pointer-events: none;
+  }
+  .nav-shell{
+    position: relative;
+    pointer-events: auto;
+  }
+  .nav-toggle{
+    display: none;
+  }
+  .navbar{
+    width: 68px;
+    padding: 10px 8px;
+    border-radius: 34px;
+    background: #fffdf9;
+    border: 1px solid rgba(80, 72, 60, 0.18);
+    box-shadow:
+      0 14px 34px rgba(40, 32, 20, 0.10),
+      inset 0 1px 0 rgba(255,255,255,0.9);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition:
+      width .28s cubic-bezier(.18,.92,.22,1),
+      border-radius .28s cubic-bezier(.18,.92,.22,1),
+      box-shadow .24s ease;
+  }
+  .navbar:hover,
+  .navbar:focus-within{
+    width: 232px;
+    border-radius: 28px;
+    box-shadow:
+      0 18px 42px rgba(40, 32, 20, 0.13),
+      inset 0 1px 0 rgba(255,255,255,0.92);
+  }
+  .nav-item{
+    position: relative;
+    min-height: 52px;
+    border-radius: 999px;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    align-items: center;
+    color: #464B54;
+    text-decoration: none;
+    outline: none;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background .22s ease,
+      color .22s ease,
+      transform .22s cubic-bezier(.18,.92,.22,1);
+  }
+  .nav-item:hover,
+  .nav-item:focus-visible{
+    background: color-mix(in oklab, var(--new) 8%, transparent);
+    color: var(--ink);
+  }
+  .nav-item.active{
+    background: color-mix(in oklab, var(--new) 13%, #fffdf9);
+    color: var(--new);
+  }
+  .nav-item.active::before{
+    content:"";
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: #fffdf9;
+    border: 1px solid rgba(80, 72, 60, 0.16);
+    box-shadow:
+      0 8px 18px rgba(40, 32, 20, 0.10),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  .nav-icon{
+    position: relative;
+    z-index: 1;
+    width: 23px;
+    height: 23px;
+    justify-self: center;
+    stroke-width: 2.25;
+    transition: transform .22s cubic-bezier(.18,.92,.22,1);
+  }
+  .nav-item.active .nav-icon{
+    transform: scale(1.08);
+  }
+  .nav-label{
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+      opacity .2s ease,
+      transform .24s cubic-bezier(.18,.92,.22,1);
+  }
+  .navbar:hover .nav-label,
+  .navbar:focus-within .nav-label{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .nav-item:focus-visible{
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--new) 48%, transparent);
+  }
+  @media (max-width: 980px){
+    html{ scroll-padding-top: 90px; }
+    section[id]{ scroll-margin-top: 90px; }
+    .nav{
+      left: 14px;
+      top: 14px;
+      transform: none;
+    }
+    .nav-toggle{
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(80, 72, 60, 0.18);
+      background: #fffdf9;
+      color: var(--new);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow:
+        0 12px 28px rgba(40, 32, 20, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+    .nav-toggle svg{
+      width: 24px;
+      height: 24px;
+      stroke-width: 2.4;
+    }
+    .navbar{
+      position: absolute;
+      top: 62px;
+      left: 0;
+      width: min(260px, calc(100vw - 28px));
+      border-radius: 28px;
+      opacity: 0;
+      transform: translateY(-10px) scale(.98);
+      pointer-events: none;
+      transition:
+        opacity .22s ease,
+        transform .26s cubic-bezier(.18,.92,.22,1);
+    }
+    .nav.is-open .navbar{
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .nav-label{
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding: 60px 0 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before{
+    content:""; position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(14,18,23,0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  }
+  .hero-grid{
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 64px;
+    align-items: center;
+    position: relative;
+  }
+  @media (max-width: 1080px){ .hero-grid{ grid-template-columns: 1fr; gap: 56px; } }
+
+  .badge{
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--surface); color: var(--ink-2);
+    border: 1px solid var(--line); border-radius: 999px;
+  }
+  .badge .pulse{
+    width: 7px; height: 7px; border-radius: 50%; background: var(--new);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--new) 22%, transparent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
+
+  h1.hero-title{
+    font-family: var(--sans); font-weight: 800;
+    font-size: clamp(40px, 5.5vw, 76px);
+    line-height: 0.98; letter-spacing: -0.04em;
+    margin: 22px 0 16px;
+    text-wrap: balance;
+  }
+  h1.hero-title .new{ color: var(--new); }
+  h1.hero-title .strike{
+    position: relative; display: inline-block;
+    color: var(--ink-3);
+  }
+  h1.hero-title .strike::after{
+    content:""; position: absolute; left: -4%; right: -4%; top: 50%;
+    height: 6px; background: var(--old);
+    transform: rotate(-3deg);
+  }
+  .hero-sub{
+    max-width: 520px; color: var(--ink-2);
+    font-size: clamp(15.5px, 1.3vw, 18px);
+    line-height: 1.55; margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+
+  /* HERO URL input */
+  .url-form{
+    display: flex; gap: 8px; max-width: 540px; margin-bottom: 18px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 6px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .url-form:focus-within{
+    border-color: var(--new);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--new) 18%, transparent);
+  }
+  .url-form input{
+    flex: 1; border: none; outline: none; background: transparent;
+    padding: 10px 12px; font-family: var(--mono); font-size: 13.5px; color: var(--ink);
+  }
+  .url-form input::placeholder{ color: var(--ink-3); }
+  .url-form button{
+    border: none; cursor: pointer;
+    background: var(--ink); color: var(--bg);
+    padding: 10px 16px; border-radius: 10px;
+    font-family: var(--sans); font-weight: 600; font-size: 13.5px;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .url-form button:hover{ background: var(--new); color: #fff; }
+  .url-result{
+    display: none; margin-bottom: 18px;
+    padding: 12px 16px; max-width: 540px;
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--new) 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--new) 25%, var(--line));
+    color: var(--new-deep);
+    font-size: 14px;
+    align-items: flex-start; gap: 10px;
+  }
+  .url-result.show{ display: flex; }
+
+  .cta-row{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;}
+  .btn{
+    appearance: none; cursor: pointer; border: 1px solid transparent;
+    padding: 14px 22px; border-radius: 999px;
+    font-family: var(--sans); font-weight: 600; font-size: 14.5px;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: transform .2s, background .2s, color .2s, border-color .2s;
+    text-decoration: none;
+  }
+  .btn .arrow{ transition: transform .2s; }
+  .btn:hover .arrow{ transform: translateX(3px); }
+  .btn-primary{ background: var(--ink); color: var(--bg); }
+  .btn-primary:hover{ transform: translateY(-1px); background: var(--new); color: #fff;}
+  .btn-secondary{ background: var(--surface); color: var(--ink); border-color: var(--line-2); }
+  .btn-secondary:hover{ border-color: var(--ink); transform: translateY(-1px); }
+  .btn-on-dark{ background: var(--new); color: #fff;}
+  .btn-on-dark:hover{ transform: translateY(-1px); background: color-mix(in oklab, var(--new) 88%, white);}
+  .btn-ghost-dark{ background: transparent; color: var(--dark-ink); border-color: var(--dark-line);}
+  .btn-ghost-dark:hover{ border-color: var(--dark-ink); }
+
+  .hero-note{
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .hero-note::before{ content:""; width: 14px; height: 1px; background: var(--ink-3);}
+
+  /* ===== HERO TRANSFORMATION VISUAL ===== */
+  .transformer{
+    position: relative;
+    padding: 0;
+  }
+  .upgrade-bar{
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 14px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px; margin-bottom: 24px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em;
+    color: var(--ink-3);
+  }
+  .upgrade-bar .year-old{ color: var(--old-deep); font-weight: 600; }
+  .upgrade-bar .year-new{ color: var(--new-deep); font-weight: 600; }
+  .upgrade-bar .track{
+    position: relative; height: 4px; background: var(--line);
+    border-radius: 2px; overflow: hidden;
+  }
+  .upgrade-bar .track::before{
+    content:""; position: absolute; left: 0; top: 0; height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, var(--old) 0%, var(--new) 100%);
+    transform-origin: left;
+    animation: fill 2.8s cubic-bezier(.2,.7,.2,1) .3s both;
+  }
+  @keyframes fill{ from{ transform: scaleX(0);} to{ transform: scaleX(1);} }
+
+  .browsers{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 24px;
+    align-items: end;
+  }
+  @media (max-width: 560px){ .browsers{ grid-template-columns: 1fr; gap: 18px; } }
+
+  .browser{
+    background: var(--surface);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: 0 24px 50px -28px rgba(20,16,8,0.30), 0 4px 12px -8px rgba(20,16,8,0.08);
+    border: 1px solid var(--line);
+    position: relative;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .browser-old{
+    transform: translateY(18px) rotate(-2deg);
+    filter: saturate(.5) brightness(.96);
+  }
+  .browser-old:hover{ transform: translateY(10px) rotate(-2deg); }
+  .browser-new:hover{ transform: translateY(-6px); }
+  .browser-new{ z-index: 2;}
+
+  .browser-bar{
+    background: var(--bg-2);
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .browser-old .browser-bar{ background: #D7CFBF; }
+  .browser-bar .dots{ display:inline-flex; gap: 5px; }
+  .browser-bar .dots i{ width: 9px; height: 9px; border-radius: 50%; background: #BFB7A6; display: inline-block;}
+  .browser-bar .url{
+    flex: 1; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 4px 10px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
+  }
+  .year-tag{
+    position: absolute; top: -10px; left: 16px; z-index: 3;
+    font-family: var(--mono); font-weight: 600; font-size: 11px;
+    padding: 4px 10px; border-radius: 999px; letter-spacing: 0.08em;
+    background: var(--surface); border: 1px solid var(--line);
+  }
+  .browser-old .year-tag{ background: var(--old); color: #fff; border-color: var(--old);}
+  .browser-new .year-tag{ background: var(--new); color: #fff; border-color: var(--new);}
+
+  /* OLD browser content */
+  .old-content{
+    padding: 14px;
+    background: #ECE6D6;
+    color: #4A4232;
+    min-height: 220px;
+  }
+  .old-content .old-h{
+    font-family: "Times New Roman", serif;
+    font-size: 14px; font-weight: 700;
+    color: #6B5640;
+    margin-bottom: 6px;
+    text-align: center;
+    text-decoration: underline;
+  }
+  .old-content .old-marquee{
+    font-family: "Times New Roman", serif; font-style: italic;
+    font-size: 10px; color: #2A6CC9;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .old-content .old-layout{
+    display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px;
+  }
+  .old-content .old-sidebar{
+    background: #D9CFB7; border: 1px solid #BBB094;
+    padding: 6px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .old-content .old-sidebar i{
+    height: 8px; background: #B5A88C; border-radius: 1px;
+    font-family: "Times New Roman", serif; font-size: 8px;
+  }
+  .old-content .old-sidebar i:first-child{ width: 70%; background: #8E7E61;}
+  .old-content .old-main{
+    background: #F5EFDD; border: 1px solid #C9BD9E;
+    padding: 8px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .old-content .old-main b{
+    font-family: "Times New Roman", serif; font-size: 10px;
+    color: #2A6CC9; text-decoration: underline; font-weight: 400;
+  }
+  .old-content .old-main p{
+    font-family: "Times New Roman", serif; font-size: 9px; color: #4A4232;
+    margin: 0; line-height: 1.3;
+  }
+  .old-content .old-btn{
+    margin-top: 4px;
+    background: linear-gradient(180deg, #FFEAB0 0%, #C8A14A 100%);
+    border: 1px outset #8E6B1F;
+    color: #3F2E0B; font-family: Arial, sans-serif; font-weight: 700;
+    font-size: 9px; padding: 3px 10px;
+    width: max-content; border-radius: 2px;
+    text-shadow: 0 1px 0 rgba(255,255,255,.4);
+  }
+  .old-content .old-bottom{
+    margin-top: 8px; padding-top: 6px; border-top: 1px dotted #BBB094;
+    font-family: "Times New Roman", serif; font-size: 8px;
+    color: #6B5640; text-align: center;
+  }
+
+  /* NEW browser content */
+  .new-content{
+    padding: 18px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F7F6F2 100%);
+    min-height: 260px;
+    display: flex; flex-direction: column;
+    gap: 10px;
+  }
+  .new-content .nc-nav{
+    display: flex; align-items: center; gap: 12px;
+  }
+  .new-content .nc-logo{
+    width: 22px; height: 22px;
+    background: transparent;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .new-content .nc-logo img{ width: 100%; height: 100%; object-fit: contain;}
+  .new-content .nc-name{ font-weight: 700; font-size: 12px; letter-spacing: -0.015em;}
+  .new-content .nc-items{ display: flex; gap: 12px; margin-left: auto; font-size: 10px; color: var(--ink-2);}
+  .new-content .nc-cta{
+    background: var(--ink); color: var(--bg);
+    font-size: 10px; padding: 4px 9px; border-radius: 999px;
+    margin-left: 4px;
+  }
+  .new-content .nc-hero{
+    margin-top: 6px;
+  }
+  .new-content .nc-eyebrow{
+    font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.1em;
+    color: var(--new); text-transform: uppercase;
+  }
+  .new-content .nc-h{
+    font-size: 18px; font-weight: 700; letter-spacing: -0.02em;
+    line-height: 1.05; margin: 5px 0 6px;
+  }
+  .new-content .nc-h em{ font-style: normal; color: var(--new);}
+  .new-content .nc-p{
+    font-size: 10px; color: var(--ink-2); margin: 0; line-height: 1.45;
+    max-width: 80%;
+  }
+  .new-content .nc-buttons{
+    display: flex; gap: 6px; margin-top: 8px;
+  }
+  .new-content .nc-buttons .pbtn{
+    background: var(--ink); color: var(--bg); font-size: 9.5px; font-weight: 600;
+    padding: 5px 10px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .new-content .nc-buttons .sbtn{
+    background: var(--surface); color: var(--ink); font-size: 9.5px; font-weight: 600;
+    padding: 5px 10px; border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  .new-content .nc-cards{
+    margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;
+  }
+  .new-content .nc-cards i{
+    height: 28px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .new-content .nc-cards i:first-child{ background: var(--new-soft); border-color: color-mix(in oklab, var(--new) 30%, var(--line));}
+
+  /* mobile mockup floating on right of new browser */
+  .mobile-mock{
+    position: absolute; right: -22px; bottom: -28px;
+    width: 78px; height: 150px;
+    background: var(--ink); border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 18px 30px -14px rgba(0,0,0,0.35);
+    z-index: 4;
+    transform: rotate(6deg);
+  }
+  .mobile-mock .screen{
+    width: 100%; height: 100%; border-radius: 9px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F7F6F2 100%);
+    padding: 8px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .mobile-mock .screen .mh{ height: 7px; background: var(--ink); border-radius: 2px; width: 70%;}
+  .mobile-mock .screen .ml{ height: 4px; background: var(--ink-3); opacity: .3; border-radius: 2px;}
+  .mobile-mock .screen .ml:nth-child(3){ width: 90%; }
+  .mobile-mock .screen .ml:nth-child(4){ width: 70%; }
+  .mobile-mock .screen .mbtn{ margin-top: 4px; height: 11px; background: var(--new); border-radius: 4px;}
+  .mobile-mock .screen .mcards{ display: flex; flex-direction: column; gap: 3px; margin-top: auto;}
+  .mobile-mock .screen .mcards i{ height: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px;}
+  @media (max-width: 560px){ .mobile-mock{ display: none; } }
+
+  /* floating status tags around transformer */
+  .status-tags{
+    position: absolute; inset: 0; pointer-events: none; z-index: 5;
+  }
+  .stag{
+    position: absolute;
+    background: var(--surface); border: 1px solid var(--line);
+    box-shadow: 0 6px 16px -8px rgba(0,0,0,0.18);
+    border-radius: 999px;
+    padding: 6px 12px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 500;
+    color: var(--ink);
+    opacity: 0; transform: translateY(8px) scale(.92);
+    animation: stagIn .5s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes stagIn{ to{ opacity: 1; transform: translateY(0) scale(1);} }
+  .stag svg{ color: var(--new); }
+  .stag.s1{ top: -8%; left: 18%; animation-delay: 1.3s; }
+  .stag.s2{ top: 8%; right: -2%; animation-delay: 1.6s; }
+  .stag.s3{ bottom: 8%; right: 28%; animation-delay: 1.9s; }
+  .stag.s4{ bottom: 22%; left: -4%; animation-delay: 2.2s; }
+  .stag.s5{ top: 42%; left: -8%; animation-delay: 2.5s; }
+  @media (max-width: 1080px){
+    .stag.s1{ top: -16px; left: 14%; }
+    .stag.s4{ bottom: 6%; }
+  }
+  @media (max-width: 560px){ .status-tags{ display: none; } }
+
+  /* ============ SECTIONS ============ */
+  section.block{
+    padding: 120px 0; border-top: 1px solid var(--line); position: relative;
+  }
+  @media (max-width: 720px){ section.block{ padding: 80px 0; } }
+  section.block.dark{
+    background: var(--dark); color: var(--dark-ink); border-color: transparent;
+  }
+
+  .section-head{
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: end;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 880px){ .section-head{ grid-template-columns: 1fr; gap: 18px; } }
+  .section-eyebrow{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    color: var(--new); text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .section-eyebrow::before{ content:""; width: 18px; height: 1px; background: var(--new);}
+  .dark .section-eyebrow{ color: color-mix(in oklab, var(--new) 80%, white);}
+  h2.section-title{
+    font-weight: 800; font-size: clamp(34px, 4.2vw, 56px);
+    line-height: 1.02; letter-spacing: -0.035em;
+    margin: 14px 0 0; text-wrap: balance;
+  }
+  .section-sub{
+    color: var(--ink-2); font-size: clamp(15.5px, 1.3vw, 17.5px);
+    margin: 0; max-width: 540px; text-wrap: pretty;
+  }
+  .dark .section-sub{ color: var(--dark-ink2); }
+
+  /* ============ WHO IS THIS FOR (3 cards) ============ */
+  .who-grid{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  @media (max-width: 980px){ .who-grid{ grid-template-columns: 1fr; } }
+
+  .who-card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 30px;
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative; overflow: hidden;
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s;
+  }
+  .who-card:hover{
+    transform: translateY(-5px);
+    border-color: var(--ink);
+    box-shadow: 0 28px 50px -32px rgba(14,18,23,0.28);
+  }
+  .who-icon{
+    width: 56px; height: 56px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    display: grid; place-items: center;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .who-card.feature .who-icon{ background: var(--new); border-color: var(--new); color: #fff; }
+  .who-num{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--ink-3); text-transform: uppercase;
+  }
+  .who-h{
+    font-weight: 700; font-size: 26px; line-height: 1.1; letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .who-p{ color: var(--ink-2); font-size: 15px; margin: 0;}
+
+  /* ============ BEFORE / AFTER SLIDER ============ */
+  .ba-slider-wrap{
+    display: grid;
+    gap: 18px;
+  }
+  .ba-slider{
+    --split: 50%;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    min-height: 420px;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 34px 70px -46px rgba(14,18,23,.34);
+    user-select: none;
+    cursor: ew-resize;
+  }
+  .ba-slider img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    pointer-events: none;
+  }
+  .ba-after{
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+  }
+  .ba-scrim{
+    position: absolute;
+    inset: auto 0 0;
+    height: 30%;
+    background: linear-gradient(180deg, transparent, rgba(14,18,23,.18));
+    pointer-events: none;
+  }
+  .ba-chip{
+    position: absolute;
+    bottom: 18px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 13px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(235,238,242,.88);
+    color: var(--ink);
+    border: 1px solid rgba(102,111,124,.18);
+    box-shadow: 0 12px 26px -18px rgba(14,18,23,.36);
+    backdrop-filter: blur(10px);
+  }
+  .ba-chip.before{
+    right: 18px;
+  }
+  .ba-chip.after{
+    left: 18px;
+    color: var(--new);
+  }
+  .ba-divider{
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    bottom: 0;
+    left: var(--split);
+    width: 2px;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 0 0 1px rgba(14,18,23,.18);
+    pointer-events: none;
+  }
+  .ba-handle{
+    position: absolute;
+    left: var(--split);
+    top: 50%;
+    z-index: 5;
+    width: 58px;
+    height: 58px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid rgba(80,72,60,.18);
+    box-shadow:
+      0 16px 28px -18px rgba(14,18,23,.42),
+      inset 0 1px 0 rgba(255,255,255,.92);
+    display: grid;
+    place-items: center;
+    color: var(--new);
+    pointer-events: none;
+  }
+  .ba-handle::before,
+  .ba-handle::after{
+    content:"";
+    width: 9px;
+    height: 9px;
+    border-top: 2px solid currentColor;
+    border-left: 2px solid currentColor;
+    position: absolute;
+  }
+  .ba-handle::before{
+    transform: translateX(-7px) rotate(-45deg);
+  }
+  .ba-handle::after{
+    transform: translateX(7px) rotate(135deg);
+  }
+  .ba-range{
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    appearance: none;
+    background: transparent;
+    touch-action: none;
+  }
+  .ba-range::-webkit-slider-runnable-track{
+    height: 100%;
+    background: transparent;
+  }
+  .ba-range::-webkit-slider-thumb{
+    appearance: none;
+    width: 58px;
+    height: 100%;
+    background: transparent;
+  }
+  .ba-range::-moz-range-track{
+    height: 100%;
+    background: transparent;
+    border: 0;
+  }
+  .ba-range::-moz-range-thumb{
+    width: 58px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+  }
+  .ba-caption{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .ba-caption span{
+    min-height: 64px;
+    padding: 15px 16px;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    font-size: 14.5px;
+  }
+  .ba-caption b{
+    display: block;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .mobile-demo{
+    margin-top: clamp(38px, 6vw, 76px);
+    display: grid;
+    grid-template-columns: minmax(260px, .82fr) minmax(0, 1.65fr);
+    gap: clamp(30px, 5vw, 64px);
+    align-items: center;
+    padding: clamp(24px, 4vw, 46px);
+    border-radius: var(--r-lg);
+    background: color-mix(in oklab, var(--surface) 88%, var(--bg));
+    border: 1px solid var(--line);
+    box-shadow: 0 34px 70px -56px rgba(14,18,23,.36);
+  }
+  .device-showcase{
+    display: grid;
+    gap: 18px;
+    justify-items: center;
+  }
+  .device-toggle{
+    display: inline-flex;
+    gap: 8px;
+    padding: 7px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 36px -30px rgba(14,18,23,.34);
+  }
+  .device-toggle button{
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background .25s, color .25s, transform .25s, box-shadow .25s;
+  }
+  .device-toggle button:hover{
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .device-toggle button.is-active{
+    background: var(--new);
+    color: #fff;
+    box-shadow: 0 14px 28px -18px rgba(35,115,181,.7);
+  }
+  .device-toggle svg{
+    width: 23px;
+    height: 23px;
+  }
+  .device-stage{
+    width: 100%;
+    display: grid;
+    place-items: center;
+    min-height: 520px;
+    position: relative;
+  }
+  .device-panel{
+    grid-area: 1 / 1;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(.985);
+    pointer-events: none;
+    transition: opacity .28s ease, transform .28s ease, visibility .28s;
+  }
+  .device-panel.is-active{
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+  .phone-shell{
+    position: relative;
+    justify-self: center;
+    width: min(318px, 100%);
+    padding: 12px;
+    border-radius: 42px;
+    background: #111821;
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow:
+      0 28px 60px -34px rgba(14,18,23,.58),
+      inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .phone-shell::before{
+    content:"";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 82px;
+    height: 7px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: rgba(255,255,255,.22);
+    z-index: 2;
+  }
+  .phone-screen{
+    height: min(640px, 70vh);
+    min-height: 500px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 31px;
+    background: linear-gradient(180deg, #f3439c 0 50%, #fff 50% 100%);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(35,115,181,.55) transparent;
+    outline: none;
+  }
+  .phone-screen:focus-visible{
+    box-shadow: 0 0 0 3px rgba(35,115,181,.22);
+  }
+  .phone-screen::-webkit-scrollbar{ width: 6px; }
+  .phone-screen::-webkit-scrollbar-track{ background: transparent; }
+  .phone-screen::-webkit-scrollbar-thumb{
+    border-radius: 999px;
+    background: rgba(35,115,181,.55);
+  }
+  .phone-screen img{
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .device-showcase .phone-shell{
+    width: min(252px, 100%);
+    border-radius: 34px;
+    padding: 9px;
+  }
+  .device-showcase .phone-shell::before{
+    top: 8px;
+    width: 62px;
+    height: 5px;
+  }
+  .device-showcase .phone-screen{
+    height: 500px;
+    min-height: 0;
+    border-radius: 25px;
+  }
+  .laptop-shell{
+    position: relative;
+    width: min(680px, 100%);
+    min-width: 0;
+  }
+  .laptop-frame{
+    position: relative;
+    padding: 12px;
+    border-radius: 24px 24px 15px 15px;
+    background: #111821;
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow:
+      0 26px 58px -36px rgba(14,18,23,.58),
+      inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .laptop-frame::before{
+    content:"";
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: rgba(255,255,255,.24);
+    z-index: 2;
+  }
+  .laptop-screen{
+    aspect-ratio: 16 / 10;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 13px;
+    background: linear-gradient(180deg, #f3439c 0 50%, #fff 50% 100%);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(35,115,181,.55) transparent;
+    outline: none;
+  }
+  .laptop-screen:focus-visible{
+    box-shadow: 0 0 0 3px rgba(35,115,181,.22);
+  }
+  .laptop-screen::-webkit-scrollbar{ width: 7px; }
+  .laptop-screen::-webkit-scrollbar-track{ background: transparent; }
+  .laptop-screen::-webkit-scrollbar-thumb{
+    border-radius: 999px;
+    background: rgba(35,115,181,.55);
+  }
+  .laptop-screen img{
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .laptop-base{
+    width: 108%;
+    height: 18px;
+    margin: 0 0 0 -4%;
+    border-radius: 0 0 24px 24px;
+    background: linear-gradient(180deg, #dfe5ec, #aeb8c5);
+    box-shadow: 0 18px 26px -24px rgba(14,18,23,.55);
+  }
+  .mobile-demo-copy{
+    max-width: 560px;
+  }
+  .mobile-demo-copy h3{
+    margin: 14px 0 18px;
+    font-size: clamp(32px, 4vw, 54px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+  .mobile-demo-copy p{
+    margin: 0;
+    color: var(--ink-2);
+    font-size: clamp(15.5px, 1.25vw, 17px);
+    max-width: 520px;
+  }
+  .phone-hint{
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px 11px 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: 0 16px 34px -28px rgba(14,18,23,.32);
+  }
+  .phone-hint svg{
+    width: 22px;
+    height: 22px;
+    color: var(--new);
+    flex: 0 0 auto;
+  }
+  .device-sync{
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .device-pill,
+  .device-arrow{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 16px 34px -28px rgba(14,18,23,.32);
+  }
+  .device-pill{
+    gap: 10px;
+    padding: 10px 14px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .device-arrow{
+    width: 44px;
+    color: var(--new);
+  }
+  .device-pill svg,
+  .device-arrow svg{
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+  }
+  @media (max-width: 880px){
+    .ba-slider{ min-height: 320px; aspect-ratio: 4 / 3; }
+    .ba-caption{ grid-template-columns: 1fr; }
+    .mobile-demo{
+      grid-template-columns: 1fr;
+      text-align: center;
+      justify-items: center;
+    }
+    .mobile-demo-copy{
+      order: -1;
+    }
+    .mobile-demo-copy p{
+      margin-inline: auto;
+    }
+    .phone-hint{
+      margin-inline: auto;
+    }
+    .device-showcase{
+      width: 100%;
+    }
+    .laptop-shell{
+      width: 100%;
+    }
+    .device-sync{
+      justify-content: center;
+    }
+  }
+  @media (max-width: 540px){
+    .ba-slider{ min-height: 260px; border-radius: var(--r-md); }
+    .ba-chip{ bottom: 12px; font-size: 9.5px; padding: 6px 9px; }
+    .ba-chip.before{ right: 12px; }
+    .ba-chip.after{ left: 12px; }
+    .ba-handle{ width: 48px; height: 48px; }
+    .mobile-demo{
+      padding: 22px 16px 26px;
+      border-radius: var(--r-md);
+    }
+    .phone-shell{
+      width: min(286px, 100%);
+      border-radius: 38px;
+      padding: 10px;
+    }
+    .phone-screen{
+      min-height: 430px;
+      height: 58vh;
+      border-radius: 28px;
+    }
+    .device-showcase .phone-screen{
+      min-height: 0;
+      height: 460px;
+      border-radius: 25px;
+    }
+    .device-stage{
+      min-height: 520px;
+    }
+    .laptop-frame{
+      padding: 9px;
+      border-radius: 18px 18px 12px 12px;
+    }
+    .laptop-screen{
+      border-radius: 10px;
+    }
+    .laptop-base{
+      height: 14px;
+    }
+  }
+
+  /* ============ SERVICES ============ */
+  .svc-grid{
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--dark-line);
+    border: 1px solid var(--dark-line);
+    border-radius: var(--r-md); overflow: hidden;
+  }
+  @media (max-width: 980px){ .svc-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px){ .svc-grid{ grid-template-columns: 1fr; } }
+  .svc{
+    background: var(--dark);
+    padding: 28px 24px 30px;
+    display: flex; flex-direction: column;
+    min-height: 200px;
+    transition: background .25s, transform .25s;
+    cursor: default;
+    position: relative;
+  }
+  .svc:hover{ background: var(--dark-2); }
+  .svc-num{
+    font-family: var(--mono); font-size: 11px; color: var(--dark-ink2);
+    margin-bottom: 16px; letter-spacing: 0.04em;
+  }
+  .svc-icon{
+    width: 38px; height: 38px; border-radius: var(--r-sm);
+    background: color-mix(in oklab, var(--new) 18%, transparent);
+    color: var(--new);
+    display: grid; place-items: center;
+    margin-bottom: 14px;
+  }
+  .svc h4{
+    font-weight: 700; font-size: 19px; letter-spacing: -0.015em;
+    line-height: 1.2; margin: 0 0 8px; color: var(--dark-ink);
+  }
+  .svc p{ color: var(--dark-ink2); font-size: 14px; margin: 0; line-height: 1.5;}
+
+  /* ============ SEO MAP + PROFILE ============ */
+  .seo-grid{
+    display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; align-items: start;
+  }
+  @media (max-width: 1000px){ .seo-grid{ grid-template-columns: 1fr; gap: 48px;} }
+
+  .seo-list{ list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  @media (max-width: 540px){ .seo-list{ grid-template-columns: 1fr; } }
+  .seo-list li{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 500;
+    transition: border-color .2s, background .2s;
+  }
+  .seo-list li:hover{ border-color: var(--new); background: var(--new-soft);}
+  .seo-list .ic{
+    width: 22px; height: 22px; flex-shrink: 0;
+    background: var(--new); color: #fff; border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .seo-cta{ margin-top: 32px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;}
+  .seo-cta .helper{ font-family: var(--mono); font-size: 12px; color: var(--ink-3);}
+
+  /* presence map */
+  .presence{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: 0 28px 50px -36px rgba(20,16,8,0.22);
+  }
+  .presence-head{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-3); text-transform: uppercase;
+  }
+  .presence-head .dot{ width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); display: inline-block; margin-right: 6px;}
+
+  .presence-graph{
+    position: relative;
+    height: 320px;
+    margin: 16px 0;
+  }
+  .pg-svg{ position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;}
+  .pg-svg line{ stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 4 5; animation: dash 8s linear infinite;}
+  @keyframes dash{ to{ stroke-dashoffset: -200; }}
+  .pg-node{
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; gap: 7px;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    transition: border-color .2s, background .2s, color .2s;
+  }
+  .pg-node:hover{ border-color: var(--new); color: var(--new-deep); background: var(--new-soft);}
+  .pg-node .dot{ width: 6px; height: 6px; border-radius: 50%; background: var(--new);}
+  .pg-node.center{
+    background: var(--ink); color: var(--bg); border-color: var(--ink);
+    font-weight: 700; padding: 10px 16px; font-size: 13px;
+  }
+  .pg-node.center .dot{ background: var(--new); box-shadow: 0 0 8px var(--new);}
+
+  /* profile preview card under graph */
+  .profile-prev{
+    border-top: 1px solid var(--line);
+    padding: 18px 20px 20px;
+    background: var(--bg);
+  }
+  .pp-head{
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .pp-logo{
+    width: 48px; height: 48px; border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    padding: 5px;
+    flex-shrink: 0;
+  }
+  .pp-logo img{ width: 100%; height: 100%; object-fit: contain;}
+  .pp-name{ font-weight: 700; font-size: 15.5px; letter-spacing: -0.01em; margin: 0;}
+  .pp-cat{ font-size: 12.5px; color: var(--ink-3); margin: 2px 0 6px;}
+  .pp-rate{ display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-2);}
+  .pp-stars{ color: oklch(0.78 0.16 75); display: inline-flex;}
+  .pp-info{
+    margin-top: 14px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .pp-info .row{
+    background: var(--surface); border: 1px solid var(--line);
+    padding: 8px 10px; border-radius: 6px;
+    display: flex; gap: 8px; align-items: center;
+    font-size: 12px; color: var(--ink);
+  }
+  .pp-info .row svg{ color: var(--new); flex-shrink: 0;}
+  .pp-info .row b{ font-weight: 500;}
+  .pp-info .row span{ display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3);}
+
+  /* ============ EXAMPLES ============ */
+  .ex-grid{
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+  }
+  @media (max-width: 880px){ .ex-grid{ grid-template-columns: 1fr; } }
+
+  .ex-card{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s;
+  }
+  .ex-card:hover{
+    transform: translateY(-4px);
+    border-color: var(--ink);
+    box-shadow: 0 30px 60px -36px rgba(14,18,23,0.28);
+  }
+  .ex-visual{
+    position: relative; height: 220px;
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 22px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: center;
+  }
+  .ex-visual .mini-old, .ex-visual .mini-new{
+    background: var(--surface); border-radius: 6px; overflow: hidden;
+    box-shadow: 0 8px 16px -10px rgba(0,0,0,0.2);
+    height: 140px;
+    display: flex; flex-direction: column;
+  }
+  .ex-visual .mini-old{
+    filter: saturate(.4) brightness(.95);
+    transform: rotate(-2deg);
+    border: 1px solid var(--line);
+  }
+  .ex-visual .mini-old .bar{ background: #D7CFBF; height: 14px; }
+  .ex-visual .mini-old .body{ flex: 1; background: #ECE6D6; padding: 6px; display: flex; flex-direction: column; gap: 3px;}
+  .ex-visual .mini-old .body i{ height: 5px; background: #B5A88C; border-radius: 1px; }
+  .ex-visual .mini-old .body i:first-child{ width: 60%; height: 7px; background: #6B5640;}
+  .ex-visual .mini-old .body i:nth-child(2){ width: 80%; }
+  .ex-visual .mini-old .body i:nth-child(3){ width: 70%; }
+  .ex-visual .mini-old .body i:last-child{ width: 40px; background: linear-gradient(180deg, #FFEAB0, #C8A14A); height: 10px; margin-top: 4px;}
+  .ex-visual .mini-new .bar{ background: var(--bg-2); height: 14px;}
+  .ex-visual .mini-new .body{ flex: 1; padding: 7px; display: flex; flex-direction: column; gap: 4px;}
+  .ex-visual .mini-new .body i{ height: 4px; background: var(--line); border-radius: 2px;}
+  .ex-visual .mini-new .body i:first-child{ width: 65%; height: 7px; background: var(--ink);}
+  .ex-visual .mini-new .body i:nth-child(2){ width: 85%;}
+  .ex-visual .mini-new .body i:nth-child(3){ width: 65%;}
+  .ex-visual .mini-new .body i:last-child{
+    width: 55px; height: 12px; background: var(--new); border-radius: 999px; margin-top: 4px;
+  }
+  .ex-arrow{
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--ink); color: var(--bg);
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+  .ex-body{
+    padding: 26px 28px 28px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .ex-num{ font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--new); text-transform: uppercase;}
+  .ex-title{ font-weight: 700; font-size: 23px; line-height: 1.15; letter-spacing: -0.02em; margin: 0;}
+  .ex-rows{ display: grid; gap: 10px; margin-top: 4px;}
+  .ex-row{
+    display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: baseline;
+    border-top: 1px solid var(--line); padding-top: 10px;
+  }
+  .ex-row .k{ font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); text-transform: uppercase;}
+  .ex-row .v{ font-size: 14.5px; color: var(--ink);}
+  .ex-tags{ display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;}
+  .ex-tags i{
+    font-family: var(--mono); font-size: 11px; padding: 3px 9px;
+    background: var(--bg); color: var(--ink-2); border-radius: 999px; border: 1px solid var(--line);
+  }
+
+  /* ============ PRICING ============ */
+  .pricing{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px){ .pricing{ grid-template-columns: 1fr;} }
+  .price{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 32px;
+    display: flex; flex-direction: column;
+    position: relative;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .price:hover{ transform: translateY(-4px); border-color: var(--ink-3); box-shadow: 0 26px 50px -36px rgba(14,18,23,0.22);}
+  .price.featured{
+    background: var(--ink); color: var(--dark-ink); border-color: var(--ink);
+    transform: translateY(-14px);
+    box-shadow: 0 38px 70px -34px rgba(14,18,23,0.45);
+  }
+  .price.featured:hover{ transform: translateY(-18px); }
+  @media (max-width: 980px){
+    .price.featured, .price.featured:hover{ transform: none; }
+  }
+  .price-badge{
+    position: absolute; top: -12px; left: 24px;
+    background: var(--new); color: #fff;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; font-weight: 600;
+    padding: 5px 12px; border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .price-label{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+    color: var(--ink-3); text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--bg); border: 1px solid var(--line);
+    margin-bottom: 18px; width: max-content;
+  }
+  .price.featured .price-label{
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.14);
+    color: var(--dark-ink2);
+  }
+  .price-name{
+    font-family: var(--sans); font-weight: 700;
+    font-size: 26px; letter-spacing: -0.02em; line-height: 1.05;
+    margin: 0 0 14px;
+    color: var(--ink); text-transform: none;
+  }
+  .price.featured .price-name{ color: var(--dark-ink);}
+  .price-amount{
+    font-weight: 800; font-size: 40px; letter-spacing: -0.03em; line-height: 1;
+    margin: 0 0 16px;
+  }
+  .price-amount .prefix{ font-family: var(--mono); font-size: 13px; color: var(--ink-3); font-weight: 500; margin-right: 8px;}
+  .price.featured .price-amount .prefix{ color: var(--dark-ink2); }
+  .price-amount .currency{ font-family: var(--mono); font-size: 18px; color: var(--ink-2); font-weight: 500;}
+  .price.featured .price-amount .currency{ color: var(--dark-ink2);}
+  .price-best{
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    font-size: 13.5px; color: var(--ink-2);
+    margin: 0 0 22px;
+    line-height: 1.45;
+  }
+  .price.featured .price-best{
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.10);
+    color: var(--dark-ink2);
+  }
+  .price-list{ list-style: none; padding: 0; margin: 0 0 26px; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px;}
+  .price-list li{ display: flex; gap: 10px; align-items: flex-start;}
+  .price-list .ic{ color: var(--new); flex-shrink: 0; margin-top: 3px;}
+  .price.featured .price-list .ic{ color: color-mix(in oklab, var(--new) 75%, white); }
+  .price .btn{ margin-top: auto; justify-content: center;}
+  .price-note{
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    margin-top: 12px; text-align: center; letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+  .price.featured .price-note{ color: var(--dark-ink2);}
+
+  /* Custom / e-shop block */
+  .custom{
+    margin-top: 40px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    position: relative;
+    display: grid; grid-template-columns: 1fr 1.15fr;
+    transition: border-color .25s, transform .25s, box-shadow .25s;
+  }
+  .custom:hover{ border-color: var(--ink-3); transform: translateY(-3px); box-shadow: 0 28px 50px -36px rgba(14,18,23,0.22);}
+  @media (max-width: 880px){ .custom{ grid-template-columns: 1fr; } }
+  .custom-left{
+    background: var(--ink); color: var(--dark-ink);
+    padding: 40px 38px;
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative; overflow: hidden;
+  }
+  .custom-left::before{
+    content:""; position: absolute; top: -120px; right: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--new) 0%, transparent 60%);
+    opacity: .25; pointer-events: none;
+  }
+  .custom-left > *{ position: relative; z-index: 1;}
+  .custom-label{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+    color: var(--dark-ink2); text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+    width: max-content;
+  }
+  .custom-left h3{
+    font-weight: 800; font-size: clamp(26px, 2.6vw, 34px);
+    letter-spacing: -0.025em; line-height: 1.05;
+    margin: 0;
+  }
+  .custom-left p{
+    color: var(--dark-ink2); font-size: 15px; margin: 0;
+    max-width: 400px;
+  }
+  .custom-amount{
+    font-weight: 800; font-size: 36px; letter-spacing: -0.03em; line-height: 1;
+    margin-top: 6px;
+  }
+  .custom-amount .prefix{ font-family: var(--mono); font-size: 13px; color: var(--dark-ink2); font-weight: 500; margin-right: 8px;}
+  .custom-amount .currency{ font-family: var(--mono); font-size: 16px; color: var(--dark-ink2); font-weight: 500;}
+  .custom-cta{ margin-top: 8px; width: max-content;}
+  .custom-right{
+    padding: 40px 38px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .custom-right h4{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--ink-3); text-transform: uppercase;
+    margin: 0;
+  }
+  .custom-list{
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px;
+    font-size: 14px;
+  }
+  @media (max-width: 540px){ .custom-list{ grid-template-columns: 1fr;} }
+  .custom-list li{ display: flex; gap: 10px; align-items: flex-start;}
+  .custom-list .ic{ color: var(--new); flex-shrink: 0; margin-top: 3px;}
+
+  .pricing-note{
+    margin-top: 28px; padding-top: 22px;
+    border-top: 1px dashed var(--line);
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+    letter-spacing: 0.02em; text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ============ PROCESS ============ */
+  .process{
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    position: relative;
+  }
+  @media (max-width: 980px){ .process{ grid-template-columns: 1fr 1fr;} }
+  @media (max-width: 540px){ .process{ grid-template-columns: 1fr;} }
+  .process-line{
+    position: absolute; left: 0; right: 0; top: 32px;
+    height: 1px; background: var(--line);
+    z-index: 0;
+  }
+  @media (max-width: 980px){ .process-line{ display: none;} }
+  .step{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 22px 22px 24px;
+    position: relative;
+    z-index: 1;
+    transition: transform .25s, border-color .25s;
+  }
+  .step:hover{ transform: translateY(-3px); border-color: var(--new);}
+  .step-num{
+    width: 32px; height: 32px;
+    background: var(--ink); color: var(--bg);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 14px;
+    margin-bottom: 14px;
+    transition: background .25s;
+  }
+  .step:hover .step-num{ background: var(--new); }
+  .step h4{ font-weight: 700; font-size: 17.5px; line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 6px;}
+  .step p{ color: var(--ink-2); font-size: 13.5px; margin: 0;}
+
+  /* ============ FORM ============ */
+  .form-wrap{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); overflow: hidden;
+  }
+  .form-head{
+    background: var(--ink); color: var(--bg);
+    padding: 28px 32px;
+    display: flex; justify-content: space-between; align-items: end; gap: 18px;
+    flex-wrap: wrap;
+  }
+  .form-head h2{
+    font-weight: 800; font-size: clamp(28px, 3vw, 36px); letter-spacing: -0.025em;
+    line-height: 1.05; margin: 0;
+  }
+  .form-head p{ color: var(--dark-ink2); font-size: 14.5px; margin: 8px 0 0; max-width: 480px;}
+  .form-head .stamp{ font-family: var(--mono); font-size: 11px; color: color-mix(in oklab, var(--new) 80%, white); letter-spacing: 0.06em;}
+  .form-body{
+    padding: 32px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  @media (max-width: 720px){ .form-body{ grid-template-columns: 1fr; padding: 24px;} }
+  .field{ display: flex; flex-direction: column; gap: 6px;}
+  .field.full{ grid-column: 1 / -1; }
+  .field label{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-3); text-transform: uppercase; font-weight: 500;
+  }
+  .field input, .field select, .field textarea{
+    background: var(--bg); border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 12px 14px;
+    font-family: var(--sans); font-size: 14.5px;
+    border-radius: var(--r-sm);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    border-color: var(--new); background: var(--surface);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--new) 18%, transparent);
+  }
+  .field textarea{ min-height: 110px; resize: vertical; font-family: var(--sans);}
+  .radio-row{
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .radio-row label{
+    border: 1px solid var(--line); background: var(--bg);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13.5px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: border-color .2s, background .2s, color .2s;
+  }
+  .radio-row label:hover{ border-color: var(--ink-3); }
+  .radio-row input{ display: none;}
+  .radio-row input:checked + .lbl{ color: #fff; }
+  .radio-row input:checked + .lbl::before{ background: #fff;}
+  .radio-row label:has(input:checked){ background: var(--new); border-color: var(--new); color: #fff;}
+  .file-drop{
+    background: var(--bg); border: 1px dashed var(--line-2);
+    padding: 22px; border-radius: var(--r-sm);
+    text-align: center;
+    color: var(--ink-3);
+    font-family: var(--mono); font-size: 12px;
+    cursor: pointer;
+    transition: border-color .2s, color .2s, background .2s;
+  }
+  .file-drop:hover{ border-color: var(--new); color: var(--ink); background: var(--surface);}
+  .file-drop strong{ display: block; font-weight: 600; color: var(--ink); font-size: 14px; font-family: var(--sans); margin-bottom: 4px;}
+  .check-field{
+    grid-column: 1 / -1;
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 13.5px; color: var(--ink-2);
+  }
+  .check-field input{ margin-top: 3px; accent-color: var(--new);}
+  .submit-row{
+    grid-column: 1 / -1;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 14px;
+    margin-top: 6px;
+  }
+  .form-success{
+    grid-column: 1 / -1;
+    display: none;
+    padding: 18px;
+    background: color-mix(in oklab, var(--new) 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--new) 35%, var(--line));
+    color: var(--new-deep);
+    border-radius: var(--r-sm);
+    align-items: center; gap: 10px;
+    font-size: 14px;
+  }
+  .form-success.show{ display: flex; }
+
+  /* ============ FAQ ============ */
+  .faq{
+    display: flex; flex-direction: column; gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .faq details{
+    background: var(--surface);
+    padding: 22px 26px;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .faq details:hover{ background: color-mix(in oklab, var(--new) 4%, var(--surface));}
+  .faq details[open]{ background: var(--bg);}
+  .faq summary{
+    display: flex; align-items: center; justify-content: space-between;
+    list-style: none;
+    font-weight: 600; font-size: 17.5px;
+    letter-spacing: -0.015em;
+    gap: 18px;
+  }
+  .faq summary::-webkit-details-marker{ display: none;}
+  .faq summary .plus{
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--bg); border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--ink);
+    transition: transform .25s, background .25s, color .25s;
+    flex-shrink: 0;
+  }
+  .faq details[open] summary .plus{ transform: rotate(45deg); background: var(--new); border-color: var(--new); color: #fff;}
+  .faq summary .plus::before{ content: "+"; font-size: 18px; line-height: 1; font-weight: 400;}
+  .faq details > p{ color: var(--ink-2); margin: 12px 0 0; font-size: 15px; max-width: 720px;}
+
+  /* ============ FINAL CTA ============ */
+  .final{
+    background: var(--ink); color: var(--dark-ink);
+    border-radius: var(--r-lg);
+    padding: 70px 56px;
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 48px; align-items: end;
+    position: relative; overflow: hidden;
+  }
+  @media (max-width: 880px){ .final{ grid-template-columns: 1fr; padding: 48px 28px;} }
+  .final::before{
+    content:""; position: absolute; top: -120px; right: -120px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, var(--new) 0%, transparent 60%);
+    opacity: .35;
+    pointer-events: none;
+  }
+  .final::after{
+    content:""; position: absolute;
+    right: -40px; bottom: -60px;
+    width: 360px; height: 320px;
+    background: url('assets/apex-logo-white.png') center/contain no-repeat;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @media (max-width: 880px){
+    .final::after{ width: 220px; height: 200px; right: -30px; bottom: -30px; }
+  }
+  .final h2{
+    font-weight: 800; font-size: clamp(32px, 4vw, 56px);
+    line-height: 0.98; letter-spacing: -0.035em;
+    margin: 0; text-wrap: balance;
+    position: relative; z-index: 1;
+  }
+  .final p{ color: var(--dark-ink2); margin: 16px 0 0; font-size: 16.5px; max-width: 440px; position: relative; z-index: 1;}
+  .final-cta{ position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px;}
+
+  /* ============ FOOTER ============ */
+  footer{ padding: 56px 0 56px;}
+  .foot-grid{
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 880px){ .foot-grid{ grid-template-columns: 1fr 1fr; gap: 28px;} }
+  @media (max-width: 540px){ .foot-grid{ grid-template-columns: 1fr;} }
+  .foot-brand{ display: flex; flex-direction: column; gap: 14px;}
+  .foot-brand p{ color: var(--ink-2); font-size: 14.5px; margin: 0; max-width: 360px;}
+  .foot-col h5{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--ink-3); text-transform: uppercase; margin: 0 0 14px;
+  }
+  .foot-col ul{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px;}
+  .foot-col a{ color: var(--ink); text-decoration: none; font-size: 14.5px;}
+  .foot-col a:hover{ color: var(--new-deep);}
+  .foot-bottom{
+    margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em;
+    flex-wrap: wrap; gap: 14px;
+  }
+
+  /* reveal on scroll */
+  .reveal{ opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{ opacity: 1; transform: translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<header class="nav">
+  <div class="nav-shell">
+    <button class="nav-toggle" type="button" aria-label="Otevřít navigaci" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+    <nav class="navbar" aria-label="Hlavní navigace">
+      <a class="nav-item active" href="#modernization" aria-label="Modernizace">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3.46-7.1M21 4v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="nav-label">Modernizace</span>
+      </a>
+      <a class="nav-item" href="#services" aria-label="Nový web">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 10h16M8 14h6M8 17h8" stroke-linecap="round"/></svg>
+        <span class="nav-label">Nový web</span>
+      </a>
+      <a class="nav-item" href="#seo" aria-label="SEO a Google">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M20 20l-4.2-4.2" stroke-linecap="round"/></svg>
+        <span class="nav-label">SEO &amp; Google</span>
+      </a>
+      <a class="nav-item" href="#examples" aria-label="Ukázky">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M9 21h6M12 17v4M8 9h5M8 13h8" stroke-linecap="round"/></svg>
+        <span class="nav-label">Ukázky</span>
+      </a>
+      <a class="nav-item" href="#pricing" aria-label="Ceník">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 7h11M6 12h9M6 17h7" stroke-linecap="round"/><path d="M16 16.5l1.7 1.7L21 14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="nav-label">Ceník</span>
+      </a>
+      <a class="nav-item" href="#form" aria-label="Poptávka">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14a4 4 0 0 1-4 4H8l-4 3V6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4Z" stroke-linejoin="round"/><path d="M8 8h8M8 12h5" stroke-linecap="round"/></svg>
+        <span class="nav-label">Poptávka</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge">WEB MODERNIZATION STUDIO  /  ŠUMPERK &amp; ONLINE</span>
+
+      <h1 class="hero-title"><span class="strike">Zastaralý web?</span> Nebo&nbsp;žádný? Pomůžeme vám být <span class="new">vidět online.</span></h1>
+
+      <p class="hero-sub">Tvoříme nové weby a&nbsp;redesignujeme staré stránky pro&nbsp;menší firmy, služby a&nbsp;osobní značky. K&nbsp;tomu pomáháme se&nbsp;základním SEO a&nbsp;firemním profilem na&nbsp;Googlu.</p>
+
+      <form class="url-form" onsubmit="event.preventDefault(); submitUrl();">
+        <input type="text" id="urlInput" placeholder="Vložte URL starého webu" autocomplete="off" />
+        <button type="submit">
+          Získat návrh modernizace
+          <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+      <div class="url-result" id="urlResult">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>Díky. Připravíme orientační doporučení a&nbsp;ozveme se&nbsp;vám.</div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#form" class="btn btn-primary">
+          Chci moderní web
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#modernization" class="btn btn-secondary">
+          Mám starý web
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <span class="hero-note">Nezávazná kalkulace. Ozveme se a&nbsp;projdeme detaily.</span>
+    </div>
+
+    <!-- TRANSFORMATION VISUAL -->
+    <div class="transformer">
+      <div class="upgrade-bar">
+        <span class="year-old">2010</span>
+        <div class="track"></div>
+        <span class="year-new">2026</span>
+      </div>
+
+      <div class="browsers">
+        <!-- OLD BROWSER -->
+        <div class="browser browser-old">
+          <span class="year-tag">2010</span>
+          <div class="browser-bar">
+            <div class="dots"><i></i><i></i><i></i></div>
+            <div class="url">www.mojefirma.cz/index.html</div>
+          </div>
+          <div class="old-content">
+            <div class="old-h">Vítejte na našich stránkách!</div>
+            <div class="old-marquee">★ Akce platná do 30.&nbsp;6.&nbsp;2011 ★</div>
+            <div class="old-layout">
+              <div class="old-sidebar">
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+              <div class="old-main">
+                <b>O nás</b>
+                <p>Jsme firma, která se zabývá mnoha službami a&nbsp;produkty na&nbsp;trhu již mnoho let v&nbsp;oblasti...</p>
+                <p>Pro více informací nás kontaktujte.</p>
+                <div class="old-btn">Více »</div>
+              </div>
+            </div>
+            <div class="old-bottom">Optimalizováno pro IE 6 · © 2010</div>
+          </div>
+        </div>
+
+        <!-- NEW BROWSER -->
+        <div class="browser browser-new">
+          <span class="year-tag">2026</span>
+          <div class="browser-bar">
+            <div class="dots"><i></i><i></i><i></i></div>
+            <div class="url">mojefirma.cz</div>
+          </div>
+          <div class="new-content">
+            <div class="nc-nav">
+              <div class="nc-logo"><img src="assets/apex-logo.png" alt="" /></div>
+              <div class="nc-name">Moje firma</div>
+              <div class="nc-items">
+                <span>Služby</span>
+                <span>O nás</span>
+                <span>Kontakt</span>
+                <span class="nc-cta">Poptávka</span>
+              </div>
+            </div>
+            <div class="nc-hero">
+              <div class="nc-eyebrow">// Pražská služba</div>
+              <div class="nc-h">Profesionální služby <em>na míru</em></div>
+              <p class="nc-p">Pomáháme zákazníkům v&nbsp;Praze a&nbsp;okolí už&nbsp;přes 12 let. Domluvte si&nbsp;nezávaznou konzultaci.</p>
+              <div class="nc-buttons">
+                <span class="pbtn">Nezávazná poptávka →</span>
+                <span class="sbtn">Zavolat</span>
+              </div>
+            </div>
+            <div class="nc-cards">
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+          <!-- mobile mockup -->
+          <div class="mobile-mock">
+            <div class="screen">
+              <div class="mh"></div>
+              <div class="ml"></div>
+              <div class="ml"></div>
+              <div class="mbtn"></div>
+              <div class="mcards">
+                <i></i><i></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- floating status tags -->
+      <div class="status-tags">
+        <div class="stag s1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Modernější vzhled
+        </div>
+        <div class="stag s2">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Jasnější kontakt
+        </div>
+        <div class="stag s3">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Mobilní verze
+        </div>
+        <div class="stag s4">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          SEO základ
+        </div>
+        <div class="stag s5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Google profil
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 2. PRO KOHO ========== -->
+<section class="block" id="modernization">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Pro koho</div>
+        <h2 class="section-title">Pro koho je Apexwebdesign?</h2>
+      </div>
+      <p class="section-sub">Tři typické situace, ve&nbsp;kterých vám rádi pomůžeme posunout online prezentaci dál.</p>
+    </div>
+
+    <div class="who-grid">
+      <article class="who-card reveal">
+        <div class="who-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8" stroke-linecap="round"/></svg>
+        </div>
+        <span class="who-num">01 — Začínáte</span>
+        <h3 class="who-h">Nemáte web</h3>
+        <p class="who-p">Pomůžeme vytvořit profesionální online prezentaci od&nbsp;nuly — struktura, design, obsah i&nbsp;kontaktní cesta.</p>
+      </article>
+
+      <article class="who-card feature reveal">
+        <div class="who-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3.46-7.1M21 4v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="who-num">02 — Modernizace</span>
+        <h3 class="who-h">Máte starý web</h3>
+        <p class="who-p">Pokud váš web působí zastarale, není přehledný nebo&nbsp;nefunguje dobře na&nbsp;mobilu, navrhneme moderní redesign.</p>
+      </article>
+
+      <article class="who-card reveal">
+        <div class="who-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="who-num">03 — Viditelnost</span>
+        <h3 class="who-h">Lidé vás špatně hledají</h3>
+        <p class="who-p">Pomůžeme se&nbsp;základním SEO, lokální dohledatelností a&nbsp;Google firemním profilem.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. BEFORE / AFTER MODERNIZATION ========== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Transformace</div>
+        <h2 class="section-title">Rozdíl, který návštěvník pozná během pár sekund.</h2>
+      </div>
+      <p class="section-sub">Modernizace není jen&nbsp;o&nbsp;vzhledu. Mění to, jak rychle zákazník pochopí, co&nbsp;nabízíte a&nbsp;jak vás kontaktovat.</p>
+    </div>
+
+    <div class="ba-slider-wrap reveal">
+      <div class="ba-slider" data-before-after>
+        <img class="ba-before" src="assets/transform-before.png" alt="Starý web před modernizací">
+        <img class="ba-after" src="assets/transform-after.png" alt="Moderní web po redesignu">
+        <div class="ba-scrim" aria-hidden="true"></div>
+        <span class="ba-chip after">Po</span>
+        <span class="ba-chip before">Před</span>
+        <div class="ba-divider" aria-hidden="true"></div>
+        <div class="ba-handle" aria-hidden="true"></div>
+        <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Porovnání webu před a po modernizaci">
+      </div>
+      <div class="ba-caption">
+        <span><b>Před:</b> nepřehledná starší šablona, slabší první dojem a&nbsp;roztříštěná navigace.</span>
+        <span><b>Po:</b> moderní hero, jasné služby, výrazná výzva k&nbsp;poptávce a&nbsp;lepší informační hierarchie.</span>
+        <span><b>Výsledek:</b> návštěvník rychleji pochopí nabídku a&nbsp;snáz najde kontakt.</span>
+      </div>
+    </div>
+
+    <div class="mobile-demo reveal" aria-label="Interaktivní náhled webu na mobilu a počítači">
+      <div class="mobile-demo-copy">
+        <div class="section-eyebrow">Responzivní integrace</div>
+        <h3>Jeden web, který sedí v&nbsp;mobilu i&nbsp;na počítači.</h3>
+        <p>Návrh drží stejný styl, obsah i logiku na všech zařízeních. Přepni si náhled ikonou a scrolluj přímo uvnitř obrazovky.</p>
+        <div class="phone-hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v12M7.5 12.5 12 17l4.5-4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Vyber zařízení a scrolluj uvnitř</span>
+        </div>
+      </div>
+      <div class="device-showcase" data-device-demo>
+        <div class="device-toggle" role="tablist" aria-label="Přepnutí náhledu zařízení">
+          <button class="is-active" type="button" data-device-target="desktop" role="tab" aria-selected="true" aria-controls="device-desktop" aria-label="Zobrazit počítač">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4" stroke-linecap="round"/></svg>
+          </button>
+          <button type="button" data-device-target="phone" role="tab" aria-selected="false" aria-controls="device-phone" aria-label="Zobrazit mobil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="8" y="2.5" width="8" height="19" rx="4"/><path d="M12 18h.01" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="device-stage">
+        <div class="phone-shell device-panel" id="device-phone" data-device-panel="phone" role="tabpanel" aria-label="Mobilní náhled webu" hidden>
+          <div class="phone-screen" tabindex="0" aria-label="Scrollovatelný náhled webu v mobilu">
+            <img src="assets/mobile-scroll-demo.jpg" alt="Dlouhý mobilní náhled růžového webu">
+          </div>
+        </div>
+        <div class="laptop-shell device-panel is-active" id="device-desktop" data-device-panel="desktop" role="tabpanel" aria-label="Desktopový náhled webu">
+          <div class="laptop-frame">
+            <div class="laptop-screen" tabindex="0" aria-label="Scrollovatelný náhled webu na počítači">
+              <img src="assets/desktop-scroll-demo.jpg" alt="Dlouhý desktopový náhled růžového webu">
+            </div>
+          </div>
+          <div class="laptop-base" aria-hidden="true"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 4. SERVICES ========== -->
+<section class="block dark" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Služby</div>
+        <h2 class="section-title">Co pro vás vyřešíme</h2>
+      </div>
+      <p class="section-sub">Od&nbsp;jednoduché vizitky po&nbsp;kompletní modernizaci. Můžete si&nbsp;vybrat jen&nbsp;to, co&nbsp;právě teď potřebujete.</p>
+    </div>
+
+    <div class="svc-grid reveal">
+      <div class="svc">
+        <div class="svc-num">01</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12" /></svg></div>
+        <h4>Nový web od nuly</h4>
+        <p>Pro firmy a&nbsp;služby, které ještě nemají profesionální web.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">02</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3.46-7.1M21 4v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h4>Redesign starého webu</h4>
+        <p>Přestavíme zastaralý web na&nbsp;moderní prezentaci.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">03</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 12h8M8 8h5"/></svg></div>
+        <h4>Landing page</h4>
+        <p>Jedna stránka zaměřená na&nbsp;konkrétní službu, nabídku nebo&nbsp;kampaň.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">04</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg></div>
+        <h4>Základní SEO</h4>
+        <p>Pomůžeme se&nbsp;strukturou, nadpisy, meta texty a&nbsp;technickým základem.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">05</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h4>Google firemní profil</h4>
+        <p>Pomůžeme s&nbsp;tím, co&nbsp;se zobrazuje ve&nbsp;Vyhledávání Google a&nbsp;Mapách.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">06</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+        <h4>Lokální dohledatelnost</h4>
+        <p>Telefon, adresa, otevírací doba, fotky, popis firmy a&nbsp;odkaz na&nbsp;web.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">07</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg></div>
+        <h4>Kontaktní formuláře</h4>
+        <p>Aby návštěvníci věděli, jak vás jednoduše oslovit.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-num">08</div>
+        <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h12"/></svg></div>
+        <h4>Úprava textů a&nbsp;obsahu</h4>
+        <p>Pomůžeme s&nbsp;lepším uspořádáním informací na&nbsp;webu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 5. SEO & GOOGLE ========== -->
+<section class="block" id="seo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">SEO &amp; Google</div>
+        <h2 class="section-title">Moderní web nestačí. Lidé vás musí najít.</h2>
+      </div>
+      <p class="section-sub">Pomáháme se&nbsp;základní online viditelností — od&nbsp;technického základu webu až&nbsp;po&nbsp;firemní profil, který se&nbsp;zobrazuje ve&nbsp;Vyhledávání Google a&nbsp;v&nbsp;Mapách.</p>
+    </div>
+
+    <div class="seo-grid">
+      <div class="reveal">
+        <ul class="seo-list">
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Struktura nadpisů</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Meta titulky a&nbsp;popisy</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rychlost a&nbsp;mobilní použitelnost</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní prvky</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Google firemní profil</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Web, telefon, adresa, doba</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Fotky a&nbsp;popis firmy</li>
+          <li><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Propojení s&nbsp;lokální prezentací</li>
+        </ul>
+        <div class="seo-cta">
+          <a href="#form" class="btn btn-primary">
+            Chci být lépe dohledatelný
+            <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <span class="helper">Žádné sliby na&nbsp;první pozice. Jen&nbsp;solidní základ.</span>
+        </div>
+      </div>
+
+      <div class="presence reveal">
+        <div class="presence-head">
+          <span>// online presence map</span>
+          <span><span class="dot"></span>ACTIVE</span>
+        </div>
+
+        <div class="presence-graph" id="presenceGraph">
+          <svg class="pg-svg" id="pgSvg" preserveAspectRatio="none"></svg>
+          <div class="pg-node center" style="left: 50%; top: 50%;"><span class="dot"></span>Váš web</div>
+          <div class="pg-node" style="left: 50%; top: 10%;"><span class="dot"></span>Google profil</div>
+          <div class="pg-node" style="left: 88%; top: 30%;"><span class="dot"></span>Mapy</div>
+          <div class="pg-node" style="left: 90%; top: 72%;"><span class="dot"></span>Kontakt</div>
+          <div class="pg-node" style="left: 50%; top: 92%;"><span class="dot"></span>Lokální hledání</div>
+          <div class="pg-node" style="left: 10%; top: 72%;"><span class="dot"></span>Fotky</div>
+          <div class="pg-node" style="left: 8%; top: 30%;"><span class="dot"></span>Recenze</div>
+          <div class="pg-node" style="left: 28%; top: 50%;"><span class="dot"></span>Poptávky</div>
+        </div>
+
+        <div class="profile-prev">
+          <div class="pp-head">
+            <div class="pp-logo"><img src="assets/apex-logo.png" alt="" /></div>
+            <div style="flex:1;">
+              <h4 class="pp-name">Název vaší firmy</h4>
+              <p class="pp-cat">Kategorie · Město · Otevřeno</p>
+              <div class="pp-rate">
+                <span class="pp-stars">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.4 4.7L18 22l-6-3.7L6 22l1.4-7.7L2 9.6 9 9z"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.4 4.7L18 22l-6-3.7L6 22l1.4-7.7L2 9.6 9 9z"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.4 4.7L18 22l-6-3.7L6 22l1.4-7.7L2 9.6 9 9z"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.4 4.7L18 22l-6-3.7L6 22l1.4-7.7L2 9.6 9 9z"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.4 4.7L18 22l-6-3.7L6 22l1.4-7.7L2 9.6 9 9z" opacity=".4"/></svg>
+                </span>
+                4,8 · 127 hodnocení
+              </div>
+            </div>
+          </div>
+          <div class="pp-info">
+            <div class="row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.92.34 1.82.63 2.69a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.39-1.2a2 2 0 0 1 2.11-.45c.87.29 1.77.5 2.69.63A2 2 0 0 1 22 16.92Z"/></svg>
+              <div><b>+420 123 456 789</b><span>TELEFON</span></div>
+            </div>
+            <div class="row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>
+              <div><b>Po–Pá 9:00–18:00</b><span>OTEVÍRACÍ DOBA</span></div>
+            </div>
+            <div class="row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div><b>Ulice 123, Město</b><span>ADRESA</span></div>
+            </div>
+            <div class="row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+              <div><b>www.vasefirma.cz</b><span>WEB</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 6. EXAMPLES ========== -->
+<section class="block" id="examples">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Ukázky</div>
+        <h2 class="section-title">Ukázky modernizací</h2>
+      </div>
+      <p class="section-sub">Modelové projekty bez&nbsp;falešných klientských jmen. Reálné reference postupně doplňujeme — rádi vám je&nbsp;ukážeme osobně.</p>
+    </div>
+
+    <div class="ex-grid">
+      <article class="ex-card reveal">
+        <div class="ex-visual">
+          <div class="mini-old">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="mini-new">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="ex-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div class="ex-body">
+          <span class="ex-num">CASE 01</span>
+          <h3 class="ex-title">Nový web pro&nbsp;lokální službu</h3>
+          <div class="ex-rows">
+            <div class="ex-row"><span class="k">Před</span><span class="v">Žádný vlastní web, jen&nbsp;profil na&nbsp;sociální síti a&nbsp;telefon předávaný z&nbsp;ruky do&nbsp;ruky.</span></div>
+            <div class="ex-row"><span class="k">Zásah</span><span class="v">Nová stránka s&nbsp;jasnou nabídkou, formulářem v&nbsp;hlavičce a&nbsp;mobilní verzí.</span></div>
+            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Web vede zákazníka přímo k&nbsp;poptávce do&nbsp;tří kliknutí.</span></div>
+          </div>
+          <div class="ex-tags"><i>Nový web</i><i>Mobilní verze</i><i>Formulář</i><i>SEO základ</i></div>
+        </div>
+      </article>
+
+      <article class="ex-card reveal">
+        <div class="ex-visual">
+          <div class="mini-old">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="mini-new">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="ex-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div class="ex-body">
+          <span class="ex-num">CASE 02</span>
+          <h3 class="ex-title">Redesign starého firemního webu</h3>
+          <div class="ex-rows">
+            <div class="ex-row"><span class="k">Před</span><span class="v">Letitý vizuál ze&nbsp;začátku 2010s, smíšené fonty, nečitelný kontakt.</span></div>
+            <div class="ex-row"><span class="k">Zásah</span><span class="v">Sjednocení vizuálu, přestavba struktury, přepis úvodních textů, zaměření na&nbsp;mobil.</span></div>
+            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Profesionálnější dojem, který odpovídá kvalitě nabízených služeb.</span></div>
+          </div>
+          <div class="ex-tags"><i>Redesign</i><i>SEO základ</i><i>Mobilní verze</i><i>Google profil</i></div>
+        </div>
+      </article>
+
+      <article class="ex-card reveal">
+        <div class="ex-visual">
+          <div class="mini-old">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="mini-new">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="ex-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div class="ex-body">
+          <span class="ex-num">CASE 03</span>
+          <h3 class="ex-title">Landing page pro&nbsp;nabídku</h3>
+          <div class="ex-rows">
+            <div class="ex-row"><span class="k">Před</span><span class="v">Reklama posílala lidi na&nbsp;obecnou úvodní stránku, kde se&nbsp;ztratili.</span></div>
+            <div class="ex-row"><span class="k">Zásah</span><span class="v">Krátká cílená landing page s&nbsp;jedním cílem — vyplnit formulář nebo&nbsp;zavolat.</span></div>
+            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Návštěvník vidí jediné rozhodnutí: vyplnit, nebo&nbsp;volat.</span></div>
+          </div>
+          <div class="ex-tags"><i>Nový web</i><i>Formulář</i><i>Mobilní verze</i></div>
+        </div>
+      </article>
+
+      <article class="ex-card reveal">
+        <div class="ex-visual">
+          <div class="mini-old">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="mini-new">
+            <div class="bar"></div>
+            <div class="body"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="ex-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div class="ex-body">
+          <span class="ex-num">CASE 04</span>
+          <h3 class="ex-title">Online prezentace pro&nbsp;osobní značku</h3>
+          <div class="ex-rows">
+            <div class="ex-row"><span class="k">Před</span><span class="v">Web bez&nbsp;tváře, žádný důvod, proč si&nbsp;vybrat zrovna tohoto odborníka.</span></div>
+            <div class="ex-row"><span class="k">Zásah</span><span class="v">Důraz na&nbsp;osobnost, jasná nabídka, reference a&nbsp;jednoduchá cesta ke&nbsp;schůzce.</span></div>
+            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Web, který návštěvníka přesvědčí během prvních pár vteřin.</span></div>
+          </div>
+          <div class="ex-tags"><i>Nový web</i><i>SEO základ</i><i>Mobilní verze</i><i>Google profil</i></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 7. PRICING ========== -->
+<section class="block" id="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Ceník</div>
+        <h2 class="section-title">Vyberte si&nbsp;řešení podle toho, kde právě jste.</h2>
+      </div>
+      <p class="section-sub">Začínáte od&nbsp;nuly, máte starý web, nebo&nbsp;potřebujete kompletní online start? Vyberte si&nbsp;orientační balíček — finální rozsah a&nbsp;cenu doladíme po&nbsp;krátké konzultaci.</p>
+    </div>
+
+    <div class="pricing">
+
+      <!-- BASIC WEB -->
+      <div class="price reveal">
+        <span class="price-label">Bez backendu</span>
+        <h3 class="price-name">Basic Web</h3>
+        <div class="price-amount"><span class="prefix">od</span>9&nbsp;900<span class="currency"> Kč</span></div>
+        <p class="price-best">Pro&nbsp;živnostníky, lokální služby a&nbsp;menší projekty, které potřebují rychle působit důvěryhodně online.</p>
+        <ul class="price-list">
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Jednostránkový web nebo&nbsp;menší prezentace</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Responzivní design</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formulář nebo&nbsp;tlačítko na&nbsp;kontakt</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO struktura</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rychlé načítání</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Napojení na&nbsp;e-mail</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Bez administrace a&nbsp;backendu</li>
+        </ul>
+        <a href="#form" class="btn btn-secondary">Chci Basic Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price-note">Ideální, pokud chcete jednoduchý web bez&nbsp;složitostí.</div>
+      </div>
+
+      <!-- PREMIUM WEB (featured) -->
+      <div class="price featured reveal">
+        <span class="price-badge">Nejčastější volba</span>
+        <span class="price-label">Firemní web</span>
+        <h3 class="price-name">Premium Web</h3>
+        <div class="price-amount"><span class="prefix">od</span>24&nbsp;900<span class="currency"> Kč</span></div>
+        <p class="price-best">Pro&nbsp;firmy, služby, studia, restaurace a&nbsp;značky, které chtějí působit profesionálně.</p>
+        <ul class="price-list">
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>4–8 sekcí nebo&nbsp;podstránek</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Návrh struktury webu</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Design na&nbsp;míru</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Úprava obsahu a&nbsp;textů</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formuláře a&nbsp;CTA prvky</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO nastavení</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Mobilní optimalizace</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pomoc s&nbsp;Google firemním profilem</li>
+        </ul>
+        <a href="#form" class="btn btn-on-dark">Chci Premium Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price-note">Nejlepší volba pro&nbsp;web, který má&nbsp;působit důvěryhodně a&nbsp;přivádět poptávky.</div>
+      </div>
+
+      <!-- BRAND LAUNCH -->
+      <div class="price reveal">
+        <span class="price-label">Nová značka</span>
+        <h3 class="price-name">Brand Launch</h3>
+        <div class="price-amount"><span class="prefix">od</span>39&nbsp;900<span class="currency"> Kč</span></div>
+        <p class="price-best">Pro&nbsp;nové projekty, které potřebují nejen web, ale&nbsp;i&nbsp;základní vizuální směr.</p>
+        <ul class="price-list">
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní vizuální identita</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Jednoduché logo nebo&nbsp;logo refresh</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Barvy a&nbsp;typografie</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Brand styl pro&nbsp;web</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Web na&nbsp;míru</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Struktura a&nbsp;základní copywriting</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formuláře</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Google firemní profil</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Příprava podkladů pro&nbsp;sociální sítě</li>
+        </ul>
+        <a href="#form" class="btn btn-secondary">Chci Brand Launch <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price-note">Pro&nbsp;firmy, které chtějí začít profesionálně od&nbsp;prvního dojmu.</div>
+      </div>
+
+    </div>
+
+    <!-- CUSTOM PROJECT / E-SHOP -->
+    <div class="custom reveal">
+      <div class="custom-left">
+        <span class="custom-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          Individuálně
+        </span>
+        <h3>E-shop nebo&nbsp;větší projekt?</h3>
+        <div class="custom-amount"><span class="prefix">od</span>49&nbsp;900<span class="currency"> Kč</span></div>
+        <p>E-shopy, rezervační systémy, členské sekce a&nbsp;složitější weby naceňujeme individuálně podle rozsahu, funkcí a&nbsp;napojení.</p>
+        <a href="#form" class="btn btn-on-dark custom-cta">
+          Chci nacenit e-shop
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="custom-right">
+        <h4>Co je v&nbsp;rozsahu</h4>
+        <ul class="custom-list">
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Návrh struktury e-shopu</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Produktové kategorie</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Košík a&nbsp;objednávkový proces</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Platební a&nbsp;dopravní metody</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO kategorií</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Responzivní design</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Napojení podle potřeby</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="pricing-note">Ceny jsou orientační a&nbsp;bez&nbsp;DPH. Finální cena záleží na&nbsp;rozsahu, obsahu, funkcích a&nbsp;dodaných podkladech.</p>
+  </div>
+</section>
+
+<!-- ========== 8. PROCESS ========== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Proces</div>
+        <h2 class="section-title">Jak probíhá modernizace</h2>
+      </div>
+      <p class="section-sub">Pět kroků od&nbsp;prvního ohledání po&nbsp;spuštění nové verze. Bez&nbsp;dlouhých briefů a&nbsp;zbytečné byrokracie.</p>
+    </div>
+
+    <div class="process reveal">
+      <div class="process-line"></div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Pošlete web nebo&nbsp;představu</h4>
+        <p>URL stávajícího webu, nebo&nbsp;krátký popis, čeho chcete dosáhnout.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Zavoláme si&nbsp;a&nbsp;projdeme cíle</h4>
+        <p>Co&nbsp;funguje, co&nbsp;ne&nbsp;a&nbsp;jak by&nbsp;měl nový web zákazníka vést.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Navrhneme strukturu a&nbsp;cenu</h4>
+        <p>Konkrétní rozsah, harmonogram a&nbsp;orientační cenu.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Připravíme moderní design</h4>
+        <p>Design, texty, mobilní verze a&nbsp;základní nastavení viditelnosti.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <h4>Spustíme nový web</h4>
+        <p>Nasazení, kontrola Google profilu a&nbsp;předání s&nbsp;dokumentací.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 9. FORM ========== -->
+<section class="block" id="form">
+  <div class="wrap">
+    <div class="form-wrap reveal">
+      <div class="form-head">
+        <div>
+          <h2>Chci moderní web</h2>
+          <p>Pošlete nám odkaz na&nbsp;starý web nebo&nbsp;napište, že&nbsp;začínáte od&nbsp;nuly. Ozveme se&nbsp;a&nbsp;navrhneme další krok.</p>
+        </div>
+        <span class="stamp">// nezávazná poptávka</span>
+      </div>
+      <form class="form-body" id="caseForm" onsubmit="event.preventDefault(); submitCase();">
+        <div class="field">
+          <label>Jméno a&nbsp;příjmení</label>
+          <input type="text" required placeholder="Jana Nováková" />
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" required placeholder="jana@firma.cz" />
+        </div>
+        <div class="field">
+          <label>Telefon</label>
+          <input type="tel" placeholder="+420" />
+        </div>
+        <div class="field">
+          <label>Název firmy / značky</label>
+          <input type="text" placeholder="Vaše firma s.r.o." />
+        </div>
+        <div class="field">
+          <label>Máte aktuální web?</label>
+          <div class="radio-row">
+            <label><input type="radio" name="hasweb" /><span class="lbl">Ano</span></label>
+            <label><input type="radio" name="hasweb" /><span class="lbl">Ne</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label>URL aktuálního webu</label>
+          <input type="text" placeholder="https://..." />
+        </div>
+        <div class="field">
+          <label>Co potřebujete?</label>
+          <select>
+            <option>Nový web</option>
+            <option>Redesign starého webu</option>
+            <option>Landing page</option>
+            <option>SEO / Google profil</option>
+            <option>Nevím, potřebuji poradit</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Rozsah projektu</label>
+          <select>
+            <option>Jednoduchý web</option>
+            <option>Firemní web</option>
+            <option>Větší web</option>
+            <option>Nevím</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Rozpočet</label>
+          <div class="radio-row">
+            <label><input type="radio" name="budget" /><span class="lbl">do 10&nbsp;000 Kč</span></label>
+            <label><input type="radio" name="budget" /><span class="lbl">10–20&nbsp;000 Kč</span></label>
+            <label><input type="radio" name="budget" /><span class="lbl">20–40&nbsp;000 Kč</span></label>
+            <label><input type="radio" name="budget" /><span class="lbl">40&nbsp;000+ Kč</span></label>
+            <label><input type="radio" name="budget" /><span class="lbl">nevím</span></label>
+          </div>
+        </div>
+        <div class="field full">
+          <label>Nahrát logo, fotky, screenshoty nebo&nbsp;inspiraci</label>
+          <label class="file-drop">
+            <strong>Přetáhněte soubory nebo&nbsp;klikněte pro&nbsp;výběr</strong>
+            PDF, PNG, JPG, ZIP &nbsp;·&nbsp; max 25 MB
+            <input type="file" multiple style="display:none;" />
+          </label>
+        </div>
+        <div class="field full">
+          <label>Krátký popis</label>
+          <textarea placeholder="Napište krátce, co potřebujete změnit nebo vytvořit."></textarea>
+        </div>
+        <label class="check-field">
+          <input type="checkbox" required />
+          <span>Souhlasím se&nbsp;zpracováním údajů za&nbsp;účelem kontaktování.</span>
+        </label>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary">
+            Odeslat nezávaznou poptávku
+            <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <span style="font-family: var(--mono); font-size: 12px; color: var(--ink-3);">// odpovídáme do&nbsp;1&nbsp;pracovního dne</span>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Děkujeme, poptávku jsme přijali. Brzy se&nbsp;vám ozveme a&nbsp;projdeme možnosti modernizace.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 10. FAQ ========== -->
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">FAQ</div>
+        <h2 class="section-title">Časté otázky</h2>
+      </div>
+      <p class="section-sub">Nejčastější otázky, které dostáváme od&nbsp;menších firem před&nbsp;začátkem spolupráce.</p>
+    </div>
+
+    <div class="faq reveal">
+      <details open>
+        <summary>Mám starý web. Umíte ho předělat? <span class="plus"></span></summary>
+        <p>Ano. Podíváme se&nbsp;na&nbsp;současný web, navrhneme novou strukturu, modernější vizuál a&nbsp;lepší cestu ke&nbsp;kontaktu.</p>
+      </details>
+      <details>
+        <summary>Nemám web vůbec. Pomůžete od&nbsp;nuly? <span class="plus"></span></summary>
+        <p>Ano. Pomůžeme se&nbsp;strukturou, obsahem, designem i&nbsp;spuštěním základní online prezentace.</p>
+      </details>
+      <details>
+        <summary>Pomůžete i&nbsp;s Google firemním profilem? <span class="plus"></span></summary>
+        <p>Ano. Pomůžeme s&nbsp;informacemi, které se&nbsp;zobrazují ve&nbsp;Vyhledávání Google a&nbsp;Mapách — například web, telefon, adresa, otevírací doba, fotky a&nbsp;popis.</p>
+      </details>
+      <details>
+        <summary>Zaručíte první místo na&nbsp;Googlu? <span class="plus"></span></summary>
+        <p>Ne. Neslibujeme nereálné pozice. Pomáháme se&nbsp;základním SEO a&nbsp;lepším technickým nastavením, které je&nbsp;dobrým základem pro&nbsp;dohledatelnost.</p>
+      </details>
+      <details>
+        <summary>Kolik stojí web? <span class="plus"></span></summary>
+        <p>Orientačně od&nbsp;9&nbsp;900&nbsp;Kč. Přesná cena záleží na&nbsp;rozsahu, obsahu a&nbsp;funkcích.</p>
+      </details>
+      <details>
+        <summary>Je poptávka závazná? <span class="plus"></span></summary>
+        <p>Ne. Poptávka je&nbsp;nezávazná a&nbsp;slouží k&nbsp;tomu, abychom zjistili, co&nbsp;potřebujete.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 11. FINAL CTA ========== -->
+<section class="block" style="border-top: none; padding-top: 60px;">
+  <div class="wrap">
+    <div class="final reveal">
+      <div>
+        <h2>Je čas posunout váš web do&nbsp;současnosti.</h2>
+        <p>Ať začínáte od&nbsp;nuly, nebo&nbsp;máte starý web, pomůžeme vám vytvořit modernější a&nbsp;dohledatelnější online prezentaci.</p>
+      </div>
+      <div class="final-cta">
+        <a href="#form" class="btn btn-on-dark" style="padding: 16px 26px; font-size: 15px;">
+          Chci nezávaznou konzultaci
+          <svg class="arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="mailto:apexwebredesign@gmail.com" class="btn btn-ghost-dark" style="padding: 14px 22px; font-size: 14px;">
+          apexwebredesign@gmail.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand"><span class="brand-mark"><img src="assets/apex-logo.png" alt="Apexwebdesign" /></span><span class="brand-name">Apex<span class="accent">web</span>design</span></div>
+        <p>Nové weby, redesigny a&nbsp;základní online viditelnost pro&nbsp;menší firmy a&nbsp;značky.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Služby</h5>
+        <ul>
+          <li><a href="#services">Nový web</a></li>
+          <li><a href="#services">Redesign</a></li>
+          <li><a href="#services">Landing page</a></li>
+          <li><a href="#seo">SEO &amp; Google</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Studio</h5>
+        <ul>
+          <li><a href="#examples">Ukázky</a></li>
+          <li><a href="#pricing">Ceník</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#form">Poptávka</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Kontakt</h5>
+        <ul>
+          <li><a href="mailto:apexwebredesign@gmail.com">apexwebredesign@gmail.com</a></li>
+          <li><a href="tel:+420">+420&nbsp;XXX&nbsp;XXX&nbsp;XXX</a></li>
+          <li>Šumperk &amp; online</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Apexwebdesign. Všechna práva vyhrazena.</span>
+      <span>Modernizace webů &amp; online viditelnost</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ URL form ============ */
+function submitUrl(){
+  const input = document.getElementById('urlInput');
+  const result = document.getElementById('urlResult');
+  result.classList.add('show');
+  input.value = '';
+  setTimeout(() => result.classList.remove('show'), 6000);
+}
+
+/* ============ form submit ============ */
+function submitCase(){
+  const success = document.getElementById('formSuccess');
+  success.classList.add('show');
+  const form = document.getElementById('caseForm');
+  const btn = form.querySelector('button[type="submit"]');
+  btn.disabled = true; btn.style.opacity = .55; btn.style.cursor = 'default';
+  setTimeout(() => {
+    success.classList.remove('show');
+    btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
+  }, 6000);
+}
+
+/* ============ presence graph lines ============ */
+(function(){
+  const svg = document.getElementById('pgSvg');
+  const graph = document.getElementById('presenceGraph');
+  if (!svg || !graph) return;
+  const nodes = graph.querySelectorAll('.pg-node:not(.center)');
+  const center = graph.querySelector('.pg-node.center');
+  function draw(){
+    const gRect = graph.getBoundingClientRect();
+    if (gRect.width === 0) return;
+    svg.setAttribute('viewBox', `0 0 ${gRect.width} ${gRect.height}`);
+    svg.innerHTML = '';
+    const cR = center.getBoundingClientRect();
+    const cx = cR.left + cR.width/2 - gRect.left;
+    const cy = cR.top + cR.height/2 - gRect.top;
+    nodes.forEach(n => {
+      const r = n.getBoundingClientRect();
+      const x = r.left + r.width/2 - gRect.left;
+      const y = r.top + r.height/2 - gRect.top;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+      line.setAttribute('x2', x); line.setAttribute('y2', y);
+      svg.appendChild(line);
+    });
+  }
+  draw();
+  window.addEventListener('resize', draw);
+  setTimeout(draw, 400);
+  setTimeout(draw, 1500);
+})();
+
+/* ============ reveal on scroll ============ */
+(function(){
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+  reveals.forEach(el => io.observe(el));
+  setTimeout(() => reveals.forEach(el => el.classList.add('in')), 1400);
+})();
+
+/* ============ before / after slider ============ */
+(function(){
+  document.querySelectorAll('[data-before-after]').forEach(slider => {
+    const range = slider.querySelector('.ba-range');
+    if (!range) return;
+
+    function update(){
+      slider.style.setProperty('--split', `${range.value}%`);
+    }
+
+    function updateFromClientX(clientX){
+      const rect = slider.getBoundingClientRect();
+      const value = Math.round(((clientX - rect.left) / rect.width) * 100);
+      range.value = Math.max(0, Math.min(100, value));
+      update();
+    }
+
+    range.addEventListener('input', update);
+    range.addEventListener('change', update);
+    range.addEventListener('keydown', event => {
+      const step = event.shiftKey ? 10 : 4;
+      let value = Number(range.value);
+      if (event.key === 'ArrowLeft') value -= step;
+      else if (event.key === 'ArrowRight') value += step;
+      else if (event.key === 'Home') value = 0;
+      else if (event.key === 'End') value = 100;
+      else return;
+      event.preventDefault();
+      range.value = Math.max(0, Math.min(100, value));
+      update();
+    });
+    slider.addEventListener('pointerdown', event => {
+      updateFromClientX(event.clientX);
+      slider.setPointerCapture?.(event.pointerId);
+    });
+    slider.addEventListener('pointermove', event => {
+      if (slider.hasPointerCapture?.(event.pointerId)) {
+        updateFromClientX(event.clientX);
+      }
+    });
+    slider.addEventListener('pointerup', event => {
+      slider.releasePointerCapture?.(event.pointerId);
+    });
+    slider.addEventListener('pointercancel', event => {
+      slider.releasePointerCapture?.(event.pointerId);
+    });
+    update();
+  });
+})();
+
+/* ============ responsive device preview ============ */
+(function(){
+  document.querySelectorAll('[data-device-demo]').forEach(demo => {
+    const buttons = Array.from(demo.querySelectorAll('[data-device-target]'));
+    const panels = Array.from(demo.querySelectorAll('[data-device-panel]'));
+    if (!buttons.length || !panels.length) return;
+
+    function activate(device){
+      buttons.forEach(button => {
+        const isActive = button.dataset.deviceTarget === device;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+
+      panels.forEach(panel => {
+        const isActive = panel.dataset.devicePanel === device;
+        panel.classList.toggle('is-active', isActive);
+        panel.toggleAttribute('hidden', !isActive);
+        panel.setAttribute('aria-hidden', String(!isActive));
+        if (isActive) {
+          panel.querySelector('.phone-screen, .laptop-screen')?.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => activate(button.dataset.deviceTarget));
+    });
+  });
+})();
+
+/* ============ navbar ============ */
+(function(){
+  const dock = document.querySelector('.navbar');
+  const items = Array.from(document.querySelectorAll('.nav-item'));
+  if (!dock || !items.length) return;
+
+  const nav = document.querySelector('.nav');
+  const toggle = document.querySelector('.nav-toggle');
+  let activeItem = items.find(item => item.classList.contains('active')) || items[0];
+  const targets = items
+    .map(item => ({ item, target: document.querySelector(item.getAttribute('href')) }))
+    .filter(pair => pair.target)
+    .sort((a, b) => a.target.offsetTop - b.target.offsetTop);
+  let scrollTicking = false;
+  let ignoreScrollUntil = 0;
+
+  function isMobileNav(){
+    return window.matchMedia('(max-width: 980px)').matches;
+  }
+
+  function setActive(item){
+    activeItem = item;
+    items.forEach(navItem => {
+      const isActive = navItem === item;
+      navItem.classList.toggle('active', isActive);
+      if (isActive) {
+        navItem.setAttribute('aria-current', 'page');
+      } else {
+        navItem.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function closeMobileNav(){
+    nav?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  }
+
+  function scrollOffset(){
+    return isMobileNav() ? 88 : 24;
+  }
+
+  function scrollToTarget(target){
+    if (!target) return;
+    const y = Math.max(0, target.getBoundingClientRect().top + window.scrollY - scrollOffset());
+    const scroller = document.scrollingElement || document.documentElement;
+    if (typeof scroller.scrollTo === 'function') {
+      scroller.scrollTo({ top: y, behavior: 'smooth' });
+    } else {
+      scroller.scrollTop = y;
+      document.body.scrollTop = y;
+    }
+  }
+
+  function goToItem(item){
+    const target = document.querySelector(item.getAttribute('href'));
+    scrollToTarget(target);
+    if (history.pushState) history.pushState(null, '', item.getAttribute('href'));
+  }
+
+  function syncActiveFromScroll(){
+    scrollTicking = false;
+    if (Date.now() < ignoreScrollUntil) return;
+    if (!targets.length) return;
+    const offset = scrollOffset() + 80;
+    let current = targets[0];
+    targets.forEach(pair => {
+      if (pair.target.getBoundingClientRect().top <= offset) current = pair;
+    });
+    if (current.item !== activeItem) setActive(current.item);
+  }
+
+  items.forEach(item => {
+    item.addEventListener('click', (event) => {
+      event.preventDefault();
+      ignoreScrollUntil = Date.now() + 900;
+      setActive(item);
+      goToItem(item);
+      closeMobileNav();
+    });
+  });
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = nav?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!isMobileNav() || !nav?.classList.contains('is-open')) return;
+    if (nav.contains(event.target)) return;
+    closeMobileNav();
+  });
+
+  window.addEventListener('resize', () => {
+    if (!isMobileNav()) closeMobileNav();
+  });
+
+  window.addEventListener('scroll', () => {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(syncActiveFromScroll);
+  }, { passive: true });
+
+  const hashItem = items.find(item => item.getAttribute('href') === window.location.hash);
+  setActive(hashItem || activeItem);
+})();
+
+/* ============ smooth anchor scrolling ============ */
+document.querySelectorAll('a[href^="#"]:not(.nav-item)').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const id = a.getAttribute('href');
+    if (id.length > 1) {
+      const t = document.querySelector(id);
+      if (t) {
+        e.preventDefault();
+        const nav = document.querySelector('.nav');
+        const offset = window.matchMedia('(max-width: 980px)').matches ? 88 : 24;
+        const y = Math.max(0, t.getBoundingClientRect().top + window.scrollY - offset);
+        const scroller = document.scrollingElement || document.documentElement;
+        if (typeof scroller.scrollTo === 'function') {
+          scroller.scrollTo({ top: y, behavior: 'smooth' });
+        } else {
+          scroller.scrollTop = y;
+          document.body.scrollTop = y;
+        }
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>
