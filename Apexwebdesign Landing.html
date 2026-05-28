@@ -330,6 +330,15 @@
     align-items: flex-start; gap: 10px;
   }
   .url-result.show{ display: flex; }
+  .url-result.error{
+    background: color-mix(in oklab, oklch(0.55 0.20 25) 10%, transparent);
+    border-color: color-mix(in oklab, oklch(0.55 0.20 25) 24%, var(--line));
+    color: oklch(0.42 0.16 25);
+  }
+  .url-result.error a{ color: inherit; font-weight: 600; text-decoration: underline; }
+  .url-result.error a:hover{ opacity: .75; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .spin-icon{ animation: spin .75s linear infinite; flex-shrink: 0; }
 
   .cta-row{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;}
   .btn{
@@ -1182,14 +1191,14 @@
   /* ============ SERVICES ============ */
   .svc-grid{
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-    background: var(--dark-line);
-    border: 1px solid var(--dark-line);
+    background: var(--line);
+    border: 1px solid var(--line);
     border-radius: var(--r-md); overflow: hidden;
   }
   @media (max-width: 980px){ .svc-grid{ grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 540px){ .svc-grid{ grid-template-columns: 1fr; } }
   .svc{
-    background: var(--dark);
+    background: var(--surface);
     padding: 28px 24px 30px;
     display: flex; flex-direction: column;
     min-height: 200px;
@@ -1197,9 +1206,9 @@
     cursor: default;
     position: relative;
   }
-  .svc:hover{ background: var(--dark-2); }
+  .svc:hover{ background: var(--bg); }
   .svc-num{
-    font-family: var(--mono); font-size: 11px; color: var(--dark-ink2);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
     margin-bottom: 16px; letter-spacing: 0.04em;
   }
   .svc-icon{
@@ -1211,9 +1220,9 @@
   }
   .svc h4{
     font-weight: 700; font-size: 19px; letter-spacing: -0.015em;
-    line-height: 1.2; margin: 0 0 8px; color: var(--dark-ink);
+    line-height: 1.2; margin: 0 0 8px; color: var(--ink);
   }
-  .svc p{ color: var(--dark-ink2); font-size: 14px; margin: 0; line-height: 1.5;}
+  .svc p{ color: var(--ink-2); font-size: 14px; margin: 0; line-height: 1.5;}
 
   /* ============ SEO MAP + PROFILE ============ */
   .seo-grid{
@@ -1326,9 +1335,32 @@
 
   /* ============ EXAMPLES ============ */
   .ex-grid{
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
   }
-  @media (max-width: 880px){ .ex-grid{ grid-template-columns: 1fr; } }
+  @media (max-width: 1100px){ .ex-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px){ .ex-grid{ grid-template-columns: 1fr; } }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+  .ex-card{ animation: cardIn .38s ease both; }
+  .ex-card:nth-child(2){ animation-delay:.06s; }
+  .ex-card:nth-child(3){ animation-delay:.12s; }
+  .ex-card:nth-child(4){ animation-delay:.18s; }
+  .ex-card:nth-child(5){ animation-delay:.24s; }
+  .ex-card:nth-child(6){ animation-delay:.30s; }
+  .work-pagination{
+    margin-top: 38px; display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+  }
+  .wp-btn, .wp-page{
+    height: 40px; min-width: 40px; padding: 0 10px;
+    border-radius: var(--r-sm); border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink-2);
+    font-family: var(--mono); font-size: 13px;
+    cursor: pointer; display: grid; place-items: center;
+    transition: border-color .18s, background .18s, color .18s;
+  }
+  .wp-btn:hover:not(:disabled), .wp-page:hover{ border-color: var(--ink-3); color: var(--ink); }
+  .wp-page.active{ background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .wp-btn:disabled{ opacity: .3; cursor: not-allowed; }
 
   .ex-card{
     background: var(--surface);
@@ -1421,9 +1453,9 @@
   }
   .price:hover{ transform: translateY(-4px); border-color: var(--ink-3); box-shadow: 0 26px 50px -36px rgba(14,18,23,0.22);}
   .price.featured{
-    background: var(--ink); color: var(--dark-ink); border-color: var(--ink);
+    background: color-mix(in oklab, var(--new) 8%, var(--surface)); color: var(--ink); border-color: color-mix(in oklab, var(--new) 35%, var(--line));
     transform: translateY(-14px);
-    box-shadow: 0 38px 70px -34px rgba(14,18,23,0.45);
+    box-shadow: 0 38px 70px -34px rgba(14,18,23,0.22);
   }
   .price.featured:hover{ transform: translateY(-18px); }
   @media (max-width: 980px){
@@ -1445,9 +1477,9 @@
     margin-bottom: 18px; width: max-content;
   }
   .price.featured .price-label{
-    background: rgba(255,255,255,0.07);
-    border-color: rgba(255,255,255,0.14);
-    color: var(--dark-ink2);
+    background: var(--bg);
+    border-color: var(--line);
+    color: var(--ink-3);
   }
   .price-name{
     font-family: var(--sans); font-weight: 700;
@@ -1455,15 +1487,15 @@
     margin: 0 0 14px;
     color: var(--ink); text-transform: none;
   }
-  .price.featured .price-name{ color: var(--dark-ink);}
+  .price.featured .price-name{ color: var(--ink);}
   .price-amount{
     font-weight: 800; font-size: 40px; letter-spacing: -0.03em; line-height: 1;
     margin: 0 0 16px;
   }
   .price-amount .prefix{ font-family: var(--mono); font-size: 13px; color: var(--ink-3); font-weight: 500; margin-right: 8px;}
-  .price.featured .price-amount .prefix{ color: var(--dark-ink2); }
+  .price.featured .price-amount .prefix{ color: var(--ink-3); }
   .price-amount .currency{ font-family: var(--mono); font-size: 18px; color: var(--ink-2); font-weight: 500;}
-  .price.featured .price-amount .currency{ color: var(--dark-ink2);}
+  .price.featured .price-amount .currency{ color: var(--ink-2);}
   .price-best{
     padding: 12px 14px;
     border-radius: 10px;
@@ -1474,21 +1506,21 @@
     line-height: 1.45;
   }
   .price.featured .price-best{
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.10);
-    color: var(--dark-ink2);
+    background: var(--bg);
+    border-color: var(--line);
+    color: var(--ink-2);
   }
   .price-list{ list-style: none; padding: 0; margin: 0 0 26px; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px;}
   .price-list li{ display: flex; gap: 10px; align-items: flex-start;}
   .price-list .ic{ color: var(--new); flex-shrink: 0; margin-top: 3px;}
-  .price.featured .price-list .ic{ color: color-mix(in oklab, var(--new) 75%, white); }
+  .price.featured .price-list .ic{ color: var(--new); }
   .price .btn{ margin-top: auto; justify-content: center;}
   .price-note{
     font-family: var(--mono); font-size: 11px; color: var(--ink-3);
     margin-top: 12px; text-align: center; letter-spacing: 0.02em;
     line-height: 1.4;
   }
-  .price.featured .price-note{ color: var(--dark-ink2);}
+  .price.featured .price-note{ color: var(--ink-3);}
 
   /* Custom / e-shop block */
   .custom{
@@ -1504,7 +1536,7 @@
   .custom:hover{ border-color: var(--ink-3); transform: translateY(-3px); box-shadow: 0 28px 50px -36px rgba(14,18,23,0.22);}
   @media (max-width: 880px){ .custom{ grid-template-columns: 1fr; } }
   .custom-left{
-    background: var(--ink); color: var(--dark-ink);
+    background: color-mix(in oklab, var(--new) 8%, var(--bg)); color: var(--ink);
     padding: 40px 38px;
     display: flex; flex-direction: column; gap: 16px;
     position: relative; overflow: hidden;
@@ -1513,15 +1545,15 @@
     content:""; position: absolute; top: -120px; right: -100px;
     width: 300px; height: 300px;
     background: radial-gradient(circle, var(--new) 0%, transparent 60%);
-    opacity: .25; pointer-events: none;
+    opacity: .10; pointer-events: none;
   }
   .custom-left > *{ position: relative; z-index: 1;}
   .custom-label{
     display: inline-flex; align-items: center; gap: 8px;
     font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
-    color: var(--dark-ink2); text-transform: uppercase;
+    color: var(--ink-2); text-transform: uppercase;
     padding: 4px 10px; border-radius: 999px;
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+    background: var(--surface); border: 1px solid var(--line);
     width: max-content;
   }
   .custom-left h3{
@@ -1530,15 +1562,15 @@
     margin: 0;
   }
   .custom-left p{
-    color: var(--dark-ink2); font-size: 15px; margin: 0;
+    color: var(--ink-2); font-size: 15px; margin: 0;
     max-width: 400px;
   }
   .custom-amount{
     font-weight: 800; font-size: 36px; letter-spacing: -0.03em; line-height: 1;
     margin-top: 6px;
   }
-  .custom-amount .prefix{ font-family: var(--mono); font-size: 13px; color: var(--dark-ink2); font-weight: 500; margin-right: 8px;}
-  .custom-amount .currency{ font-family: var(--mono); font-size: 16px; color: var(--dark-ink2); font-weight: 500;}
+  .custom-amount .prefix{ font-family: var(--mono); font-size: 13px; color: var(--ink-3); font-weight: 500; margin-right: 8px;}
+  .custom-amount .currency{ font-family: var(--mono); font-size: 16px; color: var(--ink-2); font-weight: 500;}
   .custom-cta{ margin-top: 8px; width: max-content;}
   .custom-right{
     padding: 40px 38px;
@@ -1607,22 +1639,24 @@
     border-radius: var(--r-lg); overflow: hidden;
   }
   .form-head{
-    background: var(--ink); color: var(--bg);
+    background: var(--bg-2); color: var(--ink);
     padding: 28px 32px;
     display: flex; justify-content: space-between; align-items: end; gap: 18px;
     flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
   }
   .form-head h2{
     font-weight: 800; font-size: clamp(28px, 3vw, 36px); letter-spacing: -0.025em;
     line-height: 1.05; margin: 0;
   }
-  .form-head p{ color: var(--dark-ink2); font-size: 14.5px; margin: 8px 0 0; max-width: 480px;}
-  .form-head .stamp{ font-family: var(--mono); font-size: 11px; color: color-mix(in oklab, var(--new) 80%, white); letter-spacing: 0.06em;}
+  .form-head p{ color: var(--ink-2); font-size: 15.5px; margin: 10px 0 0; max-width: 560px; line-height: 1.55;}
+  .form-head .stamp{ font-family: var(--mono); font-size: 11px; color: var(--new); letter-spacing: 0.06em; align-self: flex-start;}
   .form-body{
-    padding: 32px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
   }
-  @media (max-width: 720px){ .form-body{ grid-template-columns: 1fr; padding: 24px;} }
+  @media (max-width: 720px){ .form-body{ padding: 0; } }
   .field{ display: flex; flex-direction: column; gap: 6px;}
   .field.full{ grid-column: 1 / -1; }
   .field label{
@@ -1695,6 +1729,198 @@
   }
   .form-success.show{ display: flex; }
 
+  /* ---- form sections ---- */
+  .form-section{
+    padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 720px){ .form-section{ padding: 22px 20px; gap: 14px; } }
+  .form-section-label{
+    display: block;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--new); opacity: .85;
+  }
+  .form-section-grid{
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  @media (max-width: 720px){ .form-section-grid{ grid-template-columns: 1fr; } }
+  .form-section-grid .field.full{ grid-column: 1 / -1; }
+
+  /* ---- choice pills ---- */
+  .choice-pills{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice-pill{ display: inline-flex; cursor: pointer; }
+  .choice-pill input{ display: none; }
+  .choice-pill span{
+    display: inline-flex; align-items: center;
+    padding: 9px 17px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--bg);
+    color: var(--ink-2); font-size: 14px; line-height: 1;
+    cursor: pointer; user-select: none;
+    transition: border-color .18s, background .18s, color .18s;
+  }
+  .choice-pill span:hover{ border-color: var(--ink-3); color: var(--ink); background: var(--surface); }
+  .choice-pill input:checked + span{
+    background: var(--ink); border-color: var(--ink); color: var(--bg);
+  }
+
+  /* ---- main textarea block ---- */
+  .field-main-wrap{
+    background: color-mix(in oklab, var(--new) 5%, var(--bg));
+    border: 1px solid color-mix(in oklab, var(--new) 20%, var(--line));
+    border-radius: var(--r-md); padding: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .field-main-header{
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 6px;
+  }
+  .field-main-header > label{
+    font-family: var(--sans) !important; font-size: 15px !important;
+    font-weight: 600 !important; color: var(--ink) !important;
+    letter-spacing: -0.01em !important; text-transform: none !important;
+  }
+  .field-hint{
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.02em;
+  }
+  .field-main-wrap .field textarea{
+    min-height: 160px;
+    background: var(--surface) !important;
+    border-color: color-mix(in oklab, var(--new) 16%, var(--line)) !important;
+  }
+  .field-main-wrap .field textarea:focus{
+    border-color: var(--new) !important;
+  }
+
+  /* ---- helpers ---- */
+  .optional{
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.06em; text-transform: uppercase; font-weight: 400; margin-left: 5px;
+  }
+  .field-note{
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-3);
+    line-height: 1.5; letter-spacing: 0.01em;
+  }
+  .file-drop-sm{
+    padding: 12px 18px; flex-direction: row;
+    justify-content: center; gap: 8px; font-size: 13px; text-align: left;
+  }
+  .file-drop-sm strong{ margin-bottom: 0; display: inline; }
+
+  /* ---- form bottom ---- */
+  .form-bottom{
+    padding: 24px 32px; display: flex; flex-direction: column; gap: 14px;
+  }
+  @media (max-width: 720px){ .form-bottom{ padding: 20px; } }
+  .form-bottom-row{
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .form-bottom-row .note{
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.02em;
+  }
+  .submit-note{
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin: 8px 0 0; letter-spacing: 0.01em;
+  }
+  @media (max-width: 540px){ .btn-submit-full{ width: 100%; justify-content: center; } }
+
+  /* ============ PORTFOLIO SHOWCASE ============ */
+  .pf-portfolio{ display: flex; flex-direction: column; gap: 14px; }
+  .pf-main{
+    display: grid; grid-template-columns: 1.12fr 1fr;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); overflow: hidden;
+    box-shadow: 0 24px 56px -36px rgba(14,18,23,.14);
+    transition: opacity .22s ease, transform .22s ease;
+  }
+  @media (max-width: 960px){ .pf-main{ grid-template-columns: 1fr; } }
+  .pf-main.is-switching{ opacity: 0; transform: translateY(7px); pointer-events: none; }
+  .pf-main-visual{
+    background: var(--bg); border-right: 1px solid var(--line);
+    padding: 36px 28px; display: flex; align-items: center; justify-content: center;
+    min-height: 460px;
+  }
+  @media (max-width: 960px){ .pf-main-visual{ border-right: none; border-bottom: 1px solid var(--line); min-height: 260px; padding: 28px 22px; } }
+  .pf-main-body{
+    padding: 38px 40px; display: flex; flex-direction: column;
+  }
+  @media (max-width: 720px){ .pf-main-body{ padding: 26px 22px; } }
+  .pf-cat{
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--new); opacity: .9; margin-bottom: 8px;
+  }
+  .pf-num{ font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .pf-title{ font-weight: 800; font-size: clamp(22px, 2.2vw, 30px); letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 10px; }
+  .pf-short{ color: var(--ink-2); font-size: 14.5px; line-height: 1.55; margin: 0 0 20px; }
+  .pf-rows{ border-top: 1px solid var(--line); margin-bottom: 18px; }
+  .pf-row{ display: grid; grid-template-columns: 116px 1fr; gap: 12px; align-items: baseline; border-bottom: 1px solid var(--line); padding: 11px 0; }
+  .pf-row .rk{ font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; color: var(--new); text-transform: uppercase; padding-top: 1px; }
+  .pf-row .rv{ font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+  .pf-tags{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+  .pf-tag{ font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--ink-2); }
+  .pf-cta-area{ margin-top: auto; }
+  .pf-cta-note{ font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); margin: 9px 0 0; letter-spacing: 0.01em; }
+
+  .pf-mini-grid{ display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+  @media (max-width: 1200px){ .pf-mini-grid{ grid-template-columns: repeat(4,1fr); } }
+  @media (max-width: 860px){ .pf-mini-grid{ grid-template-columns: repeat(3,1fr); } }
+  @media (max-width: 640px){
+    .pf-mini-grid{ display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 12px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch; }
+  }
+  .pf-mini{ background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; cursor: pointer; display: flex; flex-direction: column; transition: transform .22s cubic-bezier(.2,.7,.2,1), border-color .2s, box-shadow .2s; }
+  @media (max-width: 640px){ .pf-mini{ flex: 0 0 auto; min-width: 190px; max-width: 220px; scroll-snap-align: start; } }
+  .pf-mini:hover{ transform: translateY(-4px); border-color: var(--ink-3); box-shadow: 0 14px 28px -18px rgba(14,18,23,.16); }
+  .pf-mini.active{ border-color: var(--new); box-shadow: 0 0 0 3px color-mix(in oklab, var(--new) 18%, transparent); }
+  .pf-mini.active:hover{ transform: translateY(-2px); }
+  .pf-mini-preview{ height: 100px; overflow: hidden; display: flex; flex-direction: column; }
+  @media (max-width: 640px){ .pf-mini-preview{ height: 80px; } }
+  .pf-mini-bar{ height: 18px; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-bottom: 1px solid rgba(14,18,23,.08); flex-shrink: 0; }
+  .pf-mini-bar i{ width: 6px; height: 6px; border-radius: 50%; background: rgba(128,128,128,.35); display: inline-block; }
+  .pf-mini-screen{ padding: 7px 9px 8px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .msl{ height: 5px; border-radius: 2px; width: 88%; }
+  .msl:first-child{ height: 7px; width: 68%; }
+  .msl:last-of-type{ width: 50%; }
+  .msh{ height: 13px; border-radius: 999px; width: 50%; margin-top: 2px; }
+  .pf-mini-body{ padding: 11px 13px; flex: 1; }
+  .pf-mini-num{ font-family: var(--mono); font-size: 10px; color: var(--new); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+  .pf-mini-title{ font-weight: 700; font-size: 13px; line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 6px; color: var(--ink); }
+  .pf-mini-tags{ display: flex; flex-wrap: wrap; gap: 4px; }
+  .pf-mini-tags i{ font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--ink-3); }
+
+  .pf-browsers{ position: relative; width: 100%; display: grid; grid-template-columns: 1fr 1.1fr; gap: 16px; align-items: flex-end; }
+  @media (max-width: 500px){ .pf-before{ display: none; } .pf-browsers{ grid-template-columns: 1fr; } }
+  .pf-browser{ background: var(--surface); border-radius: 10px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 16px 36px -20px rgba(14,18,23,.22); position: relative; }
+  .pf-before{ transform: translateY(12px) rotate(-1.5deg); filter: saturate(.4) brightness(.95); z-index: 1; }
+  .pf-after{ z-index: 2; box-shadow: 0 22px 44px -26px rgba(14,18,23,.36); }
+  .pfb-bar{ display: flex; align-items: center; gap: 7px; padding: 7px 10px; background: var(--bg-2); border-bottom: 1px solid var(--line); }
+  .pfb-bar-old{ background: #D7CFBF !important; border-color: #C2B89A !important; }
+  .pfb-dots{ display: inline-flex; gap: 4px; }
+  .pfb-dots i{ width: 8px; height: 8px; border-radius: 50%; background: #BFB7A6; display: inline-block; }
+  .pfb-url{ flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 3px 7px; font-family: var(--mono); font-size: 9px; color: var(--ink-3); overflow: hidden; white-space: nowrap; }
+  .pfb-old{ padding: 10px; background: #ECE6D6; color: #4A4232; min-height: 140px; }
+  .pfo-h{ font-family: "Times New Roman", serif; font-size: 10.5px; font-weight: 700; color: #6B5640; text-align: center; text-decoration: underline; margin-bottom: 6px; }
+  .pfo-hr{ height: 1px; background: #C2B89A; margin-bottom: 6px; }
+  .pfo-layout{ display: grid; grid-template-columns: 26% 1fr; gap: 5px; }
+  .pfo-sidebar{ background: #D9CFB7; border: 1px solid #BBB094; padding: 4px; display: flex; flex-direction: column; gap: 3px; }
+  .pfo-sidebar i{ height: 5px; background: #B5A88C; border-radius: 1px; display: block; }
+  .pfo-sidebar i:first-child{ width: 70%; background: #8E7E61; height: 6px; }
+  .pfo-main{ background: #F5EFDD; border: 1px solid #C9BD9E; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
+  .pfo-main b{ height: 6px; background: #2A6CC9; border-radius: 1px; display: block; width: 60%; }
+  .pfo-main p{ height: 4px; background: #9A8C75; border-radius: 1px; display: block; }
+  .pfo-main p:last-of-type{ width: 75%; }
+  .pfo-main span{ height: 11px; background: linear-gradient(180deg,#FFEAB0,#C8A14A); border-radius: 2px; display: block; width: 42%; margin-top: 3px; }
+  .pfb-new{ padding: 12px; min-height: 160px; display: flex; flex-direction: column; gap: 6px; background: var(--after-bg,#FAFAFA); }
+  .pfn-eyebrow{ font-family: var(--mono); font-size: 7px; letter-spacing: 0.1em; color: var(--after-acc,#2570B3); text-transform: uppercase; opacity: .85; }
+  .pfn-h{ font-size: 14px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.0; color: var(--after-text,#0E1217); }
+  .pfn-sub{ height: 4px; border-radius: 2px; background: var(--after-muted,rgba(14,18,23,.15)); width: 85%; }
+  .pfn-sub2{ height: 4px; border-radius: 2px; background: var(--after-muted,rgba(14,18,23,.12)); width: 60%; }
+  .pfn-btn{ height: 16px; border-radius: 999px; background: var(--after-acc,#2570B3); width: 50%; margin-top: 2px; }
+  .pfn-cards{ display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; margin-top: auto; }
+  .pfn-cards i{ height: 20px; border-radius: 3px; background: var(--after-muted,rgba(14,18,23,.1)); display: block; }
+  .pf-chip{ position: absolute; top: -9px; left: 12px; z-index: 4; font-family: var(--mono); font-weight: 700; font-size: 9px; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.08em; }
+  .pf-chip-before{ background: var(--old); color: #fff; }
+  .pf-chip-after{ background: var(--new); color: #fff; }
+
   /* ============ FAQ ============ */
   .faq{
     display: flex; flex-direction: column; gap: 1px;
@@ -1733,8 +1959,9 @@
 
   /* ============ FINAL CTA ============ */
   .final{
-    background: var(--ink); color: var(--dark-ink);
+    background: var(--bg-2); color: var(--ink);
     border-radius: var(--r-lg);
+    border: 1px solid var(--line);
     padding: 70px 56px;
     display: grid; grid-template-columns: 1.4fr 1fr;
     gap: 48px; align-items: end;
@@ -1745,15 +1972,15 @@
     content:""; position: absolute; top: -120px; right: -120px;
     width: 360px; height: 360px;
     background: radial-gradient(circle, var(--new) 0%, transparent 60%);
-    opacity: .35;
+    opacity: .10;
     pointer-events: none;
   }
   .final::after{
     content:""; position: absolute;
     right: -40px; bottom: -60px;
     width: 360px; height: 320px;
-    background: url('assets/apex-logo-white.png') center/contain no-repeat;
-    opacity: 0.07;
+    background: url('assets/apex-logo.png') center/contain no-repeat;
+    opacity: 0.05;
     pointer-events: none;
     z-index: 0;
   }
@@ -1766,7 +1993,7 @@
     margin: 0; text-wrap: balance;
     position: relative; z-index: 1;
   }
-  .final p{ color: var(--dark-ink2); margin: 16px 0 0; font-size: 16.5px; max-width: 440px; position: relative; z-index: 1;}
+  .final p{ color: var(--ink-2); margin: 16px 0 0; font-size: 16.5px; max-width: 440px; position: relative; z-index: 1;}
   .final-cta{ position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px;}
 
   /* ============ FOOTER ============ */
@@ -1819,9 +2046,9 @@
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M20 20l-4.2-4.2" stroke-linecap="round"/></svg>
         <span class="nav-label">SEO &amp; Google</span>
       </a>
-      <a class="nav-item" href="#examples" aria-label="Ukázky">
+      <a class="nav-item" href="#examples" aria-label="Naše práce">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M9 21h6M12 17v4M8 9h5M8 13h8" stroke-linecap="round"/></svg>
-        <span class="nav-label">Ukázky</span>
+        <span class="nav-label">Naše práce</span>
       </a>
       <a class="nav-item" href="#pricing" aria-label="Ceník">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 7h11M6 12h9M6 17h7" stroke-linecap="round"/><path d="M16 16.5l1.7 1.7L21 14" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1858,12 +2085,12 @@
       </div>
 
       <div class="cta-row">
-        <a href="#form" class="btn btn-primary">
-          Chci moderní web
+        <button type="button" class="btn btn-primary" onclick="startFresh()">
+          Začínám od nuly
           <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="#modernization" class="btn btn-secondary">
-          Mám starý web
+        </button>
+        <a href="#pricing" class="btn btn-secondary">
+          Ceník
           <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </div>
@@ -2088,7 +2315,7 @@
 </section>
 
 <!-- ========== 4. SERVICES ========== -->
-<section class="block dark" id="services">
+<section class="block" id="services">
   <div class="wrap">
     <div class="section-head reveal">
       <div>
@@ -2243,121 +2470,23 @@
   </div>
 </section>
 
-<!-- ========== 6. EXAMPLES ========== -->
+<!-- ========== 6. NAŠE PRÁCE ========== -->
 <section class="block" id="examples">
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <div class="section-eyebrow">Ukázky</div>
-        <h2 class="section-title">Ukázky modernizací</h2>
+        <div class="section-eyebrow">Naše práce</div>
+        <h2 class="section-title">Podívejte se, jak&nbsp;může vypadat změna</h2>
       </div>
-      <p class="section-sub">Modelové projekty bez&nbsp;falešných klientských jmen. Reálné reference postupně doplňujeme — rádi vám je&nbsp;ukážeme osobně.</p>
+      <p class="section-sub">Vyberte si ukázku projektu a&nbsp;podívejte se, co jsme řešili, jak jsme web upravili a&nbsp;jaký výsledek má nový web přinést.</p>
     </div>
 
-    <div class="ex-grid">
-      <article class="ex-card reveal">
-        <div class="ex-visual">
-          <div class="mini-old">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="mini-new">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="ex-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </div>
-        </div>
-        <div class="ex-body">
-          <span class="ex-num">CASE 01</span>
-          <h3 class="ex-title">Nový web pro&nbsp;lokální službu</h3>
-          <div class="ex-rows">
-            <div class="ex-row"><span class="k">Před</span><span class="v">Žádný vlastní web, jen&nbsp;profil na&nbsp;sociální síti a&nbsp;telefon předávaný z&nbsp;ruky do&nbsp;ruky.</span></div>
-            <div class="ex-row"><span class="k">Zásah</span><span class="v">Nová stránka s&nbsp;jasnou nabídkou, formulářem v&nbsp;hlavičce a&nbsp;mobilní verzí.</span></div>
-            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Web vede zákazníka přímo k&nbsp;poptávce do&nbsp;tří kliknutí.</span></div>
-          </div>
-          <div class="ex-tags"><i>Nový web</i><i>Mobilní verze</i><i>Formulář</i><i>SEO základ</i></div>
-        </div>
-      </article>
-
-      <article class="ex-card reveal">
-        <div class="ex-visual">
-          <div class="mini-old">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="mini-new">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="ex-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </div>
-        </div>
-        <div class="ex-body">
-          <span class="ex-num">CASE 02</span>
-          <h3 class="ex-title">Redesign starého firemního webu</h3>
-          <div class="ex-rows">
-            <div class="ex-row"><span class="k">Před</span><span class="v">Letitý vizuál ze&nbsp;začátku 2010s, smíšené fonty, nečitelný kontakt.</span></div>
-            <div class="ex-row"><span class="k">Zásah</span><span class="v">Sjednocení vizuálu, přestavba struktury, přepis úvodních textů, zaměření na&nbsp;mobil.</span></div>
-            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Profesionálnější dojem, který odpovídá kvalitě nabízených služeb.</span></div>
-          </div>
-          <div class="ex-tags"><i>Redesign</i><i>SEO základ</i><i>Mobilní verze</i><i>Google profil</i></div>
-        </div>
-      </article>
-
-      <article class="ex-card reveal">
-        <div class="ex-visual">
-          <div class="mini-old">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="mini-new">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="ex-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </div>
-        </div>
-        <div class="ex-body">
-          <span class="ex-num">CASE 03</span>
-          <h3 class="ex-title">Landing page pro&nbsp;nabídku</h3>
-          <div class="ex-rows">
-            <div class="ex-row"><span class="k">Před</span><span class="v">Reklama posílala lidi na&nbsp;obecnou úvodní stránku, kde se&nbsp;ztratili.</span></div>
-            <div class="ex-row"><span class="k">Zásah</span><span class="v">Krátká cílená landing page s&nbsp;jedním cílem — vyplnit formulář nebo&nbsp;zavolat.</span></div>
-            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Návštěvník vidí jediné rozhodnutí: vyplnit, nebo&nbsp;volat.</span></div>
-          </div>
-          <div class="ex-tags"><i>Nový web</i><i>Formulář</i><i>Mobilní verze</i></div>
-        </div>
-      </article>
-
-      <article class="ex-card reveal">
-        <div class="ex-visual">
-          <div class="mini-old">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="mini-new">
-            <div class="bar"></div>
-            <div class="body"><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="ex-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </div>
-        </div>
-        <div class="ex-body">
-          <span class="ex-num">CASE 04</span>
-          <h3 class="ex-title">Online prezentace pro&nbsp;osobní značku</h3>
-          <div class="ex-rows">
-            <div class="ex-row"><span class="k">Před</span><span class="v">Web bez&nbsp;tváře, žádný důvod, proč si&nbsp;vybrat zrovna tohoto odborníka.</span></div>
-            <div class="ex-row"><span class="k">Zásah</span><span class="v">Důraz na&nbsp;osobnost, jasná nabídka, reference a&nbsp;jednoduchá cesta ke&nbsp;schůzce.</span></div>
-            <div class="ex-row"><span class="k">Výsledek</span><span class="v">Web, který návštěvníka přesvědčí během prvních pár vteřin.</span></div>
-          </div>
-          <div class="ex-tags"><i>Nový web</i><i>SEO základ</i><i>Mobilní verze</i><i>Google profil</i></div>
-        </div>
-      </article>
+    <div class="pf-portfolio reveal">
+      <div class="pf-main" id="pfMain">
+        <div class="pf-main-visual" id="pfVisual"></div>
+        <div class="pf-main-body" id="pfBody"></div>
+      </div>
+      <div class="pf-mini-grid" id="pfMiniGrid"></div>
     </div>
   </div>
 </section>
@@ -2411,7 +2540,7 @@
           <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Mobilní optimalizace</li>
           <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pomoc s&nbsp;Google firemním profilem</li>
         </ul>
-        <a href="#form" class="btn btn-on-dark">Chci Premium Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#form" class="btn btn-primary">Chci Premium Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <div class="price-note">Nejlepší volba pro&nbsp;web, který má&nbsp;působit důvěryhodně a&nbsp;přivádět poptávky.</div>
       </div>
 
@@ -2447,9 +2576,9 @@
           Individuálně
         </span>
         <h3>E-shop nebo&nbsp;větší projekt?</h3>
-        <div class="custom-amount"><span class="prefix">od</span>49&nbsp;900<span class="currency"> Kč</span></div>
+        <div class="custom-amount">Podle dohody</div>
         <p>E-shopy, rezervační systémy, členské sekce a&nbsp;složitější weby naceňujeme individuálně podle rozsahu, funkcí a&nbsp;napojení.</p>
-        <a href="#form" class="btn btn-on-dark custom-cta">
+        <a href="#form" class="btn btn-primary custom-cta">
           Chci nacenit e-shop
           <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
@@ -2521,94 +2650,121 @@
       <div class="form-head">
         <div>
           <h2>Chci moderní web</h2>
-          <p>Pošlete nám odkaz na&nbsp;starý web nebo&nbsp;napište, že&nbsp;začínáte od&nbsp;nuly. Ozveme se&nbsp;a&nbsp;navrhneme další krok.</p>
+          <p>Nemusíte mít hotové zadání. Napište vlastními slovy, co&nbsp;řešíte, a&nbsp;ozveme se&nbsp;s&nbsp;návrhem dalšího kroku.</p>
         </div>
         <span class="stamp">// nezávazná poptávka</span>
       </div>
+
       <form class="form-body" id="caseForm" onsubmit="event.preventDefault(); submitCase();">
-        <div class="field">
-          <label>Jméno a&nbsp;příjmení</label>
-          <input type="text" required placeholder="Jana Nováková" />
-        </div>
-        <div class="field">
-          <label>E-mail</label>
-          <input type="email" required placeholder="jana@firma.cz" />
-        </div>
-        <div class="field">
-          <label>Telefon</label>
-          <input type="tel" placeholder="+420" />
-        </div>
-        <div class="field">
-          <label>Název firmy / značky</label>
-          <input type="text" placeholder="Vaše firma s.r.o." />
-        </div>
-        <div class="field">
-          <label>Máte aktuální web?</label>
-          <div class="radio-row">
-            <label><input type="radio" name="hasweb" /><span class="lbl">Ano</span></label>
-            <label><input type="radio" name="hasweb" /><span class="lbl">Ne</span></label>
+
+        <!-- 01 Kontakt -->
+        <div class="form-section">
+          <span class="form-section-label">01 &nbsp;Kontakt</span>
+          <div class="form-section-grid">
+            <div class="field">
+              <label>Jméno</label>
+              <input type="text" name="name" required placeholder="Jan Novák" />
+            </div>
+            <div class="field">
+              <label>E-mail nebo telefon</label>
+              <input type="text" name="contact" required placeholder="jan@email.cz / +420…" />
+            </div>
+            <div class="field full">
+              <label>Firma nebo značka<span class="optional">volitelné</span></label>
+              <input type="text" name="company" placeholder="např. Autoservis Novák, nová značka oblečení…" />
+            </div>
           </div>
         </div>
-        <div class="field">
-          <label>URL aktuálního webu</label>
-          <input type="text" placeholder="https://..." />
-        </div>
-        <div class="field">
-          <label>Co potřebujete?</label>
-          <select>
-            <option>Nový web</option>
-            <option>Redesign starého webu</option>
-            <option>Landing page</option>
-            <option>SEO / Google profil</option>
-            <option>Nevím, potřebuji poradit</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Rozsah projektu</label>
-          <select>
-            <option>Jednoduchý web</option>
-            <option>Firemní web</option>
-            <option>Větší web</option>
-            <option>Nevím</option>
-          </select>
-        </div>
-        <div class="field full">
-          <label>Rozpočet</label>
-          <div class="radio-row">
-            <label><input type="radio" name="budget" /><span class="lbl">do 10&nbsp;000 Kč</span></label>
-            <label><input type="radio" name="budget" /><span class="lbl">10–20&nbsp;000 Kč</span></label>
-            <label><input type="radio" name="budget" /><span class="lbl">20–40&nbsp;000 Kč</span></label>
-            <label><input type="radio" name="budget" /><span class="lbl">40&nbsp;000+ Kč</span></label>
-            <label><input type="radio" name="budget" /><span class="lbl">nevím</span></label>
+
+        <!-- 02 Co řešíte -->
+        <div class="form-section">
+          <span class="form-section-label">02 &nbsp;Co řešíte</span>
+          <div class="field">
+            <label>Co přibližně potřebujete?</label>
+            <div class="choice-pills">
+              <label class="choice-pill"><input type="radio" name="need" value="Chci nový web"><span>Chci nový web</span></label>
+              <label class="choice-pill"><input type="radio" name="need" value="Mám starý web a chci ho zlepšit"><span>Mám starý web a&nbsp;chci ho zlepšit</span></label>
+              <label class="choice-pill"><input type="radio" name="need" value="Potřebuju e-shop"><span>Potřebuju e-shop</span></label>
+              <label class="choice-pill"><input type="radio" name="need" value="Začínám nový brand"><span>Začínám nový brand</span></label>
+              <label class="choice-pill"><input type="radio" name="need" value="Chci jen poradit"><span>Chci jen poradit</span></label>
+              <label class="choice-pill"><input type="radio" name="need" value="Nevím přesně"><span>Nevím přesně</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <label>Máte aktuální web?</label>
+            <div class="choice-pills">
+              <label class="choice-pill"><input type="radio" name="hasweb" value="Ano"><span>Ano</span></label>
+              <label class="choice-pill"><input type="radio" name="hasweb" value="Ne"><span>Ne</span></label>
+            </div>
+          </div>
+          <div class="field" id="urlFieldWrap" style="display:none;">
+            <label>Odkaz na aktuální web</label>
+            <input type="text" id="formUrlInput" name="current_url" placeholder="https://…" />
           </div>
         </div>
-        <div class="field full">
-          <label>Nahrát logo, fotky, screenshoty nebo&nbsp;inspiraci</label>
-          <label class="file-drop">
-            <strong>Přetáhněte soubory nebo&nbsp;klikněte pro&nbsp;výběr</strong>
-            PDF, PNG, JPG, ZIP &nbsp;·&nbsp; max 25 MB
-            <input type="file" multiple style="display:none;" />
+
+        <!-- 03 Vaše představa -->
+        <div class="form-section">
+          <span class="form-section-label">03 &nbsp;Vaše představa</span>
+          <div class="field">
+            <div class="field-main-wrap">
+              <div class="field-main-header">
+                <label for="mainMessage">Co máte na mysli?</label>
+                <span class="field-hint">Klidně jen pár vět. Technické pojmy nepotřebujete.</span>
+              </div>
+              <div class="field">
+                <textarea id="mainMessage" name="message" placeholder="Popište jednoduše, co potřebujete. Například: mám starý web a chci ho zmodernizovat, zakládám nový brand, potřebuji jednoduchý web pro služby, chci e-shop, nebo zatím nevím a potřebuji poradit."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 Doplňkově -->
+        <div class="form-section">
+          <span class="form-section-label">04 &nbsp;Doplňkově</span>
+          <div class="field">
+            <label>Přibližný rozpočet<span class="optional">volitelné</span></label>
+            <div class="choice-pills">
+              <label class="choice-pill"><input type="radio" name="budget" value="do 10 000 Kč"><span>do 10 000 Kč</span></label>
+              <label class="choice-pill"><input type="radio" name="budget" value="10–20 000 Kč"><span>10–20 000 Kč</span></label>
+              <label class="choice-pill"><input type="radio" name="budget" value="20–40 000 Kč"><span>20–40 000 Kč</span></label>
+              <label class="choice-pill"><input type="radio" name="budget" value="40 000+ Kč"><span>40 000+ Kč</span></label>
+              <label class="choice-pill"><input type="radio" name="budget" value="nevím"><span>nevím, poraďte mi</span></label>
+            </div>
+            <span class="field-note">Když nevíte, nevadí. Navrhneme řešení podle toho, co dává smysl.</span>
+          </div>
+          <div class="field">
+            <label>Logo, fotky nebo inspirace<span class="optional">volitelné</span></label>
+            <label class="file-drop file-drop-sm">
+              <strong>Nahrajte je sem</strong>
+              nebo je můžete poslat i&nbsp;později.&nbsp; PDF, PNG, JPG, ZIP
+              <input type="file" multiple style="display:none;" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Odeslat -->
+        <div class="form-bottom">
+          <label class="check-field">
+            <input type="checkbox" required />
+            <span>Souhlasím se&nbsp;zpracováním údajů za&nbsp;účelem kontaktování.</span>
           </label>
+          <div class="form-bottom-row">
+            <div>
+              <button type="submit" class="btn btn-primary btn-submit-full">
+                Odeslat nezávazně
+                <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <p class="submit-note">Ozveme se&nbsp;a&nbsp;společně doladíme, co&nbsp;dává největší smysl.</p>
+            </div>
+            <span class="note">// odpovídáme do&nbsp;1&nbsp;pracovního dne</span>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Děkujeme, poptávku jsme přijali. Brzy se&nbsp;vám ozveme a&nbsp;projdeme možnosti modernizace.
+          </div>
         </div>
-        <div class="field full">
-          <label>Krátký popis</label>
-          <textarea placeholder="Napište krátce, co potřebujete změnit nebo vytvořit."></textarea>
-        </div>
-        <label class="check-field">
-          <input type="checkbox" required />
-          <span>Souhlasím se&nbsp;zpracováním údajů za&nbsp;účelem kontaktování.</span>
-        </label>
-        <div class="submit-row">
-          <button type="submit" class="btn btn-primary">
-            Odeslat nezávaznou poptávku
-            <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-          <span style="font-family: var(--mono); font-size: 12px; color: var(--ink-3);">// odpovídáme do&nbsp;1&nbsp;pracovního dne</span>
-        </div>
-        <div class="form-success" id="formSuccess">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Děkujeme, poptávku jsme přijali. Brzy se&nbsp;vám ozveme a&nbsp;projdeme možnosti modernizace.
-        </div>
+
       </form>
     </div>
   </div>
@@ -2663,11 +2819,11 @@
         <p>Ať začínáte od&nbsp;nuly, nebo&nbsp;máte starý web, pomůžeme vám vytvořit modernější a&nbsp;dohledatelnější online prezentaci.</p>
       </div>
       <div class="final-cta">
-        <a href="#form" class="btn btn-on-dark" style="padding: 16px 26px; font-size: 15px;">
+        <a href="#form" class="btn btn-primary" style="padding: 16px 26px; font-size: 15px;">
           Chci nezávaznou konzultaci
           <svg class="arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a href="mailto:apexwebredesign@gmail.com" class="btn btn-ghost-dark" style="padding: 14px 22px; font-size: 14px;">
+        <a href="mailto:apexwebredesign@gmail.com" class="btn btn-secondary" style="padding: 14px 22px; font-size: 14px;">
           apexwebredesign@gmail.com
         </a>
       </div>
@@ -2695,7 +2851,7 @@
       <div class="foot-col">
         <h5>Studio</h5>
         <ul>
-          <li><a href="#examples">Ukázky</a></li>
+          <li><a href="#examples">Naše práce</a></li>
           <li><a href="#pricing">Ceník</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#form">Poptávka</a></li>
@@ -2718,13 +2874,152 @@
 </footer>
 
 <script>
+/* ================================================================
+   PROJEKTY — přidávejte sem nové projekty do pole PROJECTS.
+   Každý objekt má:
+     num       – číslo (string, "01", "02" …)
+     cat       – kategorie / situace klienta
+     title     – název projektu
+     short     – krátký popis (1–2 věty)
+     situation – situace před zásahem
+     work      – co jsme udělali
+     result    – výsledek
+     tags      – pole štítků
+     visual    – barvy mockupu: afterBg, afterAccent, afterLabel, afterDark (bool)
+   ================================================================ */
+const PROJECTS = [
+  {
+    num: "01", cat: "Nemám web",
+    title: "Nový web pro instalatéra v Šumperku",
+    short: "Jednoduchý web pro lokální službu, který jasně vysvětluje nabídku a vede návštěvníka ke kontaktu.",
+    situation: "Klient měl jen telefon, Facebook stránku a pár fotek z realizací. Lidé často nevěděli, co přesně nabízí a jak ho rychle kontaktovat.",
+    work: "Navrhli jsme přehledný jednostránkový web s jasnou nabídkou služeb, tlačítkem pro zavolání, formulářem a mobilní verzí.",
+    result: "Návštěvník během pár sekund pochopí, co firma dělá, a může rovnou zavolat nebo poslat poptávku.",
+    tags: ["Nový web", "Mobilní verze", "Formulář", "SEO základ"],
+    visual: { afterBg: "#0F1923", afterAccent: "#2570B3", afterLabel: "Instalatér Šumperk", afterDark: true }
+  },
+  {
+    num: "02", cat: "Mám starý web",
+    title: "Redesign starého webu pro účetní kancelář",
+    short: "Zastaralý web jsme převedli do čistší a důvěryhodnější podoby.",
+    situation: "Původní web byl nepřehledný, měl zastaralý vzhled a návštěvník se špatně orientoval v nabízených službách.",
+    work: "Zjednodušili jsme strukturu, upravili texty, sjednotili vizuál a zvýraznili hlavní služby i cestu ke kontaktu.",
+    result: "Web působí profesionálněji a návštěvník rychleji pochopí, s čím kancelář pomůže.",
+    tags: ["Redesign", "Důvěryhodnost", "Přehlednost", "Texty"],
+    visual: { afterBg: "#FAFAF8", afterAccent: "#2A7A4B", afterLabel: "Účetní kancelář", afterDark: false }
+  },
+  {
+    num: "03", cat: "Landing page",
+    title: "Landing page pro zubní hygienu",
+    short: "Cílená stránka, která vede návštěvníka přímo k rezervaci termínu.",
+    situation: "Návštěvníci přicházeli z reklamy na obecnou stránku a často nevěděli, kde se objednat.",
+    work: "Navrhli jsme krátkou landing page s jasným benefitem, jednoduchým vysvětlením služby a výrazným tlačítkem pro rezervaci.",
+    result: "Návštěvník má před sebou jednu hlavní akci a může se rychle objednat.",
+    tags: ["Landing page", "Rezervace", "CTA", "Mobilní verze"],
+    visual: { afterBg: "#F0FAFA", afterAccent: "#0E9090", afterLabel: "Zubní hygiena", afterDark: false }
+  },
+  {
+    num: "04", cat: "E-shop / brand",
+    title: "Start nové značky s e-shopem",
+    short: "Úvodní web pro začínající brand, který představí produkty a připraví zákazníka na nákup.",
+    situation: "Značka měla produkty a sociální sítě, ale chyběla jí důvěryhodná prezentace a místo, kam posílat zákazníky.",
+    work: "Navrhli jsme moderní stránku s příběhem značky, ukázkou produktů, jasnými benefity a cestou k objednávce.",
+    result: "Brand působí důvěryhodněji a zákazník rychle pochopí, proč produkt vyzkoušet.",
+    tags: ["Brand", "E-shop", "Produktová stránka", "Obsah"],
+    visual: { afterBg: "#1C1510", afterAccent: "#D4874A", afterLabel: "Nová značka", afterDark: true }
+  },
+  {
+    num: "05", cat: "Lokální služba",
+    title: "Web pro autoservis",
+    short: "Přehledný web pro službu, kde zákazník rychle najde nabídku, telefon a možnost objednání.",
+    situation: "Autoservis měl informace rozházené na různých místech a zákazníci často volali jen kvůli základním dotazům.",
+    work: "Vytvořili jsme strukturovanou stránku s hlavními službami, otevírací dobou, mapou, telefonem a formulářem.",
+    result: "Lidé rychle najdou, co servis nabízí, kdy má otevřeno a jak se objednat.",
+    tags: ["Lokální SEO", "Kontakt", "Mapa", "Služby"],
+    visual: { afterBg: "#111827", afterAccent: "#E26B2B", afterLabel: "Autoservis", afterDark: true }
+  }
+  /* sem přidávejte další projekty */
+];
+
 /* ============ URL form ============ */
-function submitUrl(){
+let _heroUrl = '';
+
+async function submitUrl(){
   const input = document.getElementById('urlInput');
-  const result = document.getElementById('urlResult');
-  result.classList.add('show');
-  input.value = '';
-  setTimeout(() => result.classList.remove('show'), 6000);
+  const btn = document.querySelector('.url-form button');
+  let raw = input.value.trim();
+  if (!raw) return;
+
+  let url = raw;
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  let parsed;
+  try { parsed = new URL(url); } catch(e) { parsed = null; }
+  if (!parsed || !parsed.hostname.includes('.')) {
+    showUrlFeedback('error', 'Zadejte platnou adresu — například <strong>vasefirma.cz</strong>');
+    return;
+  }
+
+  btn.disabled = true;
+  const origHtml = btn.innerHTML;
+  btn.innerHTML = 'Kontroluji web… <svg class="spin-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>';
+
+  let ok = false;
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 7000);
+    await fetch(url, { mode: 'no-cors', signal: ctrl.signal, cache: 'no-store' });
+    clearTimeout(tid);
+    ok = true;
+  } catch(e) { ok = false; }
+
+  btn.disabled = false;
+  btn.innerHTML = origHtml;
+  _heroUrl = url;
+
+  if (ok) {
+    fillFormUrl(url);
+    showUrlFeedback('success', 'Web nalezen! Přecházíme na poptávkový formulář…');
+    setTimeout(() => { input.value = ''; hideUrlFeedback(); scrollToFormSection(); }, 1400);
+  } else {
+    showUrlFeedback('error', 'Web se nepodařilo ověřit — může být nedostupný nebo&nbsp;pomalý. <a href="#" id="urlProceedAny">Pokračovat přesto &rarr;</a>');
+    document.getElementById('urlProceedAny')?.addEventListener('click', e => {
+      e.preventDefault();
+      fillFormUrl(_heroUrl);
+      input.value = '';
+      hideUrlFeedback();
+      scrollToFormSection();
+    });
+  }
+}
+
+function fillFormUrl(url) {
+  const f = document.getElementById('formUrlInput');
+  if (f) f.value = url;
+  const radioAno = document.querySelector('input[name="hasweb"][value="Ano"]');
+  if (radioAno) { radioAno.checked = true; radioAno.dispatchEvent(new Event('change')); }
+}
+
+function scrollToFormSection() {
+  const section = document.getElementById('form');
+  if (!section) return;
+  const offset = window.matchMedia('(max-width: 980px)').matches ? 88 : 24;
+  const y = Math.max(0, section.getBoundingClientRect().top + window.scrollY - offset);
+  (document.scrollingElement || document.documentElement).scrollTo({ top: y, behavior: 'smooth' });
+}
+
+function showUrlFeedback(type, html) {
+  const el = document.getElementById('urlResult');
+  el.className = 'url-result show ' + type;
+  const icon = type === 'success'
+    ? '<path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/>'
+    : '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01" stroke-linecap="round"/>';
+  el.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0">${icon}</svg><div>${html}</div>`;
+}
+
+function hideUrlFeedback() {
+  const el = document.getElementById('urlResult');
+  if (el) { el.classList.remove('show'); el.className = 'url-result'; }
 }
 
 /* ============ form submit ============ */
@@ -2739,6 +3034,25 @@ function submitCase(){
     btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
   }, 6000);
 }
+
+/* ============ start fresh (no website) ============ */
+function startFresh() {
+  const needRadio = document.querySelector('input[name="need"][value="Chci nový web"]');
+  if (needRadio) needRadio.checked = true;
+  const haswebNe = document.querySelector('input[name="hasweb"][value="Ne"]');
+  if (haswebNe) { haswebNe.checked = true; haswebNe.dispatchEvent(new Event('change')); }
+  scrollToFormSection();
+}
+
+/* ============ hasweb toggle ============ */
+(function(){
+  document.querySelectorAll('input[name="hasweb"]').forEach(radio => {
+    radio.addEventListener('change', function(){
+      const wrap = document.getElementById('urlFieldWrap');
+      if (wrap) wrap.style.display = this.value === 'Ano' ? 'block' : 'none';
+    });
+  });
+})();
 
 /* ============ presence graph lines ============ */
 (function(){
@@ -2972,6 +3286,129 @@ function submitCase(){
 
   const hashItem = items.find(item => item.getAttribute('href') === window.location.hash);
   setActive(hashItem || activeItem);
+})();
+
+/* ============ portfolio showcase ============ */
+(function(){
+  let active = 0;
+
+  function vis(p){
+    const v = p.visual;
+    const tc  = v.afterDark ? '#E9E5DA' : '#0E1217';
+    const mut = v.afterDark ? 'rgba(255,255,255,0.22)' : 'rgba(14,18,23,0.18)';
+    const barBg = `color-mix(in oklab,${v.afterBg} 93%,${v.afterDark?'white':'black'} 7%)`;
+    const barBd = v.afterDark ? 'rgba(255,255,255,.1)' : 'rgba(14,18,23,.08)';
+    const urlBg = v.afterDark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.04)';
+    const urlBd = v.afterDark ? 'rgba(255,255,255,.12)' : 'rgba(14,18,23,.1)';
+    return `<div class="pf-browsers">
+      <div class="pf-browser pf-before">
+        <span class="pf-chip pf-chip-before">PŘED</span>
+        <div class="pfb-bar pfb-bar-old"><div class="pfb-dots"><i></i><i></i><i></i></div><div class="pfb-url">stary-web.cz</div></div>
+        <div class="pfb-old">
+          <div class="pfo-h">Vítejte na naší stránce!</div><div class="pfo-hr"></div>
+          <div class="pfo-layout">
+            <div class="pfo-sidebar"><i></i><i></i><i></i><i></i></div>
+            <div class="pfo-main"><b></b><p></p><p></p><span></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="pf-browser pf-after" style="--after-bg:${v.afterBg};--after-acc:${v.afterAccent};--after-text:${tc};--after-muted:${mut};">
+        <span class="pf-chip pf-chip-after">PO</span>
+        <div class="pfb-bar" style="background:${barBg};border-color:${barBd};">
+          <div class="pfb-dots"><i></i><i></i><i></i></div>
+          <div class="pfb-url" style="background:${urlBg};border-color:${urlBd};color:${mut};">${v.afterLabel.toLowerCase().replace(/\s/g,'')}.cz</div>
+        </div>
+        <div class="pfb-new">
+          <div class="pfn-eyebrow">${p.cat}</div>
+          <div class="pfn-h">${v.afterLabel}</div>
+          <div class="pfn-sub"></div><div class="pfn-sub2"></div>
+          <div class="pfn-btn"></div>
+          <div class="pfn-cards"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function body(p){
+    const rows = [
+      {k:'Situace',    v: p.situation},
+      {k:'Co jsme změnili', v: p.work},
+      {k:'Výsledek',   v: p.result}
+    ].map(r=>`<div class="pf-row"><span class="rk">${r.k}</span><span class="rv">${r.v}</span></div>`).join('');
+    const tags = p.tags.map(t=>`<span class="pf-tag">${t}</span>`).join('');
+    return `
+      <div class="pf-cat">${p.cat}</div>
+      <div class="pf-num">CASE ${p.num}</div>
+      <h3 class="pf-title">${p.title}</h3>
+      <p class="pf-short">${p.short}</p>
+      <div class="pf-rows">${rows}</div>
+      <div class="pf-tags">${tags}</div>
+      <div class="pf-cta-area">
+        <a href="#form" class="btn btn-primary">
+          Chci podobný web
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <p class="pf-cta-note">Stačí napsat pár vět o tom, co řešíte.</p>
+      </div>`;
+  }
+
+  function mini(p, idx){
+    const v = p.visual;
+    const mut = v.afterDark ? 'rgba(255,255,255,0.22)' : 'rgba(14,18,23,0.2)';
+    const barBg = `color-mix(in oklab,${v.afterBg} 91%,${v.afterDark?'white':'black'} 9%)`;
+    return `<div class="pf-mini${idx===active?' active':''}" data-idx="${idx}" role="button" tabindex="0" aria-label="${p.title}">
+      <div class="pf-mini-preview" style="background:${v.afterBg};">
+        <div class="pf-mini-bar" style="background:${barBg};"><i></i><i></i><i></i></div>
+        <div class="pf-mini-screen">
+          <div class="msl" style="background:${v.afterAccent};opacity:.85;"></div>
+          <div class="msl" style="background:${mut};"></div>
+          <div class="msl" style="background:${mut};"></div>
+          <div class="msh" style="background:${v.afterAccent};"></div>
+        </div>
+      </div>
+      <div class="pf-mini-body">
+        <div class="pf-mini-num">CASE ${p.num}</div>
+        <div class="pf-mini-title">${p.title}</div>
+        <div class="pf-mini-tags">${p.tags.slice(0,2).map(t=>`<i>${t}</i>`).join('')}</div>
+      </div>
+    </div>`;
+  }
+
+  function setActive(idx){
+    if (idx === active) return;
+    const main = document.getElementById('pfMain');
+    if (!main) return;
+    main.classList.add('is-switching');
+    setTimeout(() => {
+      active = idx;
+      document.getElementById('pfVisual').innerHTML = vis(PROJECTS[idx]);
+      document.getElementById('pfBody').innerHTML   = body(PROJECTS[idx]);
+      document.querySelectorAll('.pf-mini').forEach((c,i) => c.classList.toggle('active', i===idx));
+      main.classList.remove('is-switching');
+    }, 230);
+  }
+
+  function init(){
+    const visual = document.getElementById('pfVisual');
+    const bd     = document.getElementById('pfBody');
+    const grid   = document.getElementById('pfMiniGrid');
+    if (!visual || !bd || !grid) return;
+    visual.innerHTML = vis(PROJECTS[0]);
+    bd.innerHTML     = body(PROJECTS[0]);
+    grid.innerHTML   = PROJECTS.map((p,i) => mini(p,i)).join('');
+    grid.addEventListener('click', e => {
+      const c = e.target.closest('.pf-mini');
+      if (c) setActive(+c.dataset.idx);
+    });
+    grid.addEventListener('keydown', e => {
+      if (e.key==='Enter'||e.key===' ') {
+        const c = e.target.closest('.pf-mini');
+        if (c) { e.preventDefault(); setActive(+c.dataset.idx); }
+      }
+    });
+  }
+
+  init();
 })();
 
 /* ============ smooth anchor scrolling ============ */
