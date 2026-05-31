@@ -2636,8 +2636,9 @@
   .cs-device-shell{
     --device-w: 1200px;
     --device-h: 760px;
-    --device-frame-w: 1224px;
-    --device-border: 12px;
+    --device-frame-w: 1228px;
+    --device-border: 14px;
+    --device-bottom-border: 30px;
     --device-scale: .62;
     width: var(--device-frame-w);
     transform: scale(var(--device-scale));
@@ -2649,19 +2650,23 @@
     --device-h: 920px;
     --device-frame-w: 796px;
     --device-border: 14px;
+    --device-bottom-border: 14px;
   }
   .cs-device-shell.mobile{
     --device-w: 393px;
     --device-h: 760px;
     --device-frame-w: 417px;
     --device-border: 12px;
+    --device-bottom-border: 12px;
   }
 
   .cs-browser{
+    position: relative;
     width: var(--device-frame-w);
     max-width: none;
-    background: #111820;
+    background: #050607;
     border: var(--device-border) solid #111820;
+    border-bottom-width: var(--device-bottom-border);
     border-radius: 24px;
     box-shadow:
       0 22px 44px -32px rgba(14,18,23,.7),
@@ -2671,6 +2676,37 @@
   }
   .cs-browser.tablet{ border-radius: 30px; }
   .cs-browser.mobile{ border-radius: 34px; }
+  .cs-browser::before{
+    content:"";
+    position: absolute;
+    left: 50%;
+    top: -1px;
+    width: 142px;
+    height: 28px;
+    transform: translateX(-50%);
+    background: #020304;
+    border-radius: 0 0 12px 12px;
+    z-index: 3;
+  }
+  .cs-browser::after{
+    content:"";
+    position: absolute;
+    left: 50%;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,.08);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+    z-index: 4;
+  }
+  .cs-browser.tablet::before,
+  .cs-browser.tablet::after,
+  .cs-browser.mobile::before,
+  .cs-browser.mobile::after{
+    display: none;
+  }
 
   .cs-browser-bar{
     background: var(--bg-2);
@@ -2719,7 +2755,7 @@
     height: var(--device-h);
     overflow: hidden;
     background: var(--surface);
-    border-radius: 12px;
+    border-radius: 14px 14px 10px 10px;
   }
   .cs-browser.tablet .cs-iframe-wrap{ border-radius: 16px; }
   .cs-browser.mobile .cs-iframe-wrap{ border-radius: 22px; }
@@ -2730,38 +2766,44 @@
   }
 
   .cs-laptop-keyboard{
-    height: 92px;
-    width: calc(var(--device-frame-w) + 92px);
-    margin: 0 -46px;
+    height: 74px;
+    width: calc(var(--device-frame-w) + 180px);
+    margin: 0 -90px;
     position: relative;
-    background: linear-gradient(180deg, #EEF2F6 0%, #C8D0D9 72%, #AEB8C4 100%);
-    border-radius: 0 0 28px 28px;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.75) 14%, rgba(93,101,111,.22) 50%, rgba(255,255,255,.65) 86%, rgba(255,255,255,.08)),
+      linear-gradient(180deg, #F1F4F7 0%, #C9D0D8 64%, #9FA9B3 100%);
+    border-radius: 0 0 34px 34px;
     box-shadow:
-      0 28px 48px -34px rgba(14,18,23,.75),
+      0 28px 48px -34px rgba(14,18,23,.78),
       inset 0 1px 0 rgba(255,255,255,.9);
   }
   .cs-laptop-keyboard::before{
     content:"";
     position: absolute;
-    left: 9%; right: 9%; top: 14px;
-    height: 42px;
-    border-radius: 8px;
-    background:
-      repeating-linear-gradient(90deg, rgba(76,85,97,.34) 0 22px, transparent 22px 29px),
-      repeating-linear-gradient(0deg, rgba(76,85,97,.28) 0 8px, transparent 8px 14px),
-      linear-gradient(180deg, #E6EBF0, #D0D7DF);
-    opacity: .72;
+    left: 50%;
+    top: 0;
+    width: 230px;
+    height: 25px;
+    transform: translateX(-50%);
+    border-radius: 0 0 16px 16px;
+    background: linear-gradient(180deg, rgba(88,98,109,.28), rgba(255,255,255,.42));
+    border: 1px solid rgba(80,88,98,.2);
+    border-top: none;
   }
   .cs-laptop-keyboard::after{
     content:"";
     position: absolute;
-    left: 50%; bottom: 16px;
-    width: 180px; height: 28px;
-    transform: translateX(-50%);
-    border-radius: 8px;
-    background: #DCE2E8;
-    border: 1px solid rgba(89,99,112,.25);
-    box-shadow: inset 0 1px 3px rgba(14,18,23,.08);
+    left: 7%;
+    right: 7%;
+    bottom: -6px;
+    height: 12px;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse at 8% 30%, rgba(14,18,23,.52), transparent 11%),
+      radial-gradient(ellipse at 92% 30%, rgba(14,18,23,.52), transparent 11%),
+      linear-gradient(90deg, transparent, rgba(14,18,23,.18) 16%, rgba(14,18,23,.18) 84%, transparent);
+    filter: blur(1px);
   }
   .cs-browser.tablet + .cs-laptop-keyboard,
   .cs-browser.mobile + .cs-laptop-keyboard{
