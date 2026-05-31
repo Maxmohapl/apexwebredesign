@@ -2588,7 +2588,7 @@
   .cs-tag:hover{ border-color: var(--new); color: var(--new); }
 
   .cs-device-switcher{
-    display: inline-flex; gap: 6px; padding: 7px;
+    display: inline-flex; gap: 8px; padding: 8px;
     background: var(--surface); border: 1px solid var(--line);
     border-radius: 999px;
     box-shadow: 0 18px 40px -30px rgba(14,18,23,.3);
@@ -2596,23 +2596,33 @@
     align-self: center;
   }
   .cs-dev-btn{
-    width: 50px; height: 50px;
+    width: 56px; height: 56px;
     display: inline-grid; place-items: center;
     padding: 0; border-radius: 50%; cursor: pointer;
     font-family: var(--sans); font-size: 13px; font-weight: 500;
-    color: var(--ink-2); background: transparent; border: none;
-    transition: background .2s, color .2s;
+    color: var(--ink); background: transparent; border: none;
+    transition: background .2s, color .2s, transform .2s;
     white-space: nowrap;
   }
-  .cs-dev-btn:hover{ color: var(--ink); background: var(--bg); }
+  .cs-dev-btn:hover{ color: var(--ink); background: var(--bg); transform: translateY(-1px); }
   .cs-dev-btn.active{
     background: var(--new); color: #fff;
     box-shadow: 0 10px 22px -14px rgba(37,112,179,.8);
   }
-  .cs-dev-btn svg{ width: 22px; height: 22px; flex-shrink: 0; }
+  .cs-dev-btn .device-icon{
+    width: 34px; height: 34px; flex-shrink: 0;
+    fill: none; stroke: currentColor; stroke-width: 2.8;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .cs-dev-btn .device-icon-laptop{ width: 42px; height: 32px; }
+  .cs-dev-btn .device-icon-tablet{ width: 30px; height: 36px; }
+  .cs-dev-btn .device-icon-phone{ width: 24px; height: 36px; }
   .cs-dev-btn span{ display: none; }
   @media (max-width: 600px){
-    .cs-dev-btn{ width: 44px; height: 44px; }
+    .cs-dev-btn{ width: 48px; height: 48px; }
+    .cs-dev-btn .device-icon-laptop{ width: 36px; }
+    .cs-dev-btn .device-icon-tablet{ width: 26px; height: 32px; }
+    .cs-dev-btn .device-icon-phone{ width: 22px; height: 32px; }
   }
 
   .cs-stage{
@@ -3063,15 +3073,25 @@
 
       <div class="cs-device-switcher" role="group" aria-label="Přepínač zařízení">
           <button class="cs-dev-btn active" data-device="desktop" aria-pressed="true" aria-label="Počítač" title="Počítač">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <svg class="device-icon device-icon-laptop" viewBox="0 0 64 44" aria-hidden="true">
+              <rect x="10" y="6" width="44" height="28" rx="2"></rect>
+              <path d="M6 36h52l-4 4H10z"></path>
+              <path d="M25 36h14"></path>
+            </svg>
             <span>Počítač</span>
           </button>
           <button class="cs-dev-btn" data-device="tablet" aria-pressed="false" aria-label="Tablet" title="Tablet">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <svg class="device-icon device-icon-tablet" viewBox="0 0 40 52" aria-hidden="true">
+              <rect x="6" y="3" width="28" height="46" rx="4"></rect>
+              <path d="M17 8h6"></path>
+            </svg>
             <span>Tablet</span>
           </button>
           <button class="cs-dev-btn" data-device="mobile" aria-pressed="false" aria-label="Mobil" title="Mobil">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <svg class="device-icon device-icon-phone" viewBox="0 0 32 52" aria-hidden="true">
+              <rect x="6" y="3" width="20" height="46" rx="5"></rect>
+              <path d="M13 8h6"></path>
+            </svg>
             <span>Mobil</span>
           </button>
       </div>
