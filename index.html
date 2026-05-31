@@ -2616,13 +2616,11 @@
   }
   .cs-dev-btn .device-detail{ stroke-width: 1.55; }
   .cs-dev-btn .device-icon-laptop{ width: 48px; height: 34px; }
-  .cs-dev-btn .device-icon-tablet{ width: 34px; height: 38px; }
   .cs-dev-btn .device-icon-phone{ width: 23px; height: 38px; }
   .cs-dev-btn span{ display: none; }
   @media (max-width: 600px){
     .cs-dev-btn{ width: 50px; height: 48px; }
     .cs-dev-btn .device-icon-laptop{ width: 40px; height: 30px; }
-    .cs-dev-btn .device-icon-tablet{ width: 28px; height: 34px; }
     .cs-dev-btn .device-icon-phone{ width: 20px; height: 34px; }
   }
 
@@ -2640,24 +2638,44 @@
     --device-border: 14px;
     --device-bottom-border: 30px;
     --device-scale: .62;
+    position: relative;
     width: var(--device-frame-w);
     transform: scale(var(--device-scale));
     transform-origin: top center;
     transition: transform .34s cubic-bezier(.2,.7,.2,1);
   }
-  .cs-device-shell.tablet{
-    --device-w: 768px;
-    --device-h: 920px;
-    --device-frame-w: 796px;
-    --device-border: 14px;
-    --device-bottom-border: 14px;
-  }
   .cs-device-shell.mobile{
     --device-w: 393px;
     --device-h: 760px;
-    --device-frame-w: 417px;
-    --device-border: 12px;
-    --device-bottom-border: 12px;
+    --device-frame-w: 421px;
+    --device-border: 14px;
+    --device-bottom-border: 14px;
+  }
+  .cs-device-shell.mobile::before,
+  .cs-device-shell.mobile::after{
+    content:"";
+    position: absolute;
+    pointer-events: none;
+    background: #2b2d2f;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    z-index: 2;
+  }
+  .cs-device-shell.mobile::before{
+    left: -5px;
+    top: 96px;
+    width: 5px;
+    height: 30px;
+    border-radius: 6px 0 0 6px;
+    box-shadow:
+      0 52px 0 #2b2d2f,
+      inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .cs-device-shell.mobile::after{
+    right: -5px;
+    top: 178px;
+    width: 5px;
+    height: 62px;
+    border-radius: 0 6px 6px 0;
   }
 
   .cs-browser{
@@ -2674,8 +2692,15 @@
     overflow: hidden;
     transition: border-radius .3s, box-shadow .3s;
   }
-  .cs-browser.tablet{ border-radius: 30px; }
-  .cs-browser.mobile{ border-radius: 34px; }
+  .cs-browser.mobile{
+    border-color: #2c2d2f;
+    border-radius: 44px;
+    background: #1c1e20;
+    box-shadow:
+      0 20px 38px -28px rgba(14,18,23,.78),
+      0 0 0 2px rgba(255,255,255,.08) inset,
+      0 0 0 1px rgba(0,0,0,.45);
+  }
   .cs-browser::before{
     content:"";
     position: absolute;
@@ -2701,8 +2726,6 @@
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
     z-index: 4;
   }
-  .cs-browser.tablet::before,
-  .cs-browser.tablet::after,
   .cs-browser.mobile::before,
   .cs-browser.mobile::after{
     display: none;
@@ -2757,8 +2780,36 @@
     background: var(--surface);
     border-radius: 14px 14px 10px 10px;
   }
-  .cs-browser.tablet .cs-iframe-wrap{ border-radius: 16px; }
-  .cs-browser.mobile .cs-iframe-wrap{ border-radius: 22px; }
+  .cs-browser.mobile .cs-iframe-wrap{ border-radius: 28px; }
+  .cs-browser.mobile .cs-iframe-wrap::before{
+    content:"";
+    position: absolute;
+    left: 50%;
+    top: 12px;
+    width: 96px;
+    height: 28px;
+    transform: translateX(-50%);
+    background: #242526;
+    border-radius: 999px;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.08),
+      0 1px 2px rgba(0,0,0,.24);
+    z-index: 4;
+    pointer-events: none;
+  }
+  .cs-browser.mobile .cs-iframe-wrap::after{
+    content:"";
+    position: absolute;
+    left: 50%;
+    bottom: 13px;
+    width: 132px;
+    height: 4px;
+    transform: translateX(-50%);
+    background: #151617;
+    border-radius: 999px;
+    z-index: 4;
+    pointer-events: none;
+  }
 
   .cs-iframe-wrap iframe{
     width: 100%; height: 100%;
@@ -2805,7 +2856,6 @@
       linear-gradient(90deg, transparent, rgba(14,18,23,.18) 16%, rgba(14,18,23,.18) 84%, transparent);
     filter: blur(1px);
   }
-  .cs-browser.tablet + .cs-laptop-keyboard,
   .cs-browser.mobile + .cs-laptop-keyboard{
     display: none;
   }
@@ -3188,14 +3238,6 @@
               <path class="device-detail" d="M35 36h6"></path>
             </svg>
             <span>Počítač</span>
-          </button>
-          <button class="cs-dev-btn" data-device="tablet" aria-pressed="false" aria-label="Tablet" title="Tablet">
-            <svg class="device-icon device-icon-tablet" viewBox="0 0 46 56" aria-hidden="true">
-              <rect x="6" y="4" width="34" height="48" rx="5"></rect>
-              <rect class="device-detail" x="10" y="9" width="26" height="36" rx="2"></rect>
-              <path class="device-detail" d="M20 48h6"></path>
-            </svg>
-            <span>Tablet</span>
           </button>
           <button class="cs-dev-btn" data-device="mobile" aria-pressed="false" aria-label="Mobil" title="Mobil">
             <svg class="device-icon device-icon-phone" viewBox="0 0 32 56" aria-hidden="true">
@@ -4828,12 +4870,8 @@ function startFresh() {
   const devBtns = document.querySelectorAll('.cs-dev-btn');
   function updateDeviceScale() {
     if (!browser || !shell || !stage) return;
-    const mode = browser.classList.contains('mobile')
-      ? 'mobile'
-      : browser.classList.contains('tablet')
-        ? 'tablet'
-        : 'desktop';
-    const targetScale = mode === 'desktop' ? 0.62 : mode === 'tablet' ? 0.58 : 0.72;
+    const mode = browser.classList.contains('mobile') ? 'mobile' : 'desktop';
+    const targetScale = mode === 'desktop' ? 0.62 : 0.72;
     const fitScale = Math.max(0.22, Math.min(targetScale, stage.clientWidth / shell.offsetWidth));
     const keyboard = shell.querySelector('.cs-laptop-keyboard');
     const keyboardHeight = keyboard && getComputedStyle(keyboard).display !== 'none' ? keyboard.offsetHeight : 0;
@@ -4845,7 +4883,6 @@ function startFresh() {
   if (browser && devBtns.length) {
     const sizes = {
       desktop: { cls: '' },
-      tablet:  { cls: 'tablet' },
       mobile:  { cls: 'mobile' },
     };
     devBtns.forEach(btn => {
