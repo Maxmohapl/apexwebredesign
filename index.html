@@ -2630,15 +2630,36 @@
     display: flex; justify-content: center;
     position: relative;
     padding: 8px 0 34px;
+    overflow: visible;
   }
 
-  .cs-browser{
+  .cs-device-shell{
     --device-w: 1200px;
     --device-h: 760px;
     --device-frame-w: 1224px;
     --device-border: 12px;
-    width: min(100%, var(--device-frame-w));
-    max-width: var(--device-frame-w);
+    --device-scale: .62;
+    width: var(--device-frame-w);
+    transform: scale(var(--device-scale));
+    transform-origin: top center;
+    transition: transform .34s cubic-bezier(.2,.7,.2,1);
+  }
+  .cs-device-shell.tablet{
+    --device-w: 768px;
+    --device-h: 920px;
+    --device-frame-w: 796px;
+    --device-border: 14px;
+  }
+  .cs-device-shell.mobile{
+    --device-w: 393px;
+    --device-h: 760px;
+    --device-frame-w: 417px;
+    --device-border: 12px;
+  }
+
+  .cs-browser{
+    width: var(--device-frame-w);
+    max-width: none;
     background: #111820;
     border: var(--device-border) solid #111820;
     border-radius: 24px;
@@ -2648,20 +2669,8 @@
     overflow: hidden;
     transition: border-radius .3s, box-shadow .3s;
   }
-  .cs-browser.tablet{
-    --device-w: 768px;
-    --device-h: 920px;
-    --device-frame-w: 796px;
-    --device-border: 14px;
-    border-radius: 30px;
-  }
-  .cs-browser.mobile{
-    --device-w: 393px;
-    --device-h: 760px;
-    --device-frame-w: 417px;
-    --device-border: 12px;
-    border-radius: 34px;
-  }
+  .cs-browser.tablet{ border-radius: 30px; }
+  .cs-browser.mobile{ border-radius: 34px; }
 
   .cs-browser-bar{
     background: var(--bg-2);
@@ -2720,6 +2729,45 @@
     border: none; display: block;
   }
 
+  .cs-laptop-keyboard{
+    height: 92px;
+    width: calc(var(--device-frame-w) + 92px);
+    margin: 0 -46px;
+    position: relative;
+    background: linear-gradient(180deg, #EEF2F6 0%, #C8D0D9 72%, #AEB8C4 100%);
+    border-radius: 0 0 28px 28px;
+    box-shadow:
+      0 28px 48px -34px rgba(14,18,23,.75),
+      inset 0 1px 0 rgba(255,255,255,.9);
+  }
+  .cs-laptop-keyboard::before{
+    content:"";
+    position: absolute;
+    left: 9%; right: 9%; top: 14px;
+    height: 42px;
+    border-radius: 8px;
+    background:
+      repeating-linear-gradient(90deg, rgba(76,85,97,.34) 0 22px, transparent 22px 29px),
+      repeating-linear-gradient(0deg, rgba(76,85,97,.28) 0 8px, transparent 8px 14px),
+      linear-gradient(180deg, #E6EBF0, #D0D7DF);
+    opacity: .72;
+  }
+  .cs-laptop-keyboard::after{
+    content:"";
+    position: absolute;
+    left: 50%; bottom: 16px;
+    width: 180px; height: 28px;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    background: #DCE2E8;
+    border: 1px solid rgba(89,99,112,.25);
+    box-shadow: inset 0 1px 3px rgba(14,18,23,.08);
+  }
+  .cs-browser.tablet + .cs-laptop-keyboard,
+  .cs-browser.mobile + .cs-laptop-keyboard{
+    display: none;
+  }
+
   /* Mobile fallback (shown only on small screens) */
   .cs-mobile-fallback{
     display: none;
@@ -2733,9 +2781,9 @@
   }
 
   @media (max-width: 520px){
-    .cs-stage{ display: none; }
-    .cs-mobile-fallback{ display: flex; }
-    .cs-device-switcher{ display: none; }
+    .cs-stage{ display: flex; }
+    .cs-mobile-fallback{ display: none; }
+    .cs-device-switcher{ display: inline-flex; }
   }
 
   .cs-cta-row{
@@ -3119,28 +3167,31 @@
 
       <!-- Browser mockup -->
       <div class="cs-stage">
-        <div class="cs-browser" id="csBrowser">
-          <div class="cs-browser-bar">
-            <div class="cs-dots"><i></i><i></i><i></i></div>
-            <div class="cs-url-bar">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span id="csUrlSpan">www.knedlikysezelim.online</span>
+        <div class="cs-device-shell" id="csDeviceShell">
+          <div class="cs-browser" id="csBrowser">
+            <div class="cs-browser-bar">
+              <div class="cs-dots"><i></i><i></i><i></i></div>
+              <div class="cs-url-bar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span id="csUrlSpan">www.knedlikysezelim.online</span>
+              </div>
+              <div class="cs-browser-nav">
+                <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+                <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 19l7-7-7-7"/></svg></div>
+                <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+              </div>
             </div>
-            <div class="cs-browser-nav">
-              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
-              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 19l7-7-7-7"/></svg></div>
-              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+            <div class="cs-iframe-wrap">
+              <iframe id="csIframe"
+                src="https://www.knedlikysezelim.online/"
+                title="Živá ukázka webu"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                scrolling="yes"
+              ></iframe>
             </div>
           </div>
-          <div class="cs-iframe-wrap">
-            <iframe id="csIframe"
-              src="https://www.knedlikysezelim.online/"
-              title="Živá ukázka webu"
-              loading="lazy"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              scrolling="yes"
-            ></iframe>
-          </div>
+          <div class="cs-laptop-keyboard" aria-hidden="true"></div>
         </div>
       </div>
 
@@ -4713,21 +4764,42 @@ function startFresh() {
 
     /* reset device switcher to desktop */
     const browser = document.getElementById('csBrowser');
+    const shell = document.getElementById('csDeviceShell');
     const devBtns = document.querySelectorAll('.cs-dev-btn');
     if (browser) browser.className = 'cs-browser';
+    if (shell) shell.className = 'cs-device-shell';
     devBtns.forEach((b, i) => {
       b.classList.toggle('active', i === 0);
       b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
     });
     const iWrap = browser?.querySelector('.cs-iframe-wrap');
     if (iWrap) iWrap.style.height = '';
+    updateDeviceScale();
   }
 
   renderStrip();
 
   /* ---- device switcher ---- */
   const browser = document.getElementById('csBrowser');
+  const shell = document.getElementById('csDeviceShell');
+  const stage = document.querySelector('.cs-stage');
   const devBtns = document.querySelectorAll('.cs-dev-btn');
+  function updateDeviceScale() {
+    if (!browser || !shell || !stage) return;
+    const mode = browser.classList.contains('mobile')
+      ? 'mobile'
+      : browser.classList.contains('tablet')
+        ? 'tablet'
+        : 'desktop';
+    const targetScale = mode === 'desktop' ? 0.62 : mode === 'tablet' ? 0.58 : 0.72;
+    const fitScale = Math.max(0.22, Math.min(targetScale, stage.clientWidth / shell.offsetWidth));
+    const keyboard = shell.querySelector('.cs-laptop-keyboard');
+    const keyboardHeight = keyboard && getComputedStyle(keyboard).display !== 'none' ? keyboard.offsetHeight : 0;
+    const layoutHeight = browser.offsetHeight + keyboardHeight;
+    shell.style.setProperty('--device-scale', fitScale.toFixed(4));
+    stage.style.height = Math.ceil(layoutHeight * fitScale) + 'px';
+  }
+
   if (browser && devBtns.length) {
     const sizes = {
       desktop: { cls: '' },
@@ -4742,11 +4814,18 @@ function startFresh() {
         btn.classList.add('active');
         btn.setAttribute('aria-pressed','true');
         browser.className = 'cs-browser' + (cfg.cls ? ' ' + cfg.cls : '');
+        if (shell) shell.className = 'cs-device-shell' + (cfg.cls ? ' ' + cfg.cls : '');
         const wrap = browser.querySelector('.cs-iframe-wrap');
         if (wrap) wrap.style.height = '';
+        updateDeviceScale();
+        requestAnimationFrame(updateDeviceScale);
       });
     });
   }
+  window.addEventListener('resize', updateDeviceScale);
+  window.addEventListener('load', updateDeviceScale);
+  setTimeout(updateDeviceScale, 120);
+  setTimeout(updateDeviceScale, 900);
 
 })();
 
