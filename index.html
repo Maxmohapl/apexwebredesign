@@ -3028,6 +3028,108 @@
   </div>
 </section>
 
+<!-- ========== 6. NAŠE PRÁCE / CASE STUDY ========== -->
+<section class="block" id="examples">
+  <div class="wrap">
+
+    <!-- section header -->
+    <div class="section-head reveal">
+      <div>
+        <div class="section-eyebrow">Naše práce</div>
+        <h2 class="section-title">Projekty, které jsme&nbsp;realizovali</h2>
+      </div>
+      <p class="section-sub">Vyberte projekt a&nbsp;prohlédněte si živou ukázku nebo hotový výsledek.</p>
+    </div>
+
+    <!-- thumbnail strip (rendered by JS) -->
+    <div class="cs-strip reveal" id="csStrip"></div>
+
+    <!-- detail panel (updated by JS on thumb click) -->
+    <div class="cs-wrap reveal">
+
+      <div class="cs-header">
+        <div>
+          <div class="section-eyebrow" id="csEyebrow">Živá ukázka projektu</div>
+          <h2 class="section-title" id="csH2">Redesign webu pro Autocentrum Urbánek</h2>
+          <p class="section-sub" style="margin-top:14px" id="csDesc">Přehledný web pro autoservis, pneuservis, oleje a&nbsp;kamna, který návštěvníkovi rychle ukáže nabídku služeb a&nbsp;dovede ho ke&nbsp;kontaktu.</p>
+          <div class="cs-tags" id="csTags">
+            <span class="cs-tag">Redesign</span>
+            <span class="cs-tag">Autoservis</span>
+            <span class="cs-tag">Mobilní verze</span>
+            <span class="cs-tag">Kontakt</span>
+            <span class="cs-tag">Lokální SEO</span>
+          </div>
+        </div>
+
+        <div class="cs-device-switcher" role="group" aria-label="Přepínač zařízení">
+          <button class="cs-dev-btn active" data-device="desktop" aria-pressed="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <span>Desktop</span>
+          </button>
+          <button class="cs-dev-btn" data-device="tablet" aria-pressed="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Tablet</span>
+          </button>
+          <button class="cs-dev-btn" data-device="mobile" aria-pressed="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Mobil</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Browser mockup -->
+      <div class="cs-stage">
+        <div class="cs-browser" id="csBrowser">
+          <div class="cs-browser-bar">
+            <div class="cs-dots"><i></i><i></i><i></i></div>
+            <div class="cs-url-bar">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span id="csUrlSpan">www.knedlikysezelim.online</span>
+            </div>
+            <div class="cs-browser-nav">
+              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 19l7-7-7-7"/></svg></div>
+              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+            </div>
+          </div>
+          <div class="cs-iframe-wrap">
+            <iframe id="csIframe"
+              src="https://www.knedlikysezelim.online/"
+              title="Živá ukázka webu"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              scrolling="yes"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile fallback -->
+      <div class="cs-mobile-fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--new)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <p>Živé preview je nejlépe vidět na větším displeji.<br>Na mobilu otevřete web přímo v prohlížeči.</p>
+        <a id="csMobileLink" href="https://www.knedlikysezelim.online/" target="_blank" rel="noopener" class="btn btn-secondary">
+          Otevřít živý web
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      <!-- CTA tlačítka -->
+      <div class="cs-cta-row">
+        <a href="#form" class="btn btn-primary">
+          Chci podobný web
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a id="csOpenLink" href="https://www.knedlikysezelim.online/" target="_blank" rel="noopener" class="btn btn-secondary">
+          Otevřít celý web
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ========== 2. PROCES TVORBY ========== -->
 <section class="block" id="process">
   <div class="wrap">
@@ -3807,108 +3909,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== 6. NAŠE PRÁCE / CASE STUDY ========== -->
-<section class="block" id="examples">
-  <div class="wrap">
-
-    <!-- section header -->
-    <div class="section-head reveal">
-      <div>
-        <div class="section-eyebrow">Naše práce</div>
-        <h2 class="section-title">Projekty, které jsme&nbsp;realizovali</h2>
-      </div>
-      <p class="section-sub">Vyberte projekt a&nbsp;prohlédněte si živou ukázku nebo hotový výsledek.</p>
-    </div>
-
-    <!-- thumbnail strip (rendered by JS) -->
-    <div class="cs-strip reveal" id="csStrip"></div>
-
-    <!-- detail panel (updated by JS on thumb click) -->
-    <div class="cs-wrap reveal">
-
-      <div class="cs-header">
-        <div>
-          <div class="section-eyebrow" id="csEyebrow">Živá ukázka projektu</div>
-          <h2 class="section-title" id="csH2">Redesign webu pro Autocentrum Urbánek</h2>
-          <p class="section-sub" style="margin-top:14px" id="csDesc">Přehledný web pro autoservis, pneuservis, oleje a&nbsp;kamna, který návštěvníkovi rychle ukáže nabídku služeb a&nbsp;dovede ho ke&nbsp;kontaktu.</p>
-          <div class="cs-tags" id="csTags">
-            <span class="cs-tag">Redesign</span>
-            <span class="cs-tag">Autoservis</span>
-            <span class="cs-tag">Mobilní verze</span>
-            <span class="cs-tag">Kontakt</span>
-            <span class="cs-tag">Lokální SEO</span>
-          </div>
-        </div>
-
-        <div class="cs-device-switcher" role="group" aria-label="Přepínač zařízení">
-          <button class="cs-dev-btn active" data-device="desktop" aria-pressed="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            <span>Desktop</span>
-          </button>
-          <button class="cs-dev-btn" data-device="tablet" aria-pressed="false">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-            <span>Tablet</span>
-          </button>
-          <button class="cs-dev-btn" data-device="mobile" aria-pressed="false">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-            <span>Mobil</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Browser mockup -->
-      <div class="cs-stage">
-        <div class="cs-browser" id="csBrowser">
-          <div class="cs-browser-bar">
-            <div class="cs-dots"><i></i><i></i><i></i></div>
-            <div class="cs-url-bar">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span id="csUrlSpan">www.knedlikysezelim.online</span>
-            </div>
-            <div class="cs-browser-nav">
-              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
-              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 19l7-7-7-7"/></svg></div>
-              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
-            </div>
-          </div>
-          <div class="cs-iframe-wrap">
-            <iframe id="csIframe"
-              src="https://www.knedlikysezelim.online/"
-              title="Živá ukázka webu"
-              loading="lazy"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              scrolling="yes"
-            ></iframe>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mobile fallback -->
-      <div class="cs-mobile-fallback">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--new)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-        <p>Živé preview je nejlépe vidět na větším displeji.<br>Na mobilu otevřete web přímo v prohlížeči.</p>
-        <a id="csMobileLink" href="https://www.knedlikysezelim.online/" target="_blank" rel="noopener" class="btn btn-secondary">
-          Otevřít živý web
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-      </div>
-
-      <!-- CTA tlačítka -->
-      <div class="cs-cta-row">
-        <a href="#form" class="btn btn-primary">
-          Chci podobný web
-          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a id="csOpenLink" href="https://www.knedlikysezelim.online/" target="_blank" rel="noopener" class="btn btn-secondary">
-          Otevřít celý web
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-      </div>
-
     </div>
   </div>
 </section>
