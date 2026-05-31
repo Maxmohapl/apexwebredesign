@@ -255,6 +255,7 @@
     align-items: center;
     position: relative;
   }
+  .hero-grid > *{ min-width: 0; }
   @media (max-width: 1080px){ .hero-grid{ grid-template-columns: 1fr; gap: 56px; } }
 
   .badge{
@@ -271,6 +272,70 @@
     animation: pulse 2s ease-in-out infinite;
   }
   @keyframes pulse{ 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
+  .hero-brand-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 100%;
+    min-height: 64px;
+    padding: 8px 24px 8px 18px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--surface) 82%, transparent);
+    box-shadow: 0 18px 42px -34px rgba(14,18,23,.5);
+  }
+  .hero-brand-mark{
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+  }
+  .hero-brand-mark img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .hero-brand-name{
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: .075em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .hero-brand-name .apex{ color: var(--new); }
+  .hero-brand-slash{
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .hero-brand-studio{
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: .18em;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  @media (max-width: 560px){
+    .hero-brand-pill{
+      width: 100%;
+      justify-content: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 8px 14px 8px 12px;
+    }
+    .hero-brand-mark{ width: 34px; height: 34px; }
+    .hero-brand-name{ font-size: 14px; letter-spacing: .055em; }
+    .hero-brand-slash{ font-size: 17px; }
+    .hero-brand-studio{ font-size: 9px; letter-spacing: .12em; }
+  }
 
   h1.hero-title{
     font-family: var(--sans); font-weight: 800;
@@ -308,6 +373,7 @@
     box-shadow: 0 0 0 4px color-mix(in oklab, var(--new) 18%, transparent);
   }
   .url-form input{
+    min-width: 0;
     flex: 1; border: none; outline: none; background: transparent;
     padding: 10px 12px; font-family: var(--mono); font-size: 13.5px; color: var(--ink);
   }
@@ -320,6 +386,7 @@
     display: inline-flex; align-items: center; gap: 8px;
     transition: background .2s;
     white-space: nowrap;
+    justify-content: center;
   }
   .url-form button:hover{ background: var(--new); color: #fff; }
   .url-result{
@@ -368,11 +435,43 @@
     display: inline-flex; align-items: center; gap: 8px;
   }
   .hero-note::before{ content:""; width: 14px; height: 1px; background: var(--ink-3);}
+  @media (max-width: 560px){
+    .hero{
+      padding: 44px 0 84px;
+    }
+    .url-form{
+      flex-direction: column;
+      gap: 7px;
+      padding: 7px;
+    }
+    .url-form input{
+      width: 100%;
+      min-height: 42px;
+    }
+    .url-form button{
+      width: 100%;
+      min-height: 44px;
+      white-space: normal;
+    }
+    .cta-row .btn{
+      flex: 1 1 100%;
+      justify-content: center;
+    }
+    .hero-note{
+      align-items: flex-start;
+      line-height: 1.45;
+    }
+    .hero-note::before{
+      flex: 0 0 14px;
+      margin-top: .72em;
+    }
+  }
 
   /* ===== HERO TRANSFORMATION VISUAL ===== */
   .transformer{
     position: relative;
     padding: 0;
+    min-width: 0;
   }
   .upgrade-bar{
     display: grid; grid-template-columns: auto 1fr auto;
@@ -404,10 +503,12 @@
     grid-template-columns: 1fr 1.05fr;
     gap: 24px;
     align-items: end;
+    min-width: 0;
   }
-  @media (max-width: 560px){ .browsers{ grid-template-columns: 1fr; gap: 18px; } }
+  @media (max-width: 560px){ .browsers{ grid-template-columns: minmax(0, 1fr); gap: 18px; } }
 
   .browser{
+    min-width: 0;
     background: var(--surface);
     border-radius: var(--r-md);
     overflow: hidden;
@@ -434,9 +535,13 @@
   .browser-bar .dots{ display:inline-flex; gap: 5px; }
   .browser-bar .dots i{ width: 9px; height: 9px; border-radius: 50%; background: #BFB7A6; display: inline-block;}
   .browser-bar .url{
+    min-width: 0;
     flex: 1; background: var(--surface); border: 1px solid var(--line);
     border-radius: 4px;
     padding: 4px 10px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .year-tag{
     position: absolute; top: -10px; left: 16px; z-index: 3;
@@ -594,6 +699,31 @@
   .mobile-mock .screen .mcards{ display: flex; flex-direction: column; gap: 3px; margin-top: auto;}
   .mobile-mock .screen .mcards i{ height: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px;}
   @media (max-width: 560px){ .mobile-mock{ display: none; } }
+  @media (max-width: 560px){
+    .browser-old,
+    .browser-old:hover{
+      transform: none;
+    }
+    .new-content{
+      padding: 14px;
+    }
+    .new-content .nc-nav{
+      gap: 8px;
+    }
+    .new-content .nc-items{
+      display: none;
+    }
+    .new-content .nc-cta{
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .new-content .nc-p{
+      max-width: 100%;
+    }
+    .new-content .nc-buttons{
+      flex-wrap: wrap;
+    }
+  }
 
   /* floating status tags around transformer */
   .status-tags{
@@ -3360,7 +3490,12 @@
 <section class="hero" id="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="badge">WEB MODERNIZATION STUDIO  /  ŠUMPERK &amp; ONLINE</span>
+      <div class="hero-brand-pill" aria-label="Apexwebdesign / Web design studio">
+        <span class="hero-brand-mark" aria-hidden="true"><img src="assets/apex-logo.png" alt="" /></span>
+        <span class="hero-brand-name" aria-hidden="true"><span class="apex">APEX</span>WEBDESIGN</span>
+        <span class="hero-brand-slash" aria-hidden="true">/</span>
+        <span class="hero-brand-studio" aria-hidden="true">WEB DESIGN STUDIO</span>
+      </div>
 
       <h1 class="hero-title"><span class="strike">Zastaralý web?</span> Nebo&nbsp;žádný? Pomůžeme vám být <span class="new">vidět online.</span></h1>
 
