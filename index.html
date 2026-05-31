@@ -2596,7 +2596,7 @@
     align-self: center;
   }
   .cs-dev-btn{
-    width: 56px; height: 56px;
+    width: 60px; height: 56px;
     display: inline-grid; place-items: center;
     padding: 0; border-radius: 50%; cursor: pointer;
     font-family: var(--sans); font-size: 13px; font-weight: 500;
@@ -2611,18 +2611,19 @@
   }
   .cs-dev-btn .device-icon{
     width: 34px; height: 34px; flex-shrink: 0;
-    fill: none; stroke: currentColor; stroke-width: 2.8;
+    fill: none; stroke: currentColor; stroke-width: 2.6;
     stroke-linecap: round; stroke-linejoin: round;
   }
-  .cs-dev-btn .device-icon-laptop{ width: 42px; height: 32px; }
-  .cs-dev-btn .device-icon-tablet{ width: 30px; height: 36px; }
-  .cs-dev-btn .device-icon-phone{ width: 24px; height: 36px; }
+  .cs-dev-btn .device-detail{ stroke-width: 1.55; }
+  .cs-dev-btn .device-icon-laptop{ width: 48px; height: 34px; }
+  .cs-dev-btn .device-icon-tablet{ width: 34px; height: 38px; }
+  .cs-dev-btn .device-icon-phone{ width: 23px; height: 38px; }
   .cs-dev-btn span{ display: none; }
   @media (max-width: 600px){
-    .cs-dev-btn{ width: 48px; height: 48px; }
-    .cs-dev-btn .device-icon-laptop{ width: 36px; }
-    .cs-dev-btn .device-icon-tablet{ width: 26px; height: 32px; }
-    .cs-dev-btn .device-icon-phone{ width: 22px; height: 32px; }
+    .cs-dev-btn{ width: 50px; height: 48px; }
+    .cs-dev-btn .device-icon-laptop{ width: 40px; height: 30px; }
+    .cs-dev-btn .device-icon-tablet{ width: 28px; height: 34px; }
+    .cs-dev-btn .device-icon-phone{ width: 20px; height: 34px; }
   }
 
   .cs-stage{
@@ -2632,19 +2633,35 @@
   }
 
   .cs-browser{
-    width: min(100%, 980px);
-    max-width: 980px;
+    --device-w: 1200px;
+    --device-h: 760px;
+    --device-frame-w: 1224px;
+    --device-border: 12px;
+    width: min(100%, var(--device-frame-w));
+    max-width: var(--device-frame-w);
     background: #111820;
-    border: 12px solid #111820;
+    border: var(--device-border) solid #111820;
     border-radius: 24px;
     box-shadow:
       0 22px 44px -32px rgba(14,18,23,.7),
       0 0 0 1px rgba(255,255,255,.05) inset;
     overflow: hidden;
-    transition: max-width .38s cubic-bezier(.2,.7,.2,1), border-radius .3s, box-shadow .3s;
+    transition: border-radius .3s, box-shadow .3s;
   }
-  .cs-browser.tablet{ max-width: 700px; border-radius: 30px; border-width: 14px; }
-  .cs-browser.mobile{ max-width: 380px; border-radius: 34px; border-width: 12px; }
+  .cs-browser.tablet{
+    --device-w: 768px;
+    --device-h: 920px;
+    --device-frame-w: 796px;
+    --device-border: 14px;
+    border-radius: 30px;
+  }
+  .cs-browser.mobile{
+    --device-w: 393px;
+    --device-h: 760px;
+    --device-frame-w: 417px;
+    --device-border: 12px;
+    border-radius: 34px;
+  }
 
   .cs-browser-bar{
     background: var(--bg-2);
@@ -2690,13 +2707,13 @@
 
   .cs-iframe-wrap{
     position: relative;
-    height: 520px;
+    height: var(--device-h);
     overflow: hidden;
     background: var(--surface);
     border-radius: 12px;
   }
-  .cs-browser.tablet .cs-iframe-wrap{ height: 610px; border-radius: 16px; }
-  .cs-browser.mobile .cs-iframe-wrap{ height: 660px; border-radius: 22px; }
+  .cs-browser.tablet .cs-iframe-wrap{ border-radius: 16px; }
+  .cs-browser.mobile .cs-iframe-wrap{ border-radius: 22px; }
 
   .cs-iframe-wrap iframe{
     width: 100%; height: 100%;
@@ -3073,24 +3090,28 @@
 
       <div class="cs-device-switcher" role="group" aria-label="Přepínač zařízení">
           <button class="cs-dev-btn active" data-device="desktop" aria-pressed="true" aria-label="Počítač" title="Počítač">
-            <svg class="device-icon device-icon-laptop" viewBox="0 0 64 44" aria-hidden="true">
-              <rect x="10" y="6" width="44" height="28" rx="2"></rect>
-              <path d="M6 36h52l-4 4H10z"></path>
-              <path d="M25 36h14"></path>
+            <svg class="device-icon device-icon-laptop" viewBox="0 0 76 48" aria-hidden="true">
+              <rect x="12" y="4" width="52" height="31" rx="2.5"></rect>
+              <path d="M6 38h64l-6 6H12z"></path>
+              <path class="device-detail" d="M24 40h28"></path>
+              <path class="device-detail" d="M29 42.5h18"></path>
+              <path class="device-detail" d="M35 36h6"></path>
             </svg>
             <span>Počítač</span>
           </button>
           <button class="cs-dev-btn" data-device="tablet" aria-pressed="false" aria-label="Tablet" title="Tablet">
-            <svg class="device-icon device-icon-tablet" viewBox="0 0 40 52" aria-hidden="true">
-              <rect x="6" y="3" width="28" height="46" rx="4"></rect>
-              <path d="M17 8h6"></path>
+            <svg class="device-icon device-icon-tablet" viewBox="0 0 46 56" aria-hidden="true">
+              <rect x="6" y="4" width="34" height="48" rx="5"></rect>
+              <rect class="device-detail" x="10" y="9" width="26" height="36" rx="2"></rect>
+              <path class="device-detail" d="M20 48h6"></path>
             </svg>
             <span>Tablet</span>
           </button>
           <button class="cs-dev-btn" data-device="mobile" aria-pressed="false" aria-label="Mobil" title="Mobil">
-            <svg class="device-icon device-icon-phone" viewBox="0 0 32 52" aria-hidden="true">
-              <rect x="6" y="3" width="20" height="46" rx="5"></rect>
-              <path d="M13 8h6"></path>
+            <svg class="device-icon device-icon-phone" viewBox="0 0 32 56" aria-hidden="true">
+              <rect x="7" y="4" width="18" height="48" rx="6"></rect>
+              <path class="device-detail" d="M13 9h6"></path>
+              <path class="device-detail" d="M14 47h4"></path>
             </svg>
             <span>Mobil</span>
           </button>
