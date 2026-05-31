@@ -1598,40 +1598,605 @@
     line-height: 1.5;
   }
 
-  /* ============ PROCESS ============ */
-  .process{
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+  /* ============ PROCESS TIMELINE ============ */
+  .tl-header{
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: end;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 880px){ .tl-header{ grid-template-columns: 1fr; gap: 18px; } }
+
+  .tl-cards-wrap{
     position: relative;
   }
-  @media (max-width: 980px){ .process{ grid-template-columns: 1fr 1fr;} }
-  @media (max-width: 540px){ .process{ grid-template-columns: 1fr;} }
-  .process-line{
-    position: absolute; left: 0; right: 0; top: 32px;
-    height: 1px; background: var(--line);
+  .tl-connector{
+    position: absolute;
+    top: 40px;
+    left: calc(10% + 20px);
+    right: calc(10% + 20px);
+    height: 2px;
+    background: linear-gradient(90deg, var(--new) 0%, color-mix(in oklab,var(--new) 50%,var(--line)) 100%);
     z-index: 0;
+    border-radius: 2px;
   }
-  @media (max-width: 980px){ .process-line{ display: none;} }
-  .step{
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--r-md);
-    padding: 22px 22px 24px;
+  @media (max-width: 760px){ .tl-connector{ display: none; } }
+
+  .tl-cards{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
     position: relative;
     z-index: 1;
-    transition: transform .25s, border-color .25s;
   }
-  .step:hover{ transform: translateY(-3px); border-color: var(--new);}
-  .step-num{
-    width: 32px; height: 32px;
-    background: var(--ink); color: var(--bg);
+  @media (max-width: 760px){
+    .tl-cards{
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tl-cards::-webkit-scrollbar{ height: 4px; }
+    .tl-cards::-webkit-scrollbar-track{ background: var(--line); border-radius: 2px; }
+    .tl-cards::-webkit-scrollbar-thumb{ background: var(--new); border-radius: 2px; }
+  }
+
+  .tl-card{
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 16px 18px;
+    cursor: pointer;
+    position: relative;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s, background .3s;
+    outline: none;
+    text-align: left;
+  }
+  @media (max-width: 760px){
+    .tl-card{ flex: 0 0 200px; scroll-snap-align: start; }
+  }
+  .tl-card:hover{
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--new) 50%, var(--line));
+    box-shadow: 0 12px 28px -16px rgba(37,112,179,.18);
+  }
+  .tl-card.active{
+    transform: translateY(-8px) scale(1.04);
+    border-color: var(--new);
+    background: var(--surface);
+    box-shadow:
+      0 0 0 4px color-mix(in oklab, var(--new) 14%, transparent),
+      0 18px 40px -20px rgba(37,112,179,.28);
+  }
+  .tl-card-dot{
+    position: absolute;
+    top: -8px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
     border-radius: 50%;
-    display: grid; place-items: center;
-    font-weight: 700; font-size: 14px;
-    margin-bottom: 14px;
-    transition: background .25s;
+    background: var(--line);
+    border: 3px solid var(--bg);
+    transition: background .3s;
+    z-index: 2;
   }
-  .step:hover .step-num{ background: var(--new); }
-  .step h4{ font-weight: 700; font-size: 17.5px; line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 6px;}
-  .step p{ color: var(--ink-2); font-size: 13.5px; margin: 0;}
+  .tl-card.active .tl-card-dot,
+  .tl-card:hover .tl-card-dot{
+    background: var(--new);
+  }
+  @media (max-width: 760px){ .tl-card-dot{ display: none; } }
+
+  .tl-card-icon{
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--ink-2);
+    flex-shrink: 0;
+    transition: background .3s, color .3s, border-color .3s;
+  }
+  .tl-card.active .tl-card-icon{
+    background: var(--new);
+    border-color: var(--new);
+    color: #fff;
+  }
+  .tl-card-num{
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; color: var(--ink-3);
+    text-transform: uppercase;
+  }
+  .tl-card.active .tl-card-num{ color: var(--new); }
+  .tl-card-title{
+    font-weight: 700; font-size: 14.5px;
+    line-height: 1.25; letter-spacing: -0.01em;
+    color: var(--ink); margin: 0;
+  }
+  .tl-card-desc{
+    font-size: 12.5px; color: var(--ink-2);
+    line-height: 1.45; margin: 0;
+  }
+
+  /* ---- Detail Panel ---- */
+  .tl-panel-anim{
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+    padding-top: 0;
+    pointer-events: none;
+    transition:
+      max-height .52s cubic-bezier(.2,.7,.2,1),
+      opacity .32s ease,
+      margin-top .42s ease,
+      padding-top .42s ease;
+  }
+  #process.is-expanded .tl-panel-anim{
+    max-height: 900px;
+    opacity: 1;
+    margin-top: 16px;
+    padding-top: 14px;
+    pointer-events: auto;
+  }
+  .tl-panel-wrap{
+    position: relative;
+  }
+  .tl-notch{
+    position: absolute;
+    top: -10px;
+    width: 20px; height: 10px;
+    overflow: hidden;
+    transition: left .4s cubic-bezier(.2,.7,.2,1);
+    z-index: 2;
+  }
+  .tl-notch::after{
+    content:"";
+    position: absolute;
+    bottom: 0; left: 50%;
+    width: 16px; height: 16px;
+    transform: translateX(-50%) rotate(45deg);
+    background: var(--surface);
+    border-top: 1.5px solid var(--new);
+    border-left: 1.5px solid var(--new);
+  }
+
+  .tl-panel{
+    background: var(--surface);
+    border: 1.5px solid var(--new);
+    border-radius: 20px;
+    padding: 22px 24px;
+    box-shadow: 0 16px 40px -24px rgba(37,112,179,.16);
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 760px){ .tl-panel{ padding: 16px 14px; } }
+
+  .tl-panel-inner{
+    display: grid;
+    position: relative;
+  }
+  .tl-panel-slide{
+    grid-area: 1/1;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+    visibility: hidden;
+  }
+  .tl-panel-slide.active{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .tl-panel-top{
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+  }
+  .tl-panel-title{
+    font-weight: 800; font-size: 18px;
+    letter-spacing: -0.02em; margin: 0;
+  }
+  .tl-panel-badge{
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 5px 12px;
+    background: var(--new-soft);
+    color: var(--new-deep);
+    border: 1px solid color-mix(in oklab, var(--new) 30%, var(--line));
+    border-radius: 999px;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+
+  .tl-cols{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 1100px){ .tl-cols{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px){ .tl-cols{ grid-template-columns: 1fr; } }
+
+  .tl-col-box{
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .tl-col-label{
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600;
+  }
+
+  /* mini calendar */
+  .mini-cal{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden;
+    font-size: 11px;
+  }
+  .mini-cal-head{
+    background: var(--new); color: #fff;
+    padding: 7px 10px;
+    font-family: var(--mono); font-weight: 600; font-size: 10px;
+    letter-spacing: 0.05em; text-align: center;
+  }
+  .mini-cal-grid{
+    display: grid; grid-template-columns: repeat(7,1fr);
+    gap: 1px; padding: 8px 6px;
+    background: var(--line);
+  }
+  .mini-cal-grid > span{
+    background: var(--surface);
+    text-align: center; padding: 3px 0;
+    font-size: 10px; color: var(--ink-2);
+    border-radius: 3px;
+  }
+  .mini-cal-grid > span.head{ color: var(--ink-3); font-weight: 600; }
+  .mini-cal-grid > span.active{
+    background: var(--new); color: #fff; font-weight: 700;
+    border-radius: 50%; width: 22px; height: 22px;
+    display: grid; place-items: center; justify-self: center;
+  }
+  .mini-cal-grid > span.empty{ background: transparent; }
+  .time-slots{
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  }
+  .time-slot{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 6px; padding: 5px 8px;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-2); text-align: center;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .time-slot.active{
+    background: var(--new); border-color: var(--new);
+    color: #fff; font-weight: 600;
+  }
+  .cal-meta{ font-size: 11px; color: var(--ink-3); line-height: 1.4; }
+
+  /* checklist */
+  .tl-checklist{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px;}
+  .tl-checklist li{
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 13px; color: var(--ink-2); line-height: 1.4;
+  }
+  .tl-checklist li::before{
+    content:"";
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--new) 14%, transparent);
+    border: 1.5px solid color-mix(in oklab, var(--new) 40%, transparent);
+    display: grid; place-items: center;
+    margin-top: 1px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%232570B3' stroke-width='3'%3E%3Cpath d='M4 12l5 5L20 6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: center; background-size: 8px;
+  }
+
+  /* file boxes */
+  .file-boxes{ display: flex; flex-direction: column; gap: 6px; }
+  .file-box{
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px dashed var(--line-2);
+    border-radius: 8px; padding: 8px 10px;
+    font-size: 11.5px; color: var(--ink-2);
+    transition: border-color .2s, background .2s;
+  }
+  .file-box:hover{ border-color: var(--new); background: var(--new-soft); color: var(--new-deep); }
+  .file-box svg{ color: var(--ink-3); flex-shrink: 0; }
+
+  /* callout box */
+  .tl-callout{
+    background: var(--new-soft);
+    border: 1px solid color-mix(in oklab, var(--new) 28%, var(--line));
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 13px;
+    color: var(--new-deep);
+    line-height: 1.5;
+  }
+  .tl-cta-btn{
+    display: inline-flex; align-items: center; gap: 7px;
+    margin-top: 12px;
+    background: var(--new); color: #fff;
+    padding: 10px 16px; border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background .2s, transform .2s;
+  }
+  .tl-cta-btn:hover{ background: var(--new-deep); transform: translateY(-1px); }
+
+  /* wireframe mockup */
+  .wf-mock{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden;
+    font-size: 9px; color: var(--ink-3);
+  }
+  .wf-nav{
+    background: var(--bg-2); border-bottom: 1px solid var(--line);
+    padding: 5px 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .wf-logo{ font-weight: 700; font-size: 9px; color: var(--ink); }
+  .wf-nav-links{ display: flex; gap: 6px; margin-left: auto; }
+  .wf-nav-links span{ background: var(--line); height: 5px; width: 22px; border-radius: 2px; display: block; }
+  .wf-hero{
+    margin: 6px; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .wf-h{ background: var(--ink); height: 6px; width: 70%; border-radius: 2px; }
+  .wf-h2{ background: var(--ink-3); height: 4px; width: 50%; border-radius: 2px; opacity: .5; }
+  .wf-btn{ background: var(--new); height: 10px; width: 40%; border-radius: 3px; margin-top: 2px; }
+  .wf-blocks{
+    margin: 0 6px 6px;
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 4px;
+  }
+  .wf-block{
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: 5px; height: 28px;
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 4px;
+  }
+  .wf-block i{ display: block; background: var(--line-2); border-radius: 2px; height: 4px; }
+  .wf-bottom{
+    margin: 0 6px 6px;
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 4px;
+  }
+  .wf-img{ background: var(--bg); border: 1px solid var(--line); border-radius: 5px; height: 32px; }
+  .wf-txt{ display: flex; flex-direction: column; gap: 2px; padding: 4px; }
+  .wf-txt i{ display: block; background: var(--line-2); border-radius: 2px; height: 4px; }
+
+  /* sitemap */
+  .sitemap{ display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .sm-root{
+    background: var(--new); color: #fff;
+    border-radius: 7px; padding: 5px 14px;
+    font-weight: 700; font-size: 11px; text-align: center;
+  }
+  .sm-line{ width: 1.5px; height: 12px; background: var(--line-2); margin: 0 auto; }
+  .sm-branch{ display: flex; gap: 6px; align-items: flex-start; justify-content: center; }
+  .sm-col{ display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .sm-node{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 6px; padding: 4px 8px;
+    font-size: 10px; color: var(--ink-2);
+    text-align: center; white-space: nowrap;
+  }
+  .sm-sub-branch{ display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .sm-sub-node{
+    background: var(--bg); border: 1px solid var(--line-2);
+    border-radius: 5px; padding: 3px 7px;
+    font-size: 9.5px; color: var(--ink-3); white-space: nowrap;
+  }
+  .sm-h-line{ height: 1.5px; background: var(--line-2); align-self: stretch; }
+
+  /* drag list */
+  .drag-list{ display: flex; flex-direction: column; gap: 5px; }
+  .drag-item{
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 7px; padding: 7px 10px;
+    font-size: 12px; color: var(--ink-2);
+  }
+  .drag-item svg{ color: var(--ink-3); flex-shrink: 0; }
+
+  /* color swatches */
+  .swatches{ display: flex; gap: 6px; flex-wrap: wrap; }
+  .swatch{
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.08);
+    flex-shrink: 0;
+  }
+  .swatch-row{ display: flex; align-items: center; gap: 8px; }
+  .swatch-sm{ width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(0,0,0,.08); flex-shrink: 0; }
+  .swatch-label{ font-size: 11px; color: var(--ink-2); }
+
+  /* logo boxes */
+  .logo-boxes{ display: flex; flex-direction: column; gap: 7px; }
+  .logo-box{
+    background: var(--surface); border: 1.5px solid var(--line);
+    border-radius: 9px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: var(--ink-2);
+    transition: border-color .2s;
+  }
+  .logo-box.selected{ border-color: var(--new); }
+  .logo-box-icon{
+    width: 32px; height: 32px; border-radius: 6px;
+    background: var(--bg); border: 1px solid var(--line);
+    display: grid; place-items: center;
+    flex-shrink: 0; color: var(--ink-2);
+    font-weight: 800; font-size: 13px;
+    letter-spacing: -0.03em;
+  }
+  .logo-box.selected .logo-box-icon{
+    background: var(--new-soft);
+    border-color: color-mix(in oklab,var(--new) 30%, var(--line));
+    color: var(--new);
+  }
+
+  /* typo box */
+  .typo-box{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px;
+  }
+  .typo-aa{
+    font-size: 42px; font-weight: 800; letter-spacing: -0.04em;
+    color: var(--ink); line-height: 1;
+    margin-bottom: 8px;
+  }
+  .typo-rows{ display: flex; flex-direction: column; gap: 5px; }
+  .typo-row{ display: flex; justify-content: space-between; align-items: baseline; }
+  .typo-row span:first-child{ font-size: 11px; color: var(--ink-3); }
+  .typo-row span:last-child{ font-size: 11px; color: var(--ink-2); font-family: var(--mono); }
+
+  /* monitor + mobile mockup (panel 4) */
+  .p4-cols{
+    display: grid;
+    grid-template-columns: 1.4fr 0.6fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 1100px){ .p4-cols{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px){ .p4-cols{ grid-template-columns: 1fr; } }
+
+  .monitor-mock{
+    background: var(--ink); border-radius: 14px 14px 8px 8px;
+    padding: 8px;
+  }
+  .monitor-screen{
+    border-radius: 8px; overflow: hidden;
+    background: #fff;
+  }
+  .mn-bar{
+    background: var(--bg-2); border-bottom: 1px solid var(--line);
+    padding: 5px 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mn-dots{ display: flex; gap: 4px; }
+  .mn-dots i{ width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); display: block; }
+  .mn-url{
+    flex: 1; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; padding: 2px 7px;
+    font-family: var(--mono); font-size: 9px; color: var(--ink-3);
+  }
+  .mn-hero{
+    padding: 14px 12px 10px;
+    background: linear-gradient(135deg, #f7f6f2 0%, #eceae4 100%);
+  }
+  .mn-eyebrow{ font-size: 7px; color: var(--new); font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .mn-h{ font-size: 14px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 5px; }
+  .mn-sub{ font-size: 8px; color: var(--ink-2); line-height: 1.4; margin-bottom: 8px; max-width: 80%; }
+  .mn-cta{ background: var(--new); color: #fff; font-size: 9px; font-weight: 700; padding: 5px 10px; border-radius: 999px; display: inline-block; }
+  .mn-cards{ display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; padding: 8px 12px; }
+  .mn-card{ background: var(--bg); border: 1px solid var(--line); border-radius: 5px; height: 22px; }
+  .monitor-base{ height: 10px; background: linear-gradient(180deg, #d8dde4, #b0b8c2); border-radius: 0 0 8px 8px; margin-top: -1px; }
+  .monitor-stand{ width: 30%; height: 6px; background: #b0b8c2; margin: 0 auto; border-radius: 0 0 4px 4px; }
+
+  .phone-mock-sm{
+    background: var(--ink); border-radius: 18px;
+    padding: 5px;
+    max-width: 80px; margin: 0 auto;
+  }
+  .phone-screen-sm{
+    border-radius: 13px; overflow: hidden;
+    background: #fff;
+  }
+  .pms-bar{ background: var(--bg-2); height: 10px; display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; }
+  .pms-bar i{ width: 14px; height: 3px; background: var(--ink-3); border-radius: 1px; }
+  .pms-hero{ padding: 6px; background: linear-gradient(180deg,#f7f6f2,#eceae4); }
+  .pms-h{ background: var(--ink); height: 5px; width: 80%; border-radius: 2px; margin-bottom: 3px; }
+  .pms-s{ background: var(--ink-3); height: 3px; border-radius: 2px; opacity: .4; margin-bottom: 2px; }
+  .pms-cta{ background: var(--new); height: 8px; width: 50%; border-radius: 3px; margin-top: 3px; }
+  .pms-cards{ display: flex; flex-direction: column; gap: 3px; padding: 5px; }
+  .pms-cards i{ height: 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 3px; display: block; }
+
+  .ds-box{
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 11.5px;
+  }
+  .ds-box-label{ font-family: var(--mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); }
+  .ds-btn-row{ display: flex; gap: 5px; flex-wrap: wrap; }
+  .ds-btn{
+    padding: 5px 10px; border-radius: 999px;
+    font-size: 10px; font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .ds-btn.pri{ background: var(--new); color: #fff; }
+  .ds-btn.sec{ background: var(--surface); color: var(--ink); border-color: var(--line); }
+  .ds-btn.card{ background: var(--bg); color: var(--ink-2); border-color: var(--line); border-radius: 6px; }
+  .ds-swatches{ display: flex; gap: 4px; }
+  .ds-swatch{ width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(0,0,0,.08); }
+
+  /* comment box (panel 5) */
+  .comment-box{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden;
+  }
+  .comment-item{
+    display: flex; gap: 8px; padding: 10px 12px;
+    border-bottom: 1px solid var(--line); font-size: 12px; color: var(--ink-2); line-height: 1.4;
+  }
+  .comment-item:last-of-type{ border-bottom: none; }
+  .comment-avatar{
+    width: 24px; height: 24px; border-radius: 50%;
+    flex-shrink: 0; display: grid; place-items: center;
+    font-size: 10px; font-weight: 700; color: #fff;
+  }
+  .comment-input{
+    background: var(--bg); border-top: 1px solid var(--line);
+    padding: 8px 12px;
+    font-size: 11px; color: var(--ink-3); font-family: var(--sans);
+    border-radius: 0 0 12px 12px;
+  }
+
+  /* approval box */
+  .approval-box{
+    background: var(--surface); border: 1.5px solid var(--green);
+    border-radius: 12px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;
+  }
+  .approval-check{
+    width: 40px; height: 40px; border-radius: 50%;
+    background: color-mix(in oklab, var(--green) 14%, transparent);
+    border: 1.5px solid color-mix(in oklab, var(--green) 40%, transparent);
+    display: grid; place-items: center; color: var(--green);
+    flex-shrink: 0;
+  }
+  .approval-title{ font-weight: 700; font-size: 14px; color: var(--ink); }
+  .approval-sub{ font-size: 11.5px; color: var(--ink-2); line-height: 1.4; }
+  .approval-date{ font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+
+  /* launch box */
+  .launch-box{
+    background: var(--new); border-radius: 14px; padding: 18px;
+    color: #fff; display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;
+  }
+  .launch-icon{
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,.18);
+    display: grid; place-items: center;
+  }
+  .launch-title{ font-weight: 800; font-size: 16px; letter-spacing: -0.02em; }
+  .launch-sub{ font-size: 12px; opacity: .85; line-height: 1.4; }
+  .launch-status{
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.18); border-radius: 999px;
+    padding: 4px 10px; font-size: 11px; font-weight: 600;
+  }
+  .launch-status .dot{ width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+  .launch-btn{
+    background: #fff; color: var(--new);
+    padding: 9px 18px; border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: opacity .2s, transform .2s;
+  }
+  .launch-btn:hover{ opacity: .9; transform: translateY(-1px); }
 
   /* ============ FORM ============ */
   .form-wrap{
@@ -1824,103 +2389,6 @@
   }
   @media (max-width: 540px){ .btn-submit-full{ width: 100%; justify-content: center; } }
 
-  /* ============ PORTFOLIO SHOWCASE ============ */
-  .pf-portfolio{ display: flex; flex-direction: column; gap: 14px; }
-  .pf-main{
-    display: grid; grid-template-columns: 1.12fr 1fr;
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--r-lg); overflow: hidden;
-    box-shadow: 0 24px 56px -36px rgba(14,18,23,.14);
-    transition: opacity .22s ease, transform .22s ease;
-  }
-  @media (max-width: 960px){ .pf-main{ grid-template-columns: 1fr; } }
-  .pf-main.is-switching{ opacity: 0; transform: translateY(7px); pointer-events: none; }
-  .pf-main-visual{
-    background: var(--bg); border-right: 1px solid var(--line);
-    padding: 36px 28px; display: flex; align-items: center; justify-content: center;
-    min-height: 460px;
-  }
-  @media (max-width: 960px){ .pf-main-visual{ border-right: none; border-bottom: 1px solid var(--line); min-height: 260px; padding: 28px 22px; } }
-  .pf-main-body{
-    padding: 38px 40px; display: flex; flex-direction: column;
-  }
-  @media (max-width: 720px){ .pf-main-body{ padding: 26px 22px; } }
-  .pf-cat{
-    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--new); opacity: .9; margin-bottom: 8px;
-  }
-  .pf-num{ font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-  .pf-title{ font-weight: 800; font-size: clamp(22px, 2.2vw, 30px); letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 10px; }
-  .pf-short{ color: var(--ink-2); font-size: 14.5px; line-height: 1.55; margin: 0 0 20px; }
-  .pf-rows{ border-top: 1px solid var(--line); margin-bottom: 18px; }
-  .pf-row{ display: grid; grid-template-columns: 116px 1fr; gap: 12px; align-items: baseline; border-bottom: 1px solid var(--line); padding: 11px 0; }
-  .pf-row .rk{ font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; color: var(--new); text-transform: uppercase; padding-top: 1px; }
-  .pf-row .rv{ font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
-  .pf-tags{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
-  .pf-tag{ font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--ink-2); }
-  .pf-cta-area{ margin-top: auto; }
-  .pf-cta-note{ font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); margin: 9px 0 0; letter-spacing: 0.01em; }
-
-  .pf-mini-grid{ display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
-  @media (max-width: 1200px){ .pf-mini-grid{ grid-template-columns: repeat(4,1fr); } }
-  @media (max-width: 860px){ .pf-mini-grid{ grid-template-columns: repeat(3,1fr); } }
-  @media (max-width: 640px){
-    .pf-mini-grid{ display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 12px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch; }
-  }
-  .pf-mini{ background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; cursor: pointer; display: flex; flex-direction: column; transition: transform .22s cubic-bezier(.2,.7,.2,1), border-color .2s, box-shadow .2s; }
-  @media (max-width: 640px){ .pf-mini{ flex: 0 0 auto; min-width: 190px; max-width: 220px; scroll-snap-align: start; } }
-  .pf-mini:hover{ transform: translateY(-4px); border-color: var(--ink-3); box-shadow: 0 14px 28px -18px rgba(14,18,23,.16); }
-  .pf-mini.active{ border-color: var(--new); box-shadow: 0 0 0 3px color-mix(in oklab, var(--new) 18%, transparent); }
-  .pf-mini.active:hover{ transform: translateY(-2px); }
-  .pf-mini-preview{ height: 100px; overflow: hidden; display: flex; flex-direction: column; }
-  @media (max-width: 640px){ .pf-mini-preview{ height: 80px; } }
-  .pf-mini-bar{ height: 18px; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-bottom: 1px solid rgba(14,18,23,.08); flex-shrink: 0; }
-  .pf-mini-bar i{ width: 6px; height: 6px; border-radius: 50%; background: rgba(128,128,128,.35); display: inline-block; }
-  .pf-mini-screen{ padding: 7px 9px 8px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-  .msl{ height: 5px; border-radius: 2px; width: 88%; }
-  .msl:first-child{ height: 7px; width: 68%; }
-  .msl:last-of-type{ width: 50%; }
-  .msh{ height: 13px; border-radius: 999px; width: 50%; margin-top: 2px; }
-  .pf-mini-body{ padding: 11px 13px; flex: 1; }
-  .pf-mini-num{ font-family: var(--mono); font-size: 10px; color: var(--new); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
-  .pf-mini-title{ font-weight: 700; font-size: 13px; line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 6px; color: var(--ink); }
-  .pf-mini-tags{ display: flex; flex-wrap: wrap; gap: 4px; }
-  .pf-mini-tags i{ font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--ink-3); }
-
-  .pf-browsers{ position: relative; width: 100%; display: grid; grid-template-columns: 1fr 1.1fr; gap: 16px; align-items: flex-end; }
-  @media (max-width: 500px){ .pf-before{ display: none; } .pf-browsers{ grid-template-columns: 1fr; } }
-  .pf-browser{ background: var(--surface); border-radius: 10px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 16px 36px -20px rgba(14,18,23,.22); position: relative; }
-  .pf-before{ transform: translateY(12px) rotate(-1.5deg); filter: saturate(.4) brightness(.95); z-index: 1; }
-  .pf-after{ z-index: 2; box-shadow: 0 22px 44px -26px rgba(14,18,23,.36); }
-  .pfb-bar{ display: flex; align-items: center; gap: 7px; padding: 7px 10px; background: var(--bg-2); border-bottom: 1px solid var(--line); }
-  .pfb-bar-old{ background: #D7CFBF !important; border-color: #C2B89A !important; }
-  .pfb-dots{ display: inline-flex; gap: 4px; }
-  .pfb-dots i{ width: 8px; height: 8px; border-radius: 50%; background: #BFB7A6; display: inline-block; }
-  .pfb-url{ flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 3px 7px; font-family: var(--mono); font-size: 9px; color: var(--ink-3); overflow: hidden; white-space: nowrap; }
-  .pfb-old{ padding: 10px; background: #ECE6D6; color: #4A4232; min-height: 140px; }
-  .pfo-h{ font-family: "Times New Roman", serif; font-size: 10.5px; font-weight: 700; color: #6B5640; text-align: center; text-decoration: underline; margin-bottom: 6px; }
-  .pfo-hr{ height: 1px; background: #C2B89A; margin-bottom: 6px; }
-  .pfo-layout{ display: grid; grid-template-columns: 26% 1fr; gap: 5px; }
-  .pfo-sidebar{ background: #D9CFB7; border: 1px solid #BBB094; padding: 4px; display: flex; flex-direction: column; gap: 3px; }
-  .pfo-sidebar i{ height: 5px; background: #B5A88C; border-radius: 1px; display: block; }
-  .pfo-sidebar i:first-child{ width: 70%; background: #8E7E61; height: 6px; }
-  .pfo-main{ background: #F5EFDD; border: 1px solid #C9BD9E; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
-  .pfo-main b{ height: 6px; background: #2A6CC9; border-radius: 1px; display: block; width: 60%; }
-  .pfo-main p{ height: 4px; background: #9A8C75; border-radius: 1px; display: block; }
-  .pfo-main p:last-of-type{ width: 75%; }
-  .pfo-main span{ height: 11px; background: linear-gradient(180deg,#FFEAB0,#C8A14A); border-radius: 2px; display: block; width: 42%; margin-top: 3px; }
-  .pfb-new{ padding: 12px; min-height: 160px; display: flex; flex-direction: column; gap: 6px; background: var(--after-bg,#FAFAFA); }
-  .pfn-eyebrow{ font-family: var(--mono); font-size: 7px; letter-spacing: 0.1em; color: var(--after-acc,#2570B3); text-transform: uppercase; opacity: .85; }
-  .pfn-h{ font-size: 14px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.0; color: var(--after-text,#0E1217); }
-  .pfn-sub{ height: 4px; border-radius: 2px; background: var(--after-muted,rgba(14,18,23,.15)); width: 85%; }
-  .pfn-sub2{ height: 4px; border-radius: 2px; background: var(--after-muted,rgba(14,18,23,.12)); width: 60%; }
-  .pfn-btn{ height: 16px; border-radius: 999px; background: var(--after-acc,#2570B3); width: 50%; margin-top: 2px; }
-  .pfn-cards{ display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; margin-top: auto; }
-  .pfn-cards i{ height: 20px; border-radius: 3px; background: var(--after-muted,rgba(14,18,23,.1)); display: block; }
-  .pf-chip{ position: absolute; top: -9px; left: 12px; z-index: 4; font-family: var(--mono); font-weight: 700; font-size: 9px; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.08em; }
-  .pf-chip-before{ background: var(--old); color: #fff; }
-  .pf-chip-after{ background: var(--new); color: #fff; }
-
   /* ============ FAQ ============ */
   .faq{
     display: flex; flex-direction: column; gap: 1px;
@@ -2023,6 +2491,362 @@
   /* reveal on scroll */
   .reveal{ opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
   .reveal.in{ opacity: 1; transform: translateY(0);}
+
+  /* ============ CASE STUDY LIVE PREVIEW ============ */
+
+  /* thumbnail strip */
+  .cs-strip{
+    display: flex; gap: 10px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+    padding-bottom: 4px; margin-bottom: 4px;
+  }
+  .cs-strip::-webkit-scrollbar{ height: 4px; }
+  .cs-strip::-webkit-scrollbar-track{ background: transparent; }
+  .cs-strip::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 2px; }
+
+  .cs-thumb{
+    flex: 0 0 156px; height: 106px;
+    border-radius: 12px; overflow: hidden;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    scroll-snap-align: start;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    transition: border-color .22s ease, box-shadow .22s ease, transform .22s cubic-bezier(.2,.7,.2,1);
+  }
+  .cs-thumb:hover{ border-color: var(--ink-3); transform: translateY(-2px); }
+  .cs-thumb.active{
+    border-color: var(--new);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--new) 18%, transparent);
+    transform: translateY(-3px);
+  }
+  .cs-thumb.soon{ cursor: default; opacity: .42; pointer-events: none; }
+  .cs-thumb img{ width: 100%; flex: 1; object-fit: cover; object-position: top; display: block; }
+
+  .cst-bar{
+    height: 16px; flex-shrink: 0;
+    background: var(--bg-2);
+    border-bottom: 1px solid rgba(14,18,23,.07);
+    display: flex; align-items: center; gap: 3px; padding: 0 6px;
+  }
+  .cst-bar i{ width: 5px; height: 5px; border-radius: 50%; background: rgba(128,128,128,.3); display: inline-block; }
+  .cst-url{ flex: 1; height: 6px; border-radius: 2px; background: rgba(14,18,23,.09); margin-left: 4px; }
+  .cst-screen{
+    flex: 1; background: var(--tb, #f5f5f3);
+    padding: 7px 8px; display: flex; flex-direction: column; gap: 3px;
+  }
+  .cst-line{ height: 4px; border-radius: 2px; background: color-mix(in oklab, var(--ta, #2570B3) 20%, var(--tb, #f5f5f3)); }
+  .cst-line.h{ height: 6px; width: 60%; background: var(--ta, #2570B3); opacity: .72; }
+  .cst-line.w80{ width: 80%; }
+  .cst-line.w50{ width: 50%; }
+  .cst-btn{ height: 9px; width: 42%; border-radius: 999px; background: var(--ta, #2570B3); opacity: .55; margin-top: 2px; }
+  .cst-label{
+    padding: 4px 8px 5px; flex-shrink: 0;
+    font-family: var(--mono); font-size: 9px; color: var(--ink-3);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    border-top: 1px solid rgba(14,18,23,.06);
+  }
+  .cst-soon{
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px; color: var(--ink-3);
+  }
+  .cst-soon svg{ width: 20px; height: 20px; }
+  .cst-soon span{ font-family: var(--mono); font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; }
+
+  .cs-wrap{
+    display: flex; flex-direction: column; gap: 40px;
+  }
+
+  .cs-header{
+    display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end;
+  }
+  @media (max-width: 880px){ .cs-header{ grid-template-columns: 1fr; gap: 20px; } }
+
+  .cs-tags{
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+  }
+  .cs-tag{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    padding: 5px 12px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink-2); text-transform: uppercase;
+    transition: border-color .2s, color .2s;
+  }
+  .cs-tag:hover{ border-color: var(--new); color: var(--new); }
+
+  .cs-device-switcher{
+    display: inline-flex; gap: 4px; padding: 5px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px -8px rgba(14,18,23,.14);
+    flex-shrink: 0;
+  }
+  .cs-dev-btn{
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--ink-2); background: transparent; border: none;
+    transition: background .2s, color .2s;
+    white-space: nowrap;
+  }
+  .cs-dev-btn:hover{ color: var(--ink); background: var(--bg); }
+  .cs-dev-btn.active{
+    background: var(--ink); color: var(--bg);
+    box-shadow: 0 4px 10px -6px rgba(14,18,23,.38);
+  }
+  .cs-dev-btn svg{ flex-shrink: 0; }
+  @media (max-width: 600px){
+    .cs-dev-btn span{ display: none; }
+    .cs-dev-btn{ padding: 9px 11px; }
+  }
+
+  .cs-stage{
+    display: flex; justify-content: center;
+    position: relative;
+  }
+
+  .cs-browser{
+    width: 100%; max-width: 1280px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow:
+      0 4px 6px -4px rgba(14,18,23,.07),
+      0 24px 60px -36px rgba(14,18,23,.22);
+    overflow: hidden;
+    transition: max-width .38s cubic-bezier(.2,.7,.2,1), box-shadow .3s;
+  }
+  .cs-browser.tablet{ max-width: 768px; }
+  .cs-browser.mobile{ max-width: 390px; border-radius: 28px; }
+
+  .cs-browser-bar{
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cs-browser.mobile .cs-browser-bar{ padding: 10px 14px; }
+  .cs-dots{ display: flex; gap: 6px; flex-shrink: 0; }
+  .cs-dots i{
+    width: 11px; height: 11px; border-radius: 50%;
+    display: block; flex-shrink: 0;
+  }
+  .cs-dots i:nth-child(1){ background: #FF5F57; }
+  .cs-dots i:nth-child(2){ background: #FFBD2E; }
+  .cs-dots i:nth-child(3){ background: #28CA41; }
+  .cs-browser.mobile .cs-dots{ display: none; }
+
+  .cs-url-bar{
+    flex: 1; max-width: 480px;
+    display: flex; align-items: center; gap: 7px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 12px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+  }
+  .cs-url-bar svg{ flex-shrink: 0; color: var(--green); }
+  .cs-url-bar span{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cs-browser.mobile .cs-url-bar{
+    max-width: none; font-size: 11px; padding: 5px 10px;
+    margin: 0 auto;
+  }
+
+  .cs-browser-nav{
+    display: flex; gap: 6px; flex-shrink: 0; margin-left: auto;
+  }
+  .cs-browser.mobile .cs-browser-nav{ display: none; }
+  .cs-nav-btn{
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--surface);
+    display: grid; place-items: center; color: var(--ink-3);
+    cursor: default;
+  }
+
+  .cs-iframe-wrap{
+    position: relative;
+    height: 720px;
+    overflow: hidden;
+  }
+  .cs-browser.tablet .cs-iframe-wrap{ height: 780px; }
+  .cs-browser.mobile .cs-iframe-wrap{ height: 720px; }
+
+  .cs-iframe-wrap iframe{
+    width: 100%; height: 100%;
+    border: none; display: block;
+  }
+
+  /* Mobile fallback (shown only on small screens) */
+  .cs-mobile-fallback{
+    display: none;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; padding: 48px 24px;
+    text-align: center; gap: 20px;
+    flex-direction: column; align-items: center;
+  }
+  .cs-mobile-fallback p{
+    font-size: 15px; color: var(--ink-2); margin: 0; line-height: 1.55;
+  }
+
+  @media (max-width: 520px){
+    .cs-stage{ display: none; }
+    .cs-mobile-fallback{ display: flex; }
+    .cs-device-switcher{ display: none; }
+  }
+
+  .cs-cta-row{
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  }
+
+  /* ============ ENHANCED PANEL ELEMENTS ============ */
+
+  /* Full calendar */
+  .cal-full{ background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .cal-nav{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--line); }
+  .cal-month{ font-weight:600; font-size:13px; color:var(--ink); }
+  .cal-arrow{ width:26px; height:26px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--ink-2); display:grid; place-items:center; cursor:default; font-size:14px; line-height:1; }
+  .cal-g{ display:grid; grid-template-columns:repeat(7,1fr); gap:1px; padding:8px 8px 4px; }
+  .cal-dh{ text-align:center; font-size:10px; font-weight:600; color:var(--ink-3); padding:2px 0 6px; }
+  .cal-d{ text-align:center; font-size:12px; color:var(--ink-2); padding:5px 2px; border-radius:50%; }
+  .cal-d.dim{ color:var(--line); }
+  .cal-d.sel{ background:var(--new); color:#fff; font-weight:700; }
+  .cal-info-bar{ padding:8px 12px 10px; display:flex; flex-direction:column; gap:7px; border-top:1px solid var(--line); margin-top:4px; }
+  .cal-info-r{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ink-2); }
+  .cal-info-r svg{ color:var(--ink-3); flex-shrink:0; }
+  .time-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; padding:6px 8px 8px; }
+  .tslot{ border:1px solid var(--line); border-radius:8px; padding:7px 4px; font-size:12px; color:var(--ink-2); text-align:center; font-family:var(--mono); background:var(--bg); }
+  .tslot.on{ background:var(--new); border-color:var(--new); color:#fff; font-weight:600; }
+
+  /* Blue circle checklist */
+  .plist{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:11px; }
+  .plist li{ display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--ink-2); line-height:1.4; }
+  .pck{ width:22px; height:22px; border-radius:50%; background:color-mix(in oklab,var(--new) 12%,transparent); border:1.5px solid var(--new); display:grid; place-items:center; flex-shrink:0; color:var(--new); }
+
+  /* Requirement icon cards */
+  .req-list{ display:flex; flex-direction:column; gap:8px; }
+  .req-card{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:13px; color:var(--ink-2); }
+  .req-ico{ width:34px; height:34px; border-radius:8px; background:var(--bg); border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-2); flex-shrink:0; }
+
+  /* Result right col */
+  .res-wrap{ display:flex; flex-direction:column; gap:12px; height:100%; }
+  .res-ico{ width:52px; height:52px; border-radius:50%; background:var(--new-soft); border:1.5px solid color-mix(in oklab,var(--new) 28%,var(--line)); display:grid; place-items:center; color:var(--new); }
+  .btn-blue-full{ display:flex; align-items:center; justify-content:center; width:100%; background:var(--new); color:#fff; padding:14px 20px; border-radius:12px; font-weight:700; font-size:14px; text-decoration:none; border:none; cursor:pointer; transition:background .2s; margin-top:auto; }
+  .btn-blue-full:hover{ background:var(--new-deep); }
+
+  /* Wireframe X image placeholder */
+  .wf-ximg{ border:1px solid #D4CEBF; border-radius:4px; background:var(--bg); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+
+  /* Logo concept grid */
+  .logo-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .logo-con{ display:flex; flex-direction:column; align-items:center; gap:7px; padding:10px 8px; border:1.5px solid var(--line); border-radius:10px; }
+  .logo-con.sel{ border-color:var(--new); }
+  .logo-con-ico{ width:56px; height:56px; display:flex; align-items:center; justify-content:center; }
+  .logo-con-lbl{ font-size:11px; color:var(--ink-2); text-align:center; line-height:1.3; }
+
+  /* Typography hierarchy */
+  .typo-hier{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px; display:flex; gap:16px; align-items:flex-start; }
+  .typo-hier-aa{ font-size:52px; font-weight:800; letter-spacing:-0.04em; color:var(--ink); line-height:1; flex-shrink:0; }
+  .typo-hier-rows{ flex:1; display:flex; flex-direction:column; gap:0; }
+  .typo-hier-row{ padding:7px 0; border-bottom:1px solid var(--line); }
+  .typo-hier-row:last-child{ border-bottom:none; }
+  .typo-hier-name{ font-size:12px; font-weight:600; color:var(--ink); }
+  .typo-hier-sub{ font-size:11px; color:var(--ink-3); }
+  .typo-hier-row.blue .typo-hier-name{ color:var(--new); }
+
+  /* Panel 4 3-col layout */
+  .p4-layout{ display:grid; grid-template-columns:1.3fr 0.75fr 0.95fr; gap:16px; align-items:start; }
+  @media (max-width:1100px){ .p4-layout{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:640px){ .p4-layout{ grid-template-columns:1fr; } }
+
+  /* Full desktop monitor */
+  .monitor3{ background:#0E1217; border-radius:14px 14px 5px 5px; padding:7px 7px 5px; }
+  .monitor3-screen{ border-radius:8px; overflow:hidden; background:#fff; }
+  .mn3-bar{ background:var(--bg-2); padding:5px 10px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--line); }
+  .mn3-dots{ display:flex; gap:4px; }
+  .mn3-dots i{ width:7px; height:7px; border-radius:50%; background:var(--line-2); display:block; }
+  .mn3-url{ flex:1; background:#fff; border:1px solid var(--line); border-radius:3px; padding:2px 7px; font-family:var(--mono); font-size:8.5px; color:var(--ink-3); }
+  .mn3-nav{ display:flex; align-items:center; gap:6px; padding:5px 10px; background:#fff; border-bottom:1px solid var(--line); }
+  .mn3-logo{ font-weight:800; font-size:9px; color:var(--ink); letter-spacing:-.01em; }
+  .mn3-links{ display:flex; gap:8px; margin-left:auto; font-size:7.5px; color:var(--ink-2); }
+  .mn3-pill{ background:var(--new); color:#fff; font-size:7.5px; font-weight:600; padding:3px 7px; border-radius:999px; }
+  .mn3-hero{ display:grid; grid-template-columns:1fr 1fr; min-height:80px; background:linear-gradient(135deg,#faf9f6 0%,#f1efea 100%); }
+  .mn3-hero-l{ padding:10px; display:flex; flex-direction:column; gap:3px; }
+  .mn3-h{ font-size:10px; font-weight:800; letter-spacing:-.02em; color:var(--ink); line-height:1.15; }
+  .mn3-s{ font-size:7px; color:var(--ink-2); line-height:1.4; margin-top:1px; }
+  .mn3-btn{ background:var(--new); color:#fff; font-size:6.5px; font-weight:700; padding:4px 8px; border-radius:4px; display:inline-block; margin-top:3px; }
+  .mn3-hero-r{ background:linear-gradient(140deg,#e4dfd5 0%,#d5cfc4 100%); position:relative; }
+  .mn3-hero-r::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(14,18,23,.06)); }
+  .mn3-features{ display:grid; grid-template-columns:repeat(3,1fr); background:#fff; border-top:1px solid var(--line); }
+  .mn3-feat{ padding:6px 6px 7px; text-align:center; border-right:1px solid var(--line); }
+  .mn3-feat:last-child{ border-right:none; }
+  .mn3-feat-ico{ width:16px; height:16px; border-radius:50%; background:var(--new-soft); display:grid; place-items:center; color:var(--new); margin:0 auto 3px; }
+  .mn3-feat-t{ font-size:6.5px; font-weight:700; color:var(--ink); margin-bottom:1px; }
+  .mn3-feat-s{ font-size:5.5px; color:var(--ink-3); line-height:1.3; }
+  .monitor3-base{ height:7px; background:linear-gradient(180deg,#d0d8e0,#aab2be); border-radius:0 0 5px 5px; }
+  .monitor3-stand{ width:22%; height:5px; background:#b0b8c2; margin:0 auto; border-radius:0 0 3px 3px; }
+
+  /* Phone mockup full */
+  .phone3{ background:#0E1217; border-radius:28px; padding:6px; max-width:90px; margin:0 auto; position:relative; }
+  .phone3::before{ content:''; position:absolute; top:7px; left:50%; width:28px; height:4px; transform:translateX(-50%); border-radius:999px; background:rgba(255,255,255,.15); z-index:2; }
+  .phone3-screen{ border-radius:22px; overflow:hidden; background:#fff; }
+  .ph3-nav{ display:flex; align-items:center; padding:5px 7px; border-bottom:1px solid var(--line); background:#fff; }
+  .ph3-logo{ font-weight:800; font-size:7.5px; color:var(--ink); }
+  .ph3-ham{ margin-left:auto; display:flex; flex-direction:column; gap:2px; }
+  .ph3-ham i{ width:11px; height:1.5px; background:var(--ink-2); border-radius:1px; display:block; }
+  .ph3-hero{ padding:7px; background:linear-gradient(135deg,#faf9f6,#f1efea); }
+  .ph3-h{ font-size:8.5px; font-weight:800; color:var(--ink); letter-spacing:-.015em; line-height:1.2; margin-bottom:3px; }
+  .ph3-s{ font-size:6px; color:var(--ink-2); line-height:1.4; margin-bottom:5px; }
+  .ph3-btn{ background:var(--new); color:#fff; font-size:6.5px; font-weight:700; padding:4px 9px; border-radius:4px; display:inline-block; }
+  .ph3-img{ background:linear-gradient(140deg,#e4dfd5,#d5cfc4); height:44px; }
+  .ph3-cards{ padding:5px 7px; display:flex; flex-direction:column; gap:3px; }
+  .ph3-card{ display:flex; align-items:center; gap:5px; padding:4px 6px; background:var(--bg); border-radius:4px; }
+  .ph3-card-ico{ width:10px; height:10px; border-radius:50%; background:var(--new-soft); display:grid; place-items:center; color:var(--new); flex-shrink:0; }
+  .ph3-card-t{ font-size:6.5px; font-weight:600; color:var(--ink-2); }
+
+  /* Design system right col */
+  .ds3{ display:flex; flex-direction:column; gap:9px; }
+  .ds3-box{ background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:11px; }
+  .ds3-label{ font-family:var(--mono); font-size:9.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3); margin-bottom:7px; }
+  .ds3-typo-row{ display:flex; align-items:flex-end; gap:8px; }
+  .ds3-aa{ font-size:28px; font-weight:800; letter-spacing:-.03em; color:var(--ink); line-height:1; }
+  .ds3-type-info .ds3-name{ font-size:11.5px; font-weight:600; color:var(--ink); }
+  .ds3-type-info .ds3-sub{ font-size:10.5px; color:var(--ink-3); }
+  .ds3-swatches{ display:flex; gap:5px; }
+  .ds3-sw{ width:26px; height:26px; border-radius:6px; border:1px solid rgba(0,0,0,.07); }
+  .ds3-btns{ display:flex; gap:5px; flex-wrap:wrap; align-items:center; }
+  .ds3-btn-p{ background:var(--new); color:#fff; padding:5px 11px; border-radius:6px; font-size:11px; font-weight:600; }
+  .ds3-btn-s{ background:var(--surface); color:var(--ink); padding:5px 11px; border-radius:6px; font-size:11px; font-weight:600; border:1.5px solid var(--line); }
+  .ds3-btn-g{ background:var(--bg); color:var(--ink-2); padding:5px 11px; border-radius:6px; font-size:11px; border:1px solid var(--line); }
+  .ds3-icons{ display:flex; gap:8px; align-items:center; color:var(--ink-3); margin-top:4px; }
+
+  /* Comments redesigned */
+  .cmt-list{ display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .cmt{ display:flex; gap:10px; padding:11px 14px; border-bottom:1px solid var(--line); }
+  .cmt:last-of-type{ border-bottom:none; }
+  .cmt-ava{ width:36px; height:36px; border-radius:50%; flex-shrink:0; display:grid; place-items:center; font-weight:700; font-size:13px; color:#fff; }
+  .cmt-body{ flex:1; }
+  .cmt-bubble{ background:var(--bg); border-radius:0 10px 10px 10px; padding:9px 11px; }
+  .cmt-text{ font-size:12.5px; color:var(--ink); line-height:1.45; }
+  .cmt-time{ font-size:10.5px; color:var(--ink-3); margin-top:5px; font-family:var(--mono); }
+  .cmt-input{ display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--bg); border-top:1px solid var(--line); font-size:12px; color:var(--ink-3); }
+
+  /* Approval redesigned */
+  .appr2{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:4px 0; }
+  .appr2-check{ width:58px; height:58px; border-radius:50%; background:color-mix(in oklab,var(--green) 12%,transparent); border:2px solid color-mix(in oklab,var(--green) 38%,transparent); display:grid; place-items:center; color:var(--green); }
+  .appr2-title{ font-weight:700; font-size:15px; color:var(--ink); }
+  .appr2-sub{ font-size:12px; color:var(--ink-2); line-height:1.45; }
+  .appr2-sig{ font-family:'Georgia','Times New Roman',serif; font-style:italic; font-size:36px; color:var(--ink); line-height:1; padding:4px 0; }
+  .appr2-foot{ display:flex; justify-content:space-between; width:100%; padding-top:8px; border-top:1px solid var(--line); font-size:11px; color:var(--ink-3); font-family:var(--mono); }
+
+  /* Launch redesigned */
+  .launch3{ background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:18px 14px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; }
+  .launch3-ico{ width:62px; height:62px; border-radius:50%; background:var(--new-soft); border:1.5px solid color-mix(in oklab,var(--new) 28%,var(--line)); display:grid; place-items:center; color:var(--new); }
+  .launch3-title{ font-weight:800; font-size:15px; color:var(--ink); letter-spacing:-.02em; }
+  .launch3-sub{ font-size:12px; color:var(--ink-2); line-height:1.4; }
+  .launch3-btn{ display:inline-flex; align-items:center; gap:6px; background:var(--new); color:#fff; padding:11px 18px; border-radius:10px; font-weight:700; font-size:13px; text-decoration:none; transition:background .2s; width:100%; justify-content:center; }
+  .launch3-btn:hover{ background:var(--new-deep); }
+  .launch3-status{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:var(--green); }
+  .launch3-dot{ width:8px; height:8px; border-radius:50%; background:var(--green); }
+
 </style>
 </head>
 <body>
@@ -2046,9 +2870,9 @@
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M20 20l-4.2-4.2" stroke-linecap="round"/></svg>
         <span class="nav-label">SEO &amp; Google</span>
       </a>
-      <a class="nav-item" href="#examples" aria-label="Naše práce">
+      <a class="nav-item" href="#examples" aria-label="Ukázka projektu">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M9 21h6M12 17v4M8 9h5M8 13h8" stroke-linecap="round"/></svg>
-        <span class="nav-label">Naše práce</span>
+        <span class="nav-label">Ukázka projektu</span>
       </a>
       <a class="nav-item" href="#pricing" aria-label="Ceník">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 7h11M6 12h9M6 17h7" stroke-linecap="round"/><path d="M16 16.5l1.7 1.7L21 14" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2204,46 +3028,563 @@
   </div>
 </section>
 
-<!-- ========== 2. PRO KOHO ========== -->
-<section class="block" id="modernization">
+<!-- ========== 2. PROCES TVORBY ========== -->
+<section class="block" id="process">
   <div class="wrap">
+
     <div class="section-head reveal">
       <div>
-        <div class="section-eyebrow">Pro koho</div>
-        <h2 class="section-title">Pro koho je Apexwebdesign?</h2>
+        <div class="section-eyebrow">Jak to probíhá</div>
+        <h2 class="section-title">Jak probíhá tvorba webu?</h2>
       </div>
-      <p class="section-sub">Tři typické situace, ve&nbsp;kterých vám rádi pomůžeme posunout online prezentaci dál.</p>
+      <p class="section-sub">Pět jasných kroků, díky kterým víte, co se bude dít od první schůzky až po spuštění webu.</p>
     </div>
 
-    <div class="who-grid">
-      <article class="who-card reveal">
-        <div class="who-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8" stroke-linecap="round"/></svg>
-        </div>
-        <span class="who-num">01 — Začínáte</span>
-        <h3 class="who-h">Nemáte web</h3>
-        <p class="who-p">Pomůžeme vytvořit profesionální online prezentaci od&nbsp;nuly — struktura, design, obsah i&nbsp;kontaktní cesta.</p>
-      </article>
+    <!-- Cards -->
+    <div class="tl-cards-wrap reveal">
+      <div class="tl-connector"></div>
+      <div class="tl-cards" id="tlCards" role="tablist" aria-label="Kroky tvorby webu">
 
-      <article class="who-card feature reveal">
-        <div class="who-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3.46-7.1M21 4v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="who-num">02 — Modernizace</span>
-        <h3 class="who-h">Máte starý web</h3>
-        <p class="who-p">Pokud váš web působí zastarale, není přehledný nebo&nbsp;nefunguje dobře na&nbsp;mobilu, navrhneme moderní redesign.</p>
-      </article>
+        <button class="tl-card" role="tab" aria-selected="false" aria-controls="tl-panel-1" id="tl-tab-1" data-step="1">
+          <div class="tl-card-dot"></div>
+          <div class="tl-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="tl-card-num">01</div>
+          <p class="tl-card-title">Úvodní schůzka</p>
+          <p class="tl-card-desc">Krátce si zavoláme nebo se potkáme.</p>
+        </button>
 
-      <article class="who-card reveal">
-        <div class="who-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
-        </div>
-        <span class="who-num">03 — Viditelnost</span>
-        <h3 class="who-h">Lidé vás špatně hledají</h3>
-        <p class="who-p">Pomůžeme se&nbsp;základním SEO, lokální dohledatelností a&nbsp;Google firemním profilem.</p>
-      </article>
-    </div>
-  </div>
+        <button class="tl-card active" role="tab" aria-selected="true" aria-controls="tl-panel-2" id="tl-tab-2" data-step="2">
+          <div class="tl-card-dot"></div>
+          <div class="tl-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <div class="tl-card-num">02</div>
+          <p class="tl-card-title">Wireframe a obsah</p>
+          <p class="tl-card-desc">Struktura webu a rozložení sekcí.</p>
+        </button>
+
+        <button class="tl-card" role="tab" aria-selected="false" aria-controls="tl-panel-3" id="tl-tab-3" data-step="3">
+          <div class="tl-card-dot"></div>
+          <div class="tl-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 20.94c1.5.06 10.4-1.44 8-13.44"/><path d="M20 13.5c-.6 3.5-3 5.5-6 6.5"/></svg>
+          </div>
+          <div class="tl-card-num">03</div>
+          <p class="tl-card-title">Logo a styl</p>
+          <p class="tl-card-desc">Barvy, typografie a vizuální směr.</p>
+        </button>
+
+        <button class="tl-card" role="tab" aria-selected="false" aria-controls="tl-panel-4" id="tl-tab-4" data-step="4">
+          <div class="tl-card-dot"></div>
+          <div class="tl-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="tl-card-num">04</div>
+          <p class="tl-card-title">První návrh</p>
+          <p class="tl-card-desc">Vizuální koncept a celkový vzhled.</p>
+        </button>
+
+        <button class="tl-card" role="tab" aria-selected="false" aria-controls="tl-panel-5" id="tl-tab-5" data-step="5">
+          <div class="tl-card-dot"></div>
+          <div class="tl-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+          </div>
+          <div class="tl-card-num">05</div>
+          <p class="tl-card-title">Doladění a spuštění</p>
+          <p class="tl-card-desc">Připomínky, spuštění a předání.</p>
+        </button>
+
+      </div><!-- .tl-cards -->
+    </div><!-- .tl-cards-wrap -->
+
+    <!-- Detail Panel -->
+    <div class="tl-panel-anim" id="tlPanelAnim">
+    <div class="tl-panel-wrap">
+      <div class="tl-notch" id="tlNotch" aria-hidden="true"></div>
+      <div class="tl-panel">
+        <div class="tl-panel-inner">
+
+          <!-- PANEL 1: Úvodní schůzka -->
+          <div class="tl-panel-slide" id="tl-panel-1" role="tabpanel" aria-labelledby="tl-tab-1">
+            <div class="tl-panel-top">
+              <h3 class="tl-panel-title">1. Úvodní schůzka</h3>
+              <span class="tl-panel-badge">1–2 dny</span>
+            </div>
+            <div class="tl-cols">
+
+              <!-- Kalendář -->
+              <div class="tl-col-box" style="padding:0;overflow:hidden">
+                <div class="tl-col-label" style="padding:14px 14px 10px">Vyberte termín</div>
+                <div class="cal-full" style="border:none;border-radius:0">
+                  <div class="cal-nav">
+                    <button class="cal-arrow">‹</button>
+                    <span class="cal-month">Květen 2024</span>
+                    <button class="cal-arrow">›</button>
+                  </div>
+                  <div class="cal-g">
+                    <div class="cal-dh">Po</div><div class="cal-dh">Út</div><div class="cal-dh">St</div><div class="cal-dh">Čt</div><div class="cal-dh">Pá</div><div class="cal-dh">So</div><div class="cal-dh">Ne</div>
+                    <div class="cal-d dim">29</div><div class="cal-d dim">30</div>
+                    <div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div><div class="cal-d">5</div>
+                    <div class="cal-d">6</div><div class="cal-d">7</div><div class="cal-d">8</div><div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d">11</div><div class="cal-d">12</div>
+                    <div class="cal-d">13</div><div class="cal-d">14</div><div class="cal-d sel">15</div><div class="cal-d">16</div><div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d">19</div>
+                    <div class="cal-d">20</div><div class="cal-d">21</div><div class="cal-d">22</div><div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div><div class="cal-d">26</div>
+                    <div class="cal-d">27</div><div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div><div class="cal-d">31</div><div class="cal-d dim">1</div><div class="cal-d dim">2</div>
+                  </div>
+                  <div class="time-row">
+                    <div class="tslot">9:00</div>
+                    <div class="tslot on">10:30</div>
+                    <div class="tslot">13:00</div>
+                    <div class="tslot">15:00</div>
+                  </div>
+                  <div class="cal-info-bar">
+                    <div class="cal-info-r"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Online schůzka / osobně</div>
+                    <div class="cal-info-r"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Délka schůzky: 30–60 min</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Co probereme -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Co probereme</div>
+                <ul class="plist">
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Cíl webu a očekávání</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Jaké služby / produkty nabízíte</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Cílová skupina zákazníků</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Rozsah webu a důležité funkce</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Termín a rozpočet</li>
+                </ul>
+              </div>
+
+              <!-- Co od vás potřebujeme -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Co od vás potřebujeme</div>
+                <div class="req-list">
+                  <div class="req-card"><div class="req-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>Logo nebo název firmy</div>
+                  <div class="req-card"><div class="req-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>Texty, fotky, reference</div>
+                  <div class="req-card"><div class="req-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>Odkazy na inspiraci</div>
+                  <div class="req-card"><div class="req-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>Přístupy, pokud už web existuje</div>
+                </div>
+              </div>
+
+              <!-- Výsledek -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Výsledek fáze</div>
+                <div class="res-wrap">
+                  <div class="res-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                  <p style="font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0">Po schůzce víme, co má web splnit, jaký má mít rozsah a jaký bude další postup.</p>
+                  <a href="#form" class="btn-blue-full">Domluvit schůzku</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PANEL 2: Wireframe a obsah -->
+          <div class="tl-panel-slide active" id="tl-panel-2" role="tabpanel" aria-labelledby="tl-tab-2">
+            <div class="tl-panel-top">
+              <h3 class="tl-panel-title">2. Wireframe a obsah</h3>
+              <span class="tl-panel-badge">2–4 dny</span>
+            </div>
+            <div class="tl-cols">
+
+              <!-- Wireframe -->
+              <div class="tl-col-box" style="padding:0;overflow:hidden">
+                <div class="tl-col-label" style="padding:14px 14px 8px">Náhled rozvržení</div>
+                <div style="padding:0 12px 12px">
+                  <div class="wf-mock" style="border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff">
+                    <div class="wf-nav" style="padding:5px 8px;background:var(--bg-2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px">
+                      <span style="font-weight:700;font-size:9px;color:var(--ink)">LOGO</span>
+                      <div style="display:flex;gap:8px;margin-left:auto;font-size:8px;color:var(--ink-3)">
+                        <span>O nás</span><span>Služby</span><span>Reference</span><span>Kontakt</span>
+                      </div>
+                    </div>
+                    <div style="padding:8px;background:linear-gradient(135deg,#faf9f6,#f1efea)">
+                      <div style="height:7px;width:65%;background:var(--ink);border-radius:2px;margin-bottom:4px"></div>
+                      <div style="font-size:8px;color:var(--ink-2);margin-bottom:5px">Silné nadpisy vysvětlující hodnotu</div>
+                      <div style="height:16px;width:36%;background:var(--ink);border-radius:4px;font-size:7px;color:#fff;display:flex;align-items:center;justify-content:center">CTA tlačítko</div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:8px">
+                      <div class="wf-ximg" style="height:38px"><svg viewBox="0 0 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect x=".5" y=".5" width="99" height="59" fill="none" stroke="#D0CBC0" stroke-width="1"/><line x1="0" y1="0" x2="100" y2="60" stroke="#D0CBC0" stroke-width="1"/><line x1="100" y1="0" x2="0" y2="60" stroke="#D0CBC0" stroke-width="1"/></svg></div>
+                      <div class="wf-ximg" style="height:38px"><svg viewBox="0 0 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect x=".5" y=".5" width="99" height="59" fill="none" stroke="#D0CBC0" stroke-width="1"/><line x1="0" y1="0" x2="100" y2="60" stroke="#D0CBC0" stroke-width="1"/><line x1="100" y1="0" x2="0" y2="60" stroke="#D0CBC0" stroke-width="1"/></svg></div>
+                      <div class="wf-ximg" style="height:38px"><svg viewBox="0 0 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect x=".5" y=".5" width="99" height="59" fill="none" stroke="#D0CBC0" stroke-width="1"/><line x1="0" y1="0" x2="100" y2="60" stroke="#D0CBC0" stroke-width="1"/><line x1="100" y1="0" x2="0" y2="60" stroke="#D0CBC0" stroke-width="1"/></svg></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:0 8px">
+                      <div style="display:flex;flex-direction:column;gap:3px"><div style="height:3px;background:var(--line-2);border-radius:1px"></div><div style="height:3px;background:var(--line-2);border-radius:1px;width:80%"></div></div>
+                      <div style="display:flex;flex-direction:column;gap:3px"><div style="height:3px;background:var(--line-2);border-radius:1px"></div><div style="height:3px;background:var(--line-2);border-radius:1px;width:70%"></div></div>
+                      <div style="display:flex;flex-direction:column;gap:3px"><div style="height:3px;background:var(--line-2);border-radius:1px"></div><div style="height:3px;background:var(--line-2);border-radius:1px;width:85%"></div></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:5px;padding:8px">
+                      <div class="wf-ximg" style="height:28px"><svg viewBox="0 0 100 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect x=".5" y=".5" width="99" height="39" fill="none" stroke="#D0CBC0" stroke-width="1"/><line x1="0" y1="0" x2="100" y2="40" stroke="#D0CBC0" stroke-width="1"/><line x1="100" y1="0" x2="0" y2="40" stroke="#D0CBC0" stroke-width="1"/></svg></div>
+                      <div style="display:flex;flex-direction:column;gap:3px;padding-top:4px"><div style="height:3px;background:var(--line-2);border-radius:1px"></div><div style="height:3px;background:var(--line-2);border-radius:1px;width:90%"></div><div style="height:3px;background:var(--line-2);border-radius:1px;width:75%"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sitemap -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Struktura stránek</div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+                  <div style="background:var(--new);color:#fff;border-radius:8px;padding:6px 18px;font-size:12px;font-weight:600">Domů</div>
+                  <div style="width:1px;height:14px;background:var(--line-2)"></div>
+                  <div style="display:flex;gap:6px;align-items:flex-start">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+                      <div style="width:1px;height:10px;background:var(--line-2)"></div>
+                      <div style="background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--ink-2)">O nás</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+                      <div style="width:1px;height:10px;background:var(--line-2)"></div>
+                      <div style="background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--ink-2)">Služby</div>
+                      <div style="width:1px;height:10px;background:var(--line-2)"></div>
+                      <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+                        <div style="background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:4px 10px;font-size:10.5px;color:var(--ink-3)">Služba 1</div>
+                        <div style="background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:4px 10px;font-size:10.5px;color:var(--ink-3)">Služba 2</div>
+                        <div style="background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:4px 10px;font-size:10.5px;color:var(--ink-3)">Služba 3</div>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+                      <div style="width:1px;height:10px;background:var(--line-2)"></div>
+                      <div style="background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--ink-2)">Reference</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+                      <div style="width:1px;height:10px;background:var(--line-2)"></div>
+                      <div style="background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--ink-2)">Kontakt</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Obsahové bloky -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Obsahové bloky</div>
+                <div class="drag-list">
+                  <div class="drag-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>Hlavní sekce (H1 + CTA)</div>
+                  <div class="drag-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>Představení a výhody</div>
+                  <div class="drag-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>Služby / Co nabízíme</div>
+                  <div class="drag-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>Reference / Ukázky práce</div>
+                  <div class="drag-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>Proces spolupráce</div>
+                  <div class="drag-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>Závěrečná výzva k akci</div>
+                </div>
+              </div>
+
+              <!-- Co si odsouhlasíme -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Co si odsouhlasíme</div>
+                <ul class="plist">
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Strukturu stránek a pořadí sekcí</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Prioritní sdělení na hlavní stránce</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Rozplacení klíčového obsahu</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Navigaci a základní funkcionality</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Další obsah a podklady</li>
+                </ul>
+                <div class="tl-callout" style="margin-top:auto">Na tomto základě připravíme první vizuální návrh.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PANEL 3: Logo a styl -->
+          <div class="tl-panel-slide" id="tl-panel-3" role="tabpanel" aria-labelledby="tl-tab-3">
+            <div class="tl-panel-top">
+              <h3 class="tl-panel-title">3. Logo a styl</h3>
+              <span class="tl-panel-badge">2–3 dny</span>
+            </div>
+            <div class="tl-cols">
+
+              <!-- Logo koncepty -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Logo koncepty</div>
+                <div class="logo-grid">
+                  <div class="logo-con sel">
+                    <div class="logo-con-ico">
+                      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 6L38 38H6L22 6Z" stroke="#0E1217" stroke-width="2.5" stroke-linejoin="round" fill="none"/><path d="M13 28h18" stroke="#0E1217" stroke-width="2" stroke-linecap="round"/></svg>
+                    </div>
+                    <span class="logo-con-lbl">Jednoduchá značka</span>
+                  </div>
+                  <div class="logo-con">
+                    <div class="logo-con-ico">
+                      <span style="font-weight:800;font-size:18px;letter-spacing:-.02em;color:var(--ink)">NOVA</span>
+                    </div>
+                    <span class="logo-con-lbl">Textové logo</span>
+                  </div>
+                  <div class="logo-con">
+                    <div class="logo-con-ico" style="gap:5px;flex-direction:row">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2Z" stroke="#0E1217" stroke-width="2" stroke-linejoin="round"/></svg>
+                      <span style="font-weight:700;font-size:14px;letter-spacing:-.01em;color:var(--ink)">NOVA</span>
+                    </div>
+                    <span class="logo-con-lbl">Symbol + název</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Barevná paleta -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Barevná paleta</div>
+                <div style="display:flex;gap:8px;margin-bottom:12px">
+                  <div style="width:46px;height:46px;border-radius:10px;background:#0E1217;border:1px solid rgba(0,0,0,.08)"></div>
+                  <div style="width:46px;height:46px;border-radius:10px;background:#2570B3;border:1px solid rgba(0,0,0,.08)"></div>
+                  <div style="width:46px;height:46px;border-radius:10px;background:#F1EFEA;border:1px solid var(--line)"></div>
+                  <div style="width:46px;height:46px;border-radius:10px;background:#DCD7CC;border:1px solid var(--line)"></div>
+                  <div style="width:46px;height:46px;border-radius:10px;background:#FFFFFF;border:1px solid var(--line)"></div>
+                </div>
+                <p style="font-size:13px;color:var(--ink-2);margin:0;line-height:1.55">Barvy nastavíme tak, aby web působil důvěryhodně, moderně a seděl k vaší značce.</p>
+              </div>
+
+              <!-- Typografie -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Typografie</div>
+                <div class="typo-hier">
+                  <div class="typo-hier-aa">Aa</div>
+                  <div class="typo-hier-rows">
+                    <div class="typo-hier-row">
+                      <div class="typo-hier-name">Nadpisy</div>
+                      <div class="typo-hier-sub">Silné nadpisy</div>
+                    </div>
+                    <div class="typo-hier-row">
+                      <div class="typo-hier-name">Texty</div>
+                      <div class="typo-hier-sub">Čitelné texty</div>
+                    </div>
+                    <div class="typo-hier-row blue">
+                      <div class="typo-hier-name">Tlačítka</div>
+                      <div class="typo-hier-sub">Jasná hierarchie</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vizuální směr -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Vizuální směr</div>
+                <ul class="plist">
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Moderní a čistý vzhled</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Důvěryhodný dojem</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Konzistentní styl</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Barvy a fonty pro celý web</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Příprava pro první návrh</li>
+                </ul>
+                <div class="tl-callout" style="margin-top:auto">Pokud logo ještě nemáte, pomůžeme navrhnout jednoduchý vizuální směr značky.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PANEL 4: První návrh -->
+          <div class="tl-panel-slide" id="tl-panel-4" role="tabpanel" aria-labelledby="tl-tab-4">
+            <div class="tl-panel-top">
+              <h3 class="tl-panel-title">4. První návrh</h3>
+              <span class="tl-panel-badge">3–5 dní</span>
+            </div>
+            <div class="p4-layout">
+
+              <!-- Desktop preview -->
+              <div>
+                <div class="tl-col-label" style="margin-bottom:10px">Desktop preview</div>
+                <div class="monitor3">
+                  <div class="monitor3-screen">
+                    <div class="mn3-bar">
+                      <div class="mn3-dots"><i></i><i></i><i></i></div>
+                      <div class="mn3-url">apexwebdesign.cz</div>
+                    </div>
+                    <div class="mn3-nav">
+                      <span class="mn3-logo">LOGO</span>
+                      <div class="mn3-links"><span>Služby</span><span>Reference</span><span>O nás</span><span>Kontakt</span></div>
+                      <span class="mn3-pill">Nezávazná konzultace</span>
+                    </div>
+                    <div class="mn3-hero">
+                      <div class="mn3-hero-l">
+                        <div class="mn3-h">Tvoříme weby,<br>které dávají smysl.</div>
+                        <div class="mn3-s">Moderní prezentace pro firmy, živnostníky i nové projekty.</div>
+                        <div class="mn3-btn">Nezávazná konzultace</div>
+                      </div>
+                      <div class="mn3-hero-r"></div>
+                    </div>
+                    <div class="mn3-features">
+                      <div class="mn3-feat">
+                        <div class="mn3-feat-ico"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
+                        <div class="mn3-feat-t">Moderní design</div>
+                        <div class="mn3-feat-s">Čistý, profesionální vzhled, který budí důvěru.</div>
+                      </div>
+                      <div class="mn3-feat">
+                        <div class="mn3-feat-ico"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                        <div class="mn3-feat-t">Výsledky, které vidíte</div>
+                        <div class="mn3-feat-s">Weby navržené s důrazem na výkon a cíle.</div>
+                      </div>
+                      <div class="mn3-feat">
+                        <div class="mn3-feat-ico"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <div class="mn3-feat-t">Spolehlivost</div>
+                        <div class="mn3-feat-s">Technická řešení, na která se můžete spolehnout.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="monitor3-base"></div>
+                  <div class="monitor3-stand"></div>
+                </div>
+              </div>
+
+              <!-- Mobile preview -->
+              <div style="display:flex;flex-direction:column;gap:12px;align-items:center">
+                <div class="tl-col-label" style="align-self:flex-start">Mobile preview</div>
+                <div class="phone3">
+                  <div class="phone3-screen">
+                    <div class="ph3-nav">
+                      <span class="ph3-logo">LOGO</span>
+                      <div class="ph3-ham"><i></i><i></i><i></i></div>
+                    </div>
+                    <div class="ph3-hero">
+                      <div class="ph3-h">Tvoříme weby,<br>které dávají smysl.</div>
+                      <div class="ph3-s">Moderní prezentace pro firmy, živnostníky i nové projekty.</div>
+                      <div class="ph3-btn">Nezávazná konzultace</div>
+                    </div>
+                    <div class="ph3-img"></div>
+                    <div class="ph3-cards">
+                      <div class="ph3-card"><div class="ph3-card-ico"><svg width="5" height="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div><span class="ph3-card-t">Moderní design</span></div>
+                      <div class="ph3-card"><div class="ph3-card-ico"><svg width="5" height="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><span class="ph3-card-t">Výsledky, které vidíte</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                  Návrh rovnou kontrolujeme i pro mobil.
+                </div>
+              </div>
+
+              <!-- Design systém -->
+              <div class="ds3">
+                <div class="tl-col-label">Design systém</div>
+                <div class="ds3-box">
+                  <div class="ds3-label">Typografie</div>
+                  <div class="ds3-typo-row">
+                    <div class="ds3-aa">Aa</div>
+                    <div class="ds3-type-info">
+                      <div class="ds3-name">Inter</div>
+                      <div class="ds3-sub">Regular / Medium / SemiBold / Bold</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds3-box">
+                  <div class="ds3-label">Barvy</div>
+                  <div class="ds3-swatches">
+                    <div class="ds3-sw" style="background:#2570B3"></div>
+                    <div class="ds3-sw" style="background:#E2EDF7"></div>
+                    <div class="ds3-sw" style="background:#F1EFEA;border:1px solid var(--line)"></div>
+                    <div class="ds3-sw" style="background:#DCD7CC"></div>
+                    <div class="ds3-sw" style="background:#0E1217"></div>
+                  </div>
+                </div>
+                <div class="ds3-box">
+                  <div class="ds3-label">UI prvky</div>
+                  <div class="ds3-btns">
+                    <div class="ds3-btn-p">Primární tlačítko</div>
+                    <div class="ds3-btn-s">Sekundární tlačítko</div>
+                  </div>
+                  <div style="margin-top:6px"><div class="ds3-btn-g">Karta</div></div>
+                  <div class="ds3-icons">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </div>
+                </div>
+                <ul class="plist" style="margin-top:4px">
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vizuální směr webu</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Homepage návrh</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Mobilní vzhled</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>CTA prvky</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>První dojem z webu</li>
+                </ul>
+                <div class="tl-callout">V&nbsp;této fázi už uvidíte, jak bude web reálně působit na zákazníky.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PANEL 5: Doladění a spuštění -->
+          <div class="tl-panel-slide" id="tl-panel-5" role="tabpanel" aria-labelledby="tl-tab-5">
+            <div class="tl-panel-top">
+              <h3 class="tl-panel-title">5. Doladění a spuštění</h3>
+              <span class="tl-panel-badge">1–3 dny</span>
+            </div>
+            <div class="tl-cols">
+
+              <!-- Zpětná vazba -->
+              <div class="tl-col-box" style="padding:0;overflow:hidden">
+                <div class="tl-col-label" style="padding:14px 14px 10px">Zpětná vazba klienta</div>
+                <div class="cmt-list" style="border:none;border-radius:0">
+                  <div class="cmt">
+                    <div class="cmt-ava" style="background:#c0392b">K</div>
+                    <div class="cmt-body">
+                      <div class="cmt-bubble"><div class="cmt-text">Tahle sekce se mi líbí, jen bych upravil text.</div></div>
+                      <div class="cmt-time">Dnes 10:24</div>
+                    </div>
+                  </div>
+                  <div class="cmt">
+                    <div class="cmt-ava" style="background:#2470a0">M</div>
+                    <div class="cmt-body">
+                      <div class="cmt-bubble"><div class="cmt-text">Přidejme ještě jednu referenci.</div></div>
+                      <div class="cmt-time">Dnes 10:37</div>
+                    </div>
+                  </div>
+                  <div class="cmt">
+                    <div class="cmt-ava" style="background:#555f6b">J</div>
+                    <div class="cmt-body">
+                      <div class="cmt-bubble"><div class="cmt-text">Logo bych nechal o něco větší.</div></div>
+                      <div class="cmt-time">Dnes 10:52</div>
+                    </div>
+                  </div>
+                  <div class="cmt-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>Napište připomínku…</div>
+                </div>
+              </div>
+
+              <!-- Finální úpravy -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Finální úpravy</div>
+                <ul class="plist">
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Zapracování připomínek</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Kontrola responzivity</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Optimalizace obrázků</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Základní SEO nastavení</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Kontrola formulářů</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Kontrola odkazů</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Test rychlosti</li>
+                </ul>
+              </div>
+
+              <!-- Schválení -->
+              <div class="tl-col-box">
+                <div class="tl-col-label">Schválení</div>
+                <div class="appr2">
+                  <div class="appr2-check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="appr2-title">Schváleno klientem</div>
+                  <div class="appr2-sub">Finální podoba webu je odsouhlasená a připravená ke spuštění.</div>
+                  <div class="appr2-sig">Jan</div>
+                  <div class="appr2-foot">
+                    <span>Jan Novák</span>
+                    <span>28.&nbsp;5.&nbsp;2024</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Spuštění -->
+              <div class="tl-col-box" style="padding:0;background:transparent;border:none;gap:10px;display:flex;flex-direction:column">
+                <div class="launch3">
+                  <div class="launch3-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><circle cx="5" cy="19" r="1" fill="currentColor"/><circle cx="19" cy="5" r="1" fill="currentColor"/></svg></div>
+                  <div class="launch3-title">Web je online!</div>
+                  <div class="launch3-sub">Úspěšně nasazeno a dostupné pro návštěvníky.</div>
+                  <a href="#form" class="launch3-btn">Zobrazit web <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+                  <div class="launch3-status"><div class="launch3-dot"></div>Online</div>
+                </div>
+                <div class="tl-callout">Po spuštění můžeme web dál upravovat, rozšiřovat nebo napojit na další systémy.</div>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- .tl-panel-inner -->
+      </div><!-- .tl-panel -->
+    </div><!-- .tl-panel-wrap -->
+    </div><!-- .tl-panel-anim -->
+
+  </div><!-- .wrap -->
 </section>
 
 <!-- ========== 3. BEFORE / AFTER MODERNIZATION ========== -->
@@ -2470,28 +3811,109 @@
   </div>
 </section>
 
-<!-- ========== 6. NAŠE PRÁCE ========== -->
+<!-- ========== 6. NAŠE PRÁCE / CASE STUDY ========== -->
 <section class="block" id="examples">
   <div class="wrap">
+
+    <!-- section header -->
     <div class="section-head reveal">
       <div>
         <div class="section-eyebrow">Naše práce</div>
-        <h2 class="section-title">Podívejte se, jak&nbsp;může vypadat změna</h2>
+        <h2 class="section-title">Projekty, které jsme&nbsp;realizovali</h2>
       </div>
-      <p class="section-sub">Vyberte si ukázku projektu a&nbsp;podívejte se, co jsme řešili, jak jsme web upravili a&nbsp;jaký výsledek má nový web přinést.</p>
+      <p class="section-sub">Vyberte projekt a&nbsp;prohlédněte si živou ukázku nebo hotový výsledek.</p>
     </div>
 
-    <div class="pf-portfolio reveal">
-      <div class="pf-main" id="pfMain">
-        <div class="pf-main-visual" id="pfVisual"></div>
-        <div class="pf-main-body" id="pfBody"></div>
+    <!-- thumbnail strip (rendered by JS) -->
+    <div class="cs-strip reveal" id="csStrip"></div>
+
+    <!-- detail panel (updated by JS on thumb click) -->
+    <div class="cs-wrap reveal">
+
+      <div class="cs-header">
+        <div>
+          <div class="section-eyebrow" id="csEyebrow">Živá ukázka projektu</div>
+          <h2 class="section-title" id="csH2">Redesign webu pro Autocentrum Urbánek</h2>
+          <p class="section-sub" style="margin-top:14px" id="csDesc">Přehledný web pro autoservis, pneuservis, oleje a&nbsp;kamna, který návštěvníkovi rychle ukáže nabídku služeb a&nbsp;dovede ho ke&nbsp;kontaktu.</p>
+          <div class="cs-tags" id="csTags">
+            <span class="cs-tag">Redesign</span>
+            <span class="cs-tag">Autoservis</span>
+            <span class="cs-tag">Mobilní verze</span>
+            <span class="cs-tag">Kontakt</span>
+            <span class="cs-tag">Lokální SEO</span>
+          </div>
+        </div>
+
+        <div class="cs-device-switcher" role="group" aria-label="Přepínač zařízení">
+          <button class="cs-dev-btn active" data-device="desktop" aria-pressed="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <span>Desktop</span>
+          </button>
+          <button class="cs-dev-btn" data-device="tablet" aria-pressed="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Tablet</span>
+          </button>
+          <button class="cs-dev-btn" data-device="mobile" aria-pressed="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Mobil</span>
+          </button>
+        </div>
       </div>
-      <div class="pf-mini-grid" id="pfMiniGrid"></div>
+
+      <!-- Browser mockup -->
+      <div class="cs-stage">
+        <div class="cs-browser" id="csBrowser">
+          <div class="cs-browser-bar">
+            <div class="cs-dots"><i></i><i></i><i></i></div>
+            <div class="cs-url-bar">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span id="csUrlSpan">www.knedlikysezelim.online</span>
+            </div>
+            <div class="cs-browser-nav">
+              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></div>
+              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 19l7-7-7-7"/></svg></div>
+              <div class="cs-nav-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+            </div>
+          </div>
+          <div class="cs-iframe-wrap">
+            <iframe id="csIframe"
+              src="https://www.knedlikysezelim.online/"
+              title="Živá ukázka webu"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              scrolling="yes"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile fallback -->
+      <div class="cs-mobile-fallback">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--new)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <p>Živé preview je nejlépe vidět na větším displeji.<br>Na mobilu otevřete web přímo v prohlížeči.</p>
+        <a id="csMobileLink" href="https://www.knedlikysezelim.online/" target="_blank" rel="noopener" class="btn btn-secondary">
+          Otevřít živý web
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      <!-- CTA tlačítka -->
+      <div class="cs-cta-row">
+        <a href="#form" class="btn btn-primary">
+          Chci podobný web
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a id="csOpenLink" href="https://www.knedlikysezelim.online/" target="_blank" rel="noopener" class="btn btn-secondary">
+          Otevřít celý web
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ========== 7. PRICING ========== -->
+<!-- ========== 8. PRICING ========== -->
 <section class="block" id="pricing">
   <div class="wrap">
     <div class="section-head reveal">
@@ -2601,49 +4023,7 @@
   </div>
 </section>
 
-<!-- ========== 8. PROCESS ========== -->
-<section class="block">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-eyebrow">Proces</div>
-        <h2 class="section-title">Jak probíhá modernizace</h2>
-      </div>
-      <p class="section-sub">Pět kroků od&nbsp;prvního ohledání po&nbsp;spuštění nové verze. Bez&nbsp;dlouhých briefů a&nbsp;zbytečné byrokracie.</p>
-    </div>
-
-    <div class="process reveal">
-      <div class="process-line"></div>
-      <div class="step">
-        <div class="step-num">1</div>
-        <h4>Pošlete web nebo&nbsp;představu</h4>
-        <p>URL stávajícího webu, nebo&nbsp;krátký popis, čeho chcete dosáhnout.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h4>Zavoláme si&nbsp;a&nbsp;projdeme cíle</h4>
-        <p>Co&nbsp;funguje, co&nbsp;ne&nbsp;a&nbsp;jak by&nbsp;měl nový web zákazníka vést.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h4>Navrhneme strukturu a&nbsp;cenu</h4>
-        <p>Konkrétní rozsah, harmonogram a&nbsp;orientační cenu.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <h4>Připravíme moderní design</h4>
-        <p>Design, texty, mobilní verze a&nbsp;základní nastavení viditelnosti.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <h4>Spustíme nový web</h4>
-        <p>Nasazení, kontrola Google profilu a&nbsp;předání s&nbsp;dokumentací.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== 9. FORM ========== -->
+<!-- ========== 8. FORM ========== -->
 <section class="block" id="form">
   <div class="wrap">
     <div class="form-wrap reveal">
@@ -2851,7 +4231,7 @@
       <div class="foot-col">
         <h5>Studio</h5>
         <ul>
-          <li><a href="#examples">Naše práce</a></li>
+          <li><a href="#examples">Ukázka projektu</a></li>
           <li><a href="#pricing">Ceník</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#form">Poptávka</a></li>
@@ -2874,73 +4254,6 @@
 </footer>
 
 <script>
-/* ================================================================
-   PROJEKTY — přidávejte sem nové projekty do pole PROJECTS.
-   Každý objekt má:
-     num       – číslo (string, "01", "02" …)
-     cat       – kategorie / situace klienta
-     title     – název projektu
-     short     – krátký popis (1–2 věty)
-     situation – situace před zásahem
-     work      – co jsme udělali
-     result    – výsledek
-     tags      – pole štítků
-     visual    – barvy mockupu: afterBg, afterAccent, afterLabel, afterDark (bool)
-   ================================================================ */
-const PROJECTS = [
-  {
-    num: "01", cat: "Nemám web",
-    title: "Nový web pro instalatéra v Šumperku",
-    short: "Jednoduchý web pro lokální službu, který jasně vysvětluje nabídku a vede návštěvníka ke kontaktu.",
-    situation: "Klient měl jen telefon, Facebook stránku a pár fotek z realizací. Lidé často nevěděli, co přesně nabízí a jak ho rychle kontaktovat.",
-    work: "Navrhli jsme přehledný jednostránkový web s jasnou nabídkou služeb, tlačítkem pro zavolání, formulářem a mobilní verzí.",
-    result: "Návštěvník během pár sekund pochopí, co firma dělá, a může rovnou zavolat nebo poslat poptávku.",
-    tags: ["Nový web", "Mobilní verze", "Formulář", "SEO základ"],
-    visual: { afterBg: "#0F1923", afterAccent: "#2570B3", afterLabel: "Instalatér Šumperk", afterDark: true }
-  },
-  {
-    num: "02", cat: "Mám starý web",
-    title: "Redesign starého webu pro účetní kancelář",
-    short: "Zastaralý web jsme převedli do čistší a důvěryhodnější podoby.",
-    situation: "Původní web byl nepřehledný, měl zastaralý vzhled a návštěvník se špatně orientoval v nabízených službách.",
-    work: "Zjednodušili jsme strukturu, upravili texty, sjednotili vizuál a zvýraznili hlavní služby i cestu ke kontaktu.",
-    result: "Web působí profesionálněji a návštěvník rychleji pochopí, s čím kancelář pomůže.",
-    tags: ["Redesign", "Důvěryhodnost", "Přehlednost", "Texty"],
-    visual: { afterBg: "#FAFAF8", afterAccent: "#2A7A4B", afterLabel: "Účetní kancelář", afterDark: false }
-  },
-  {
-    num: "03", cat: "Landing page",
-    title: "Landing page pro zubní hygienu",
-    short: "Cílená stránka, která vede návštěvníka přímo k rezervaci termínu.",
-    situation: "Návštěvníci přicházeli z reklamy na obecnou stránku a často nevěděli, kde se objednat.",
-    work: "Navrhli jsme krátkou landing page s jasným benefitem, jednoduchým vysvětlením služby a výrazným tlačítkem pro rezervaci.",
-    result: "Návštěvník má před sebou jednu hlavní akci a může se rychle objednat.",
-    tags: ["Landing page", "Rezervace", "CTA", "Mobilní verze"],
-    visual: { afterBg: "#F0FAFA", afterAccent: "#0E9090", afterLabel: "Zubní hygiena", afterDark: false }
-  },
-  {
-    num: "04", cat: "E-shop / brand",
-    title: "Start nové značky s e-shopem",
-    short: "Úvodní web pro začínající brand, který představí produkty a připraví zákazníka na nákup.",
-    situation: "Značka měla produkty a sociální sítě, ale chyběla jí důvěryhodná prezentace a místo, kam posílat zákazníky.",
-    work: "Navrhli jsme moderní stránku s příběhem značky, ukázkou produktů, jasnými benefity a cestou k objednávce.",
-    result: "Brand působí důvěryhodněji a zákazník rychle pochopí, proč produkt vyzkoušet.",
-    tags: ["Brand", "E-shop", "Produktová stránka", "Obsah"],
-    visual: { afterBg: "#1C1510", afterAccent: "#D4874A", afterLabel: "Nová značka", afterDark: true }
-  },
-  {
-    num: "05", cat: "Lokální služba",
-    title: "Web pro autoservis",
-    short: "Přehledný web pro službu, kde zákazník rychle najde nabídku, telefon a možnost objednání.",
-    situation: "Autoservis měl informace rozházené na různých místech a zákazníci často volali jen kvůli základním dotazům.",
-    work: "Vytvořili jsme strukturovanou stránku s hlavními službami, otevírací dobou, mapou, telefonem a formulářem.",
-    result: "Lidé rychle najdou, co servis nabízí, kdy má otevřeno a jak se objednat.",
-    tags: ["Lokální SEO", "Kontakt", "Mapa", "Služby"],
-    visual: { afterBg: "#111827", afterAccent: "#E26B2B", afterLabel: "Autoservis", afterDark: true }
-  }
-  /* sem přidávejte další projekty */
-];
-
 /* ============ URL form ============ */
 let _heroUrl = '';
 
@@ -3288,127 +4601,206 @@ function startFresh() {
   setActive(hashItem || activeItem);
 })();
 
-/* ============ portfolio showcase ============ */
+/* ============ process timeline ============ */
 (function(){
-  let active = 0;
+  const section  = document.getElementById('process');
+  const cards    = document.querySelectorAll('.tl-card');
+  const panels   = document.querySelectorAll('.tl-panel-slide');
+  const notch    = document.getElementById('tlNotch');
+  const isTouch  = window.matchMedia('(hover: none)').matches;
+  let current    = 2;
+  let collapseTimer = null;
 
-  function vis(p){
-    const v = p.visual;
-    const tc  = v.afterDark ? '#E9E5DA' : '#0E1217';
-    const mut = v.afterDark ? 'rgba(255,255,255,0.22)' : 'rgba(14,18,23,0.18)';
-    const barBg = `color-mix(in oklab,${v.afterBg} 93%,${v.afterDark?'white':'black'} 7%)`;
-    const barBd = v.afterDark ? 'rgba(255,255,255,.1)' : 'rgba(14,18,23,.08)';
-    const urlBg = v.afterDark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.04)';
-    const urlBd = v.afterDark ? 'rgba(255,255,255,.12)' : 'rgba(14,18,23,.1)';
-    return `<div class="pf-browsers">
-      <div class="pf-browser pf-before">
-        <span class="pf-chip pf-chip-before">PŘED</span>
-        <div class="pfb-bar pfb-bar-old"><div class="pfb-dots"><i></i><i></i><i></i></div><div class="pfb-url">stary-web.cz</div></div>
-        <div class="pfb-old">
-          <div class="pfo-h">Vítejte na naší stránce!</div><div class="pfo-hr"></div>
-          <div class="pfo-layout">
-            <div class="pfo-sidebar"><i></i><i></i><i></i><i></i></div>
-            <div class="pfo-main"><b></b><p></p><p></p><span></span></div>
-          </div>
-        </div>
-      </div>
-      <div class="pf-browser pf-after" style="--after-bg:${v.afterBg};--after-acc:${v.afterAccent};--after-text:${tc};--after-muted:${mut};">
-        <span class="pf-chip pf-chip-after">PO</span>
-        <div class="pfb-bar" style="background:${barBg};border-color:${barBd};">
-          <div class="pfb-dots"><i></i><i></i><i></i></div>
-          <div class="pfb-url" style="background:${urlBg};border-color:${urlBd};color:${mut};">${v.afterLabel.toLowerCase().replace(/\s/g,'')}.cz</div>
-        </div>
-        <div class="pfb-new">
-          <div class="pfn-eyebrow">${p.cat}</div>
-          <div class="pfn-h">${v.afterLabel}</div>
-          <div class="pfn-sub"></div><div class="pfn-sub2"></div>
-          <div class="pfn-btn"></div>
-          <div class="pfn-cards"><i></i><i></i><i></i></div>
-        </div>
-      </div>
-    </div>`;
+  function positionNotch(card){
+    if (!notch || !card) return;
+    const wrap = document.querySelector('.tl-panel-wrap');
+    const wR   = wrap.getBoundingClientRect();
+    const cR   = card.getBoundingClientRect();
+    notch.style.left = (cR.left + cR.width / 2 - wR.left - 10) + 'px';
   }
 
-  function body(p){
-    const rows = [
-      {k:'Situace',    v: p.situation},
-      {k:'Co jsme změnili', v: p.work},
-      {k:'Výsledek',   v: p.result}
-    ].map(r=>`<div class="pf-row"><span class="rk">${r.k}</span><span class="rv">${r.v}</span></div>`).join('');
-    const tags = p.tags.map(t=>`<span class="pf-tag">${t}</span>`).join('');
-    return `
-      <div class="pf-cat">${p.cat}</div>
-      <div class="pf-num">CASE ${p.num}</div>
-      <h3 class="pf-title">${p.title}</h3>
-      <p class="pf-short">${p.short}</p>
-      <div class="pf-rows">${rows}</div>
-      <div class="pf-tags">${tags}</div>
-      <div class="pf-cta-area">
-        <a href="#form" class="btn btn-primary">
-          Chci podobný web
-          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <p class="pf-cta-note">Stačí napsat pár vět o tom, co řešíte.</p>
-      </div>`;
+  function expand(){
+    clearTimeout(collapseTimer);
+    section.classList.add('is-expanded');
   }
 
-  function mini(p, idx){
-    const v = p.visual;
-    const mut = v.afterDark ? 'rgba(255,255,255,0.22)' : 'rgba(14,18,23,0.2)';
-    const barBg = `color-mix(in oklab,${v.afterBg} 91%,${v.afterDark?'white':'black'} 9%)`;
-    return `<div class="pf-mini${idx===active?' active':''}" data-idx="${idx}" role="button" tabindex="0" aria-label="${p.title}">
-      <div class="pf-mini-preview" style="background:${v.afterBg};">
-        <div class="pf-mini-bar" style="background:${barBg};"><i></i><i></i><i></i></div>
-        <div class="pf-mini-screen">
-          <div class="msl" style="background:${v.afterAccent};opacity:.85;"></div>
-          <div class="msl" style="background:${mut};"></div>
-          <div class="msl" style="background:${mut};"></div>
-          <div class="msh" style="background:${v.afterAccent};"></div>
-        </div>
-      </div>
-      <div class="pf-mini-body">
-        <div class="pf-mini-num">CASE ${p.num}</div>
-        <div class="pf-mini-title">${p.title}</div>
-        <div class="pf-mini-tags">${p.tags.slice(0,2).map(t=>`<i>${t}</i>`).join('')}</div>
-      </div>
-    </div>`;
+  function scheduleCollapse(){
+    clearTimeout(collapseTimer);
+    collapseTimer = setTimeout(() => section.classList.remove('is-expanded'), 1000);
   }
 
-  function setActive(idx){
-    if (idx === active) return;
-    const main = document.getElementById('pfMain');
-    if (!main) return;
-    main.classList.add('is-switching');
-    setTimeout(() => {
-      active = idx;
-      document.getElementById('pfVisual').innerHTML = vis(PROJECTS[idx]);
-      document.getElementById('pfBody').innerHTML   = body(PROJECTS[idx]);
-      document.querySelectorAll('.pf-mini').forEach((c,i) => c.classList.toggle('active', i===idx));
-      main.classList.remove('is-switching');
-    }, 230);
-  }
-
-  function init(){
-    const visual = document.getElementById('pfVisual');
-    const bd     = document.getElementById('pfBody');
-    const grid   = document.getElementById('pfMiniGrid');
-    if (!visual || !bd || !grid) return;
-    visual.innerHTML = vis(PROJECTS[0]);
-    bd.innerHTML     = body(PROJECTS[0]);
-    grid.innerHTML   = PROJECTS.map((p,i) => mini(p,i)).join('');
-    grid.addEventListener('click', e => {
-      const c = e.target.closest('.pf-mini');
-      if (c) setActive(+c.dataset.idx);
+  function activate(step){
+    current = step;
+    cards.forEach((c, i) => {
+      const on = (i + 1) === step;
+      c.classList.toggle('active', on);
+      c.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-    grid.addEventListener('keydown', e => {
-      if (e.key==='Enter'||e.key===' ') {
-        const c = e.target.closest('.pf-mini');
-        if (c) { e.preventDefault(); setActive(+c.dataset.idx); }
+    panels.forEach((p, i) => p.classList.toggle('active', (i + 1) === step));
+    positionNotch(cards[step - 1]);
+  }
+
+  cards.forEach((card, i) => {
+    card.addEventListener('mouseenter', () => { expand(); activate(i + 1); });
+    card.addEventListener('click',      () => { expand(); activate(i + 1); });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); expand(); activate(i + 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); activate(Math.min(5, current + 1)); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); activate(Math.max(1, current - 1)); }
+    });
+  });
+
+  const panelAnim = document.getElementById('tlPanelAnim');
+  if (panelAnim) panelAnim.addEventListener('mouseenter', () => clearTimeout(collapseTimer));
+
+  if (!isTouch) {
+    section.addEventListener('mouseleave', scheduleCollapse);
+    section.addEventListener('mouseenter', () => clearTimeout(collapseTimer));
+  } else {
+    document.addEventListener('click', (e) => {
+      if (!section.contains(e.target)) section.classList.remove('is-expanded');
+    });
+  }
+
+  window.addEventListener('load',   () => positionNotch(cards[current - 1]));
+  window.addEventListener('resize', () => positionNotch(cards[current - 1]));
+  activate(2);
+})();
+
+/* ============ case studies ============ */
+(function(){
+
+  /* ---- project data ---- */
+  const CASES = [
+    {
+      eyebrow: 'Živá ukázka projektu',
+      h2: 'Redesign webu pro Autocentrum Urbánek',
+      desc: 'Přehledný web pro autoservis, pneuservis, oleje a kamna, který návštěvníkovi rychle ukáže nabídku služeb a dovede ho ke kontaktu.',
+      tags: ['Redesign', 'Autoservis', 'Mobilní verze', 'Kontakt', 'Lokální SEO'],
+      url:  'https://www.knedlikysezelim.online/',
+      urlLabel: 'www.knedlikysezelim.online',
+      thumb: null,
+      thumbBg: '#0f1a28',
+      thumbAccent: '#2570B3',
+    },
+    { comingSoon: true },
+    { comingSoon: true },
+    { comingSoon: true },
+    { comingSoon: true },
+  ];
+
+  let activeIdx = 0;
+  const strip = document.getElementById('csStrip');
+
+  /* ---- thumbnail HTML ---- */
+  function thumbHtml(c, i) {
+    if (c.comingSoon) {
+      return `<div class="cs-thumb soon" aria-label="Připravujeme">
+        <div class="cst-bar"><i></i><i></i><i></i><div class="cst-url"></div></div>
+        <div class="cst-soon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+          <span>Brzy</span>
+        </div>
+      </div>`;
+    }
+    const active = i === activeIdx ? ' active' : '';
+    const lbl    = c.urlLabel;
+    if (c.thumb) {
+      return `<div class="cs-thumb${active}" data-idx="${i}" role="button" tabindex="0" aria-label="${lbl}">
+        <img src="${c.thumb}" alt="${lbl}" loading="lazy" />
+        <div class="cst-label">${lbl}</div>
+      </div>`;
+    }
+    return `<div class="cs-thumb${active}" data-idx="${i}" role="button" tabindex="0" aria-label="${lbl}" style="--tb:${c.thumbBg};--ta:${c.thumbAccent}">
+      <div class="cst-bar"><i></i><i></i><i></i><div class="cst-url"></div></div>
+      <div class="cst-screen">
+        <div class="cst-line h"></div>
+        <div class="cst-line w80"></div>
+        <div class="cst-line w50"></div>
+        <div class="cst-btn"></div>
+      </div>
+      <div class="cst-label">${lbl}</div>
+    </div>`;
+  }
+
+  function renderStrip() {
+    if (!strip) return;
+    strip.innerHTML = CASES.map(thumbHtml).join('');
+    strip.addEventListener('click', e => {
+      const th = e.target.closest('.cs-thumb[data-idx]');
+      if (th) showCase(+th.dataset.idx);
+    });
+    strip.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const th = e.target.closest('.cs-thumb[data-idx]');
+        if (th) { e.preventDefault(); showCase(+th.dataset.idx); }
       }
     });
   }
 
-  init();
+  /* ---- switch active project ---- */
+  function showCase(idx) {
+    if (idx === activeIdx || CASES[idx]?.comingSoon) return;
+    activeIdx = idx;
+    const c = CASES[idx];
+
+    strip.querySelectorAll('.cs-thumb[data-idx]').forEach(th => {
+      th.classList.toggle('active', +th.dataset.idx === idx);
+    });
+
+    const h2       = document.getElementById('csH2');
+    const desc     = document.getElementById('csDesc');
+    const tags     = document.getElementById('csTags');
+    const urlSpan  = document.getElementById('csUrlSpan');
+    const iframe   = document.getElementById('csIframe');
+    const openLink = document.getElementById('csOpenLink');
+    const mobLink  = document.getElementById('csMobileLink');
+
+    if (h2)       h2.innerHTML = c.h2;
+    if (desc)     desc.innerHTML = c.desc;
+    if (tags)     tags.innerHTML = c.tags.map(t => `<span class="cs-tag">${t}</span>`).join('');
+    if (urlSpan)  urlSpan.textContent = c.urlLabel;
+    if (iframe)   iframe.src = c.url;
+    if (openLink) openLink.href = c.url;
+    if (mobLink)  mobLink.href  = c.url;
+
+    /* reset device switcher to desktop */
+    const browser = document.getElementById('csBrowser');
+    const devBtns = document.querySelectorAll('.cs-dev-btn');
+    if (browser) browser.className = 'cs-browser';
+    devBtns.forEach((b, i) => {
+      b.classList.toggle('active', i === 0);
+      b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    });
+    const iWrap = browser?.querySelector('.cs-iframe-wrap');
+    if (iWrap) iWrap.style.height = '720px';
+  }
+
+  renderStrip();
+
+  /* ---- device switcher ---- */
+  const browser = document.getElementById('csBrowser');
+  const devBtns = document.querySelectorAll('.cs-dev-btn');
+  if (browser && devBtns.length) {
+    const sizes = {
+      desktop: { cls: '',       iframeH: '720px' },
+      tablet:  { cls: 'tablet', iframeH: '780px' },
+      mobile:  { cls: 'mobile', iframeH: '720px' },
+    };
+    devBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cfg = sizes[btn.dataset.device];
+        if (!cfg) return;
+        devBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed','true');
+        browser.className = 'cs-browser' + (cfg.cls ? ' ' + cfg.cls : '');
+        const wrap = browser.querySelector('.cs-iframe-wrap');
+        if (wrap) wrap.style.height = cfg.iframeH;
+      });
+    });
+  }
+
 })();
 
 /* ============ smooth anchor scrolling ============ */
