@@ -2109,6 +2109,12 @@
     font-size: 14px;
   }
   .form-success.show{ display: flex; }
+  .form-success.error{
+    background: color-mix(in oklab, oklch(0.55 0.20 25) 10%, transparent);
+    border-color: color-mix(in oklab, oklch(0.55 0.20 25) 24%, var(--line));
+    color: oklch(0.42 0.16 25);
+  }
+  .form-success svg{ flex-shrink: 0; }
 
   /* ---- form sections ---- */
   .form-section{
@@ -4534,20 +4540,22 @@
           <div class="field">
             <label>Co přibližně potřebujete?</label>
             <div class="choice-pills">
-              <label class="choice-pill"><input type="radio" name="need" value="Chci nový web"><span>Chci nový web</span></label>
-              <label class="choice-pill"><input type="radio" name="need" value="Mám starý web a chci ho zlepšit"><span>Mám starý web a&nbsp;chci ho zlepšit</span></label>
-              <label class="choice-pill"><input type="radio" name="need" value="Potřebuju e-shop"><span>Potřebuju e-shop</span></label>
-              <label class="choice-pill"><input type="radio" name="need" value="Začínám nový brand"><span>Začínám nový brand</span></label>
-              <label class="choice-pill"><input type="radio" name="need" value="Chci jen poradit"><span>Chci jen poradit</span></label>
-              <label class="choice-pill"><input type="radio" name="need" value="Nevím přesně"><span>Nevím přesně</span></label>
+              <label class="choice-pill"><input type="radio" name="needChoice" value="Chci nový web"><span>Chci nový web</span></label>
+              <label class="choice-pill"><input type="radio" name="needChoice" value="Mám starý web a chci ho zlepšit"><span>Mám starý web a&nbsp;chci ho zlepšit</span></label>
+              <label class="choice-pill"><input type="radio" name="needChoice" value="Potřebuju e-shop"><span>Potřebuju e-shop</span></label>
+              <label class="choice-pill"><input type="radio" name="needChoice" value="Začínám nový brand"><span>Začínám nový brand</span></label>
+              <label class="choice-pill"><input type="radio" name="needChoice" value="Chci jen poradit"><span>Chci jen poradit</span></label>
+              <label class="choice-pill"><input type="radio" name="needChoice" value="Nevím přesně"><span>Nevím přesně</span></label>
             </div>
+            <input type="hidden" name="need" id="needInput">
           </div>
           <div class="field">
             <label>Máte aktuální web?</label>
             <div class="choice-pills">
-              <label class="choice-pill"><input type="radio" name="hasweb" value="Ano"><span>Ano</span></label>
-              <label class="choice-pill"><input type="radio" name="hasweb" value="Ne"><span>Ne</span></label>
+              <label class="choice-pill"><input type="radio" name="hasWebsiteChoice" value="Ano"><span>Ano</span></label>
+              <label class="choice-pill"><input type="radio" name="hasWebsiteChoice" value="Ne"><span>Ne</span></label>
             </div>
+            <input type="hidden" name="hasWebsite" id="hasWebsiteInput">
           </div>
           <div class="field" id="urlFieldWrap" style="display:none;">
             <label>Odkaz na aktuální web</label>
@@ -4565,7 +4573,7 @@
                 <span class="field-hint">Klidně jen pár vět. Technické pojmy nepotřebujete.</span>
               </div>
               <div class="field">
-                <textarea id="mainMessage" name="message" placeholder="Popište jednoduše, co potřebujete. Například: mám starý web a chci ho zmodernizovat, zakládám nový brand, potřebuji jednoduchý web pro služby, chci e-shop, nebo zatím nevím a potřebuji poradit."></textarea>
+                <textarea id="mainMessage" name="message" required placeholder="Popište jednoduše, co potřebujete. Například: mám starý web a chci ho zmodernizovat, zakládám nový brand, potřebuji jednoduchý web pro služby, chci e-shop, nebo zatím nevím a potřebuji poradit."></textarea>
               </div>
             </div>
           </div>
@@ -4611,7 +4619,7 @@
             </div>
             <span class="note">// odpovídáme do&nbsp;1&nbsp;pracovního dne</span>
           </div>
-          <div class="form-success" id="formSuccess">
+          <div class="form-success" id="formSuccess" role="status" aria-live="polite">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Děkujeme, poptávku jsme přijali. Brzy se&nbsp;vám ozveme a&nbsp;projdeme možnosti modernizace.
           </div>
@@ -4780,7 +4788,7 @@ async function submitUrl(){
 function fillFormUrl(url) {
   const f = document.getElementById('formUrlInput');
   if (f) f.value = url;
-  const radioAno = document.querySelector('input[name="hasweb"][value="Ano"]');
+  const radioAno = document.querySelector('input[name="hasWebsiteChoice"][value="Ano"]');
   if (radioAno) { radioAno.checked = true; radioAno.dispatchEvent(new Event('change')); }
 }
 
@@ -4807,36 +4815,132 @@ function hideUrlFeedback() {
 }
 
 /* ============ form submit ============ */
-function submitCase(){
-  const success = document.getElementById('formSuccess');
-  success.classList.add('show');
+let caseSubmitDefaultHtml = '';
+
+async function submitCase(){
   const form = document.getElementById('caseForm');
   const btn = form.querySelector('button[type="submit"]');
-  btn.disabled = true; btn.style.opacity = .55; btn.style.cursor = 'default';
-  setTimeout(() => {
-    success.classList.remove('show');
-    btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
-  }, 6000);
+  if (!form.reportValidity()) return;
+
+  syncChoiceHidden('needChoice', 'needInput');
+  syncChoiceHidden('hasWebsiteChoice', 'hasWebsiteInput');
+  hideFormStatus();
+  setCaseSubmitState(btn, 'sending');
+
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: new FormData(form)
+    });
+
+    let result = {};
+    try { result = await response.json(); } catch(e) { result = {}; }
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');
+    }
+
+    showFormStatus('success', 'Děkujeme, poptávku jsme přijali. Brzy se vám ozveme a projdeme možnosti modernizace.');
+    form.reset();
+    syncChoiceHidden('needChoice', 'needInput');
+    syncChoiceHidden('hasWebsiteChoice', 'hasWebsiteInput');
+    updateWebsiteFieldVisibility();
+    setCaseSubmitState(btn, 'sent');
+    setTimeout(() => setCaseSubmitState(btn, 'idle'), 3500);
+  } catch (error) {
+    showFormStatus('error', error.message || 'Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');
+    setCaseSubmitState(btn, 'error');
+  }
+}
+
+function setCaseSubmitState(btn, state) {
+  if (!caseSubmitDefaultHtml) caseSubmitDefaultHtml = btn.innerHTML;
+
+  if (state === 'sending') {
+    btn.disabled = true;
+    btn.style.opacity = .7;
+    btn.style.cursor = 'wait';
+    btn.innerHTML = 'Odesílám… <svg class="spin-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>';
+    return;
+  }
+
+  if (state === 'sent') {
+    btn.disabled = true;
+    btn.style.opacity = .7;
+    btn.style.cursor = 'default';
+    btn.innerHTML = 'Odesláno';
+    return;
+  }
+
+  if (state === 'error') {
+    btn.disabled = false;
+    btn.style.opacity = 1;
+    btn.style.cursor = 'pointer';
+    btn.innerHTML = 'Zkusit znovu';
+    return;
+  }
+
+  btn.disabled = false;
+  btn.style.opacity = 1;
+  btn.style.cursor = 'pointer';
+  btn.innerHTML = caseSubmitDefaultHtml;
+}
+
+function showFormStatus(type, message) {
+  const status = document.getElementById('formSuccess');
+  if (!status) return;
+
+  const successIcon = '<path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/>';
+  const errorIcon = '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01" stroke-linecap="round"/>';
+  status.className = 'form-success show' + (type === 'error' ? ' error' : '');
+  status.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">${type === 'error' ? errorIcon : successIcon}</svg><span></span>`;
+  status.querySelector('span').textContent = message;
+}
+
+function hideFormStatus() {
+  const status = document.getElementById('formSuccess');
+  if (!status) return;
+  status.className = 'form-success';
+}
+
+function syncChoiceHidden(choiceName, hiddenId) {
+  const checked = document.querySelector(`input[name="${choiceName}"]:checked`);
+  const hidden = document.getElementById(hiddenId);
+  if (hidden) hidden.value = checked ? checked.value : '';
 }
 
 /* ============ start fresh (no website) ============ */
 function startFresh() {
-  const needRadio = document.querySelector('input[name="need"][value="Chci nový web"]');
-  if (needRadio) needRadio.checked = true;
-  const haswebNe = document.querySelector('input[name="hasweb"][value="Ne"]');
-  if (haswebNe) { haswebNe.checked = true; haswebNe.dispatchEvent(new Event('change')); }
+  const needRadio = document.querySelector('input[name="needChoice"][value="Chci nový web"]');
+  if (needRadio) { needRadio.checked = true; needRadio.dispatchEvent(new Event('change')); }
+  const hasWebsiteNo = document.querySelector('input[name="hasWebsiteChoice"][value="Ne"]');
+  if (hasWebsiteNo) { hasWebsiteNo.checked = true; hasWebsiteNo.dispatchEvent(new Event('change')); }
   scrollToFormSection();
 }
 
-/* ============ hasweb toggle ============ */
+/* ============ choice pills ============ */
 (function(){
-  document.querySelectorAll('input[name="hasweb"]').forEach(radio => {
-    radio.addEventListener('change', function(){
-      const wrap = document.getElementById('urlFieldWrap');
-      if (wrap) wrap.style.display = this.value === 'Ano' ? 'block' : 'none';
+  document.querySelectorAll('input[name="needChoice"]').forEach(radio => {
+    radio.addEventListener('change', () => syncChoiceHidden('needChoice', 'needInput'));
+  });
+
+  document.querySelectorAll('input[name="hasWebsiteChoice"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      syncChoiceHidden('hasWebsiteChoice', 'hasWebsiteInput');
+      updateWebsiteFieldVisibility();
     });
   });
 })();
+
+function updateWebsiteFieldVisibility() {
+  const wrap = document.getElementById('urlFieldWrap');
+  const currentUrl = document.getElementById('formUrlInput');
+  const checked = document.querySelector('input[name="hasWebsiteChoice"]:checked');
+  const hasWebsite = checked && checked.value === 'Ano';
+  if (wrap) wrap.style.display = hasWebsite ? 'block' : 'none';
+  if (!hasWebsite && currentUrl) currentUrl.value = '';
+}
 
 /* ============ presence graph lines ============ */
 (function(){
