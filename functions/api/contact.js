@@ -1,6 +1,19 @@
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const TO_EMAIL = 'apexwebredesign@gmail.com';
 const FROM_EMAIL = 'Apexwebdesign <poptavka@apexwebdesign.cz>';
+const MAX_ATTACHMENTS = 5;
+const MAX_ATTACHMENT_BYTES = 8 * 1024 * 1024;
+const MAX_TOTAL_ATTACHMENT_BYTES = 15 * 1024 * 1024;
+const ALLOWED_ATTACHMENT_EXTENSIONS = new Set([
+  'pdf',
+  'png',
+  'jpg',
+  'jpeg',
+  'webp',
+  'heic',
+  'heif',
+  'zip'
+]);
 
 const jsonHeaders = {
   'content-type': 'application/json; charset=utf-8'
@@ -32,9 +45,16 @@ export async function onRequest({ request, env = {} }) {
   const message = readField(formData, 'message', 4000);
   const currentUrl = readField(formData, 'current_url', 300);
   const budget = readField(formData, 'budget', 100);
+  let attachmentData;
 
   if (!name || !contact || !message) {
     return json({ error: 'Vyplňte prosím jméno, e-mail nebo telefon a zprávu.' }, 400);
+  }
+
+  try {
+    attachmentData = await readAttachments(formData);
+  } catch (error) {
+    return json({ error: error.message }, 400);
   }
 
   const replyTo = extractEmail(contact);
@@ -46,6 +66,7 @@ export async function onRequest({ request, env = {} }) {
     ['Má aktuální web', hasWebsite],
     ['Aktuální web', currentUrl],
     ['Rozpočet', budget],
+    ['Přílohy', attachmentData.labels.join('\n')],
     ['Představa klienta', message]
   ].filter(([, value]) => value);
 
@@ -59,6 +80,10 @@ export async function onRequest({ request, env = {} }) {
 
   if (replyTo) {
     payload.reply_to = replyTo;
+  }
+
+  if (attachmentData.attachments.length) {
+    payload.attachments = attachmentData.attachments;
   }
 
   try {
@@ -95,6 +120,84 @@ function readField(formData, key, maxLength) {
   const value = formData.get(key);
   if (typeof value !== 'string') return '';
   return value.trim().slice(0, maxLength);
+}
+
+async function readAttachments(formData) {
+  const files = formData.getAll('attachments').filter(isUploadedFile).filter(file => file.size > 0);
+
+  if (files.length > MAX_ATTACHMENTS) {
+    throw new Error(`Nahrajte prosím maximálně ${MAX_ATTACHMENTS} souborů.`);
+  }
+
+  let totalBytes = 0;
+  const attachments = [];
+  const labels = [];
+
+  for (const file of files) {
+    const filename = sanitizeFilename(file.name);
+
+    if (!isAllowedAttachment(filename)) {
+      throw new Error(`Soubor ${filename} nemá podporovaný formát. Nahrajte PDF, PNG, JPG, WEBP, HEIC nebo ZIP.`);
+    }
+
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      throw new Error(`Soubor ${filename} je moc velký. Jeden soubor může mít maximálně ${formatBytes(MAX_ATTACHMENT_BYTES)}.`);
+    }
+
+    totalBytes += file.size;
+    if (totalBytes > MAX_TOTAL_ATTACHMENT_BYTES) {
+      throw new Error(`Přílohy jsou moc velké. Celkem mohou mít maximálně ${formatBytes(MAX_TOTAL_ATTACHMENT_BYTES)}.`);
+    }
+
+    attachments.push({
+      filename,
+      content: arrayBufferToBase64(await file.arrayBuffer())
+    });
+    labels.push(`${filename} (${formatBytes(file.size)})`);
+  }
+
+  return { attachments, labels };
+}
+
+function isUploadedFile(value) {
+  return value
+    && typeof value === 'object'
+    && typeof value.name === 'string'
+    && typeof value.size === 'number'
+    && typeof value.arrayBuffer === 'function';
+}
+
+function sanitizeFilename(value) {
+  const filename = value
+    .replace(/[\\/\0\r\n\t]/g, '_')
+    .replace(/["<>]/g, '')
+    .trim()
+    .slice(0, 120);
+
+  return filename || 'priloha';
+}
+
+function isAllowedAttachment(filename) {
+  const extension = filename.split('.').pop().toLowerCase();
+  return ALLOWED_ATTACHMENT_EXTENSIONS.has(extension);
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+
+  return btoa(binary);
+}
+
+function formatBytes(bytes) {
+  if (bytes >= 1024 * 1024) return `${Math.round(bytes / 1024 / 1024)} MB`;
+  if (bytes >= 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${bytes} B`;
 }
 
 function extractEmail(value) {

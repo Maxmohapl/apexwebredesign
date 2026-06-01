@@ -2085,6 +2085,13 @@
   }
   .file-drop:hover{ border-color: var(--new); color: var(--ink); background: var(--surface);}
   .file-drop strong{ display: block; font-weight: 600; color: var(--ink); font-size: 14px; font-family: var(--sans); margin-bottom: 4px;}
+  .file-input-hidden{
+    position: absolute;
+    width: 1px; height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
   .check-field{
     grid-column: 1 / -1;
     display: flex; gap: 10px; align-items: flex-start;
@@ -4595,11 +4602,12 @@
           </div>
           <div class="field">
             <label>Logo, fotky nebo inspirace<span class="optional">volitelné</span></label>
-            <label class="file-drop file-drop-sm">
+            <label class="file-drop file-drop-sm" for="attachmentsInput">
               <strong>Nahrajte je sem</strong>
-              nebo je můžete poslat i&nbsp;později.&nbsp; PDF, PNG, JPG, ZIP
-              <input type="file" multiple style="display:none;" />
+              nebo je můžete poslat i&nbsp;později.&nbsp; PDF, PNG, JPG, WEBP, HEIC, ZIP
             </label>
+            <input class="file-input-hidden" type="file" id="attachmentsInput" name="attachments" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.heic,.heif,.zip,image/png,image/jpeg,image/webp,image/heic,image/heif,application/pdf,application/zip">
+            <span class="field-note" id="attachmentList">Max. 5 souborů, celkem 15&nbsp;MB.</span>
           </div>
         </div>
 
@@ -4846,6 +4854,7 @@ async function submitCase(){
     syncChoiceHidden('needChoice', 'needInput');
     syncChoiceHidden('hasWebsiteChoice', 'hasWebsiteInput');
     updateWebsiteFieldVisibility();
+    updateAttachmentList();
     setCaseSubmitState(btn, 'sent');
     setTimeout(() => setCaseSubmitState(btn, 'idle'), 3500);
   } catch (error) {
@@ -4941,6 +4950,27 @@ function updateWebsiteFieldVisibility() {
   if (wrap) wrap.style.display = hasWebsite ? 'block' : 'none';
   if (!hasWebsite && currentUrl) currentUrl.value = '';
 }
+
+function updateAttachmentList() {
+  const input = document.getElementById('attachmentsInput');
+  const list = document.getElementById('attachmentList');
+  if (!input || !list) return;
+
+  const files = Array.from(input.files || []);
+  if (!files.length) {
+    list.textContent = 'Max. 5 souborů, celkem 15 MB.';
+    return;
+  }
+
+  const names = files.slice(0, 5).map(file => file.name);
+  const extra = files.length > 5 ? ` + ${files.length - 5} další` : '';
+  list.textContent = `Vybráno: ${names.join(', ')}${extra}`;
+}
+
+(function(){
+  const input = document.getElementById('attachmentsInput');
+  if (input) input.addEventListener('change', updateAttachmentList);
+})();
 
 /* ============ presence graph lines ============ */
 (function(){
