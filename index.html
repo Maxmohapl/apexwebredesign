@@ -1302,9 +1302,25 @@
     color: var(--ink); text-transform: none;
   }
   .price.featured .price-name{ color: var(--ink);}
+  .price-subtitle{
+    font-weight: 650;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--ink);
+    margin: -4px 0 14px;
+  }
+  .price.soft{
+    background: color-mix(in oklab, var(--new) 3%, var(--surface));
+    border-color: color-mix(in oklab, var(--new) 16%, var(--line));
+  }
   .price-amount{
     font-weight: 800; font-size: 40px; letter-spacing: -0.03em; line-height: 1;
     margin: 0 0 16px;
+  }
+  .price-amount.is-text{
+    font-size: 34px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
   }
   .price-amount .prefix{ font-family: var(--mono); font-size: 13px; color: var(--ink-3); font-weight: 500; margin-right: 8px;}
   .price.featured .price-amount .prefix{ color: var(--ink-3); }
@@ -4201,7 +4217,7 @@
                   <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vizuální směr webu</li>
                   <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Homepage návrh</li>
                   <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Mobilní vzhled</li>
-                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>CTA prvky</li>
+                  <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Tlačítka na kontakt</li>
                   <li><div class="pck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>První dojem z webu</li>
                 </ul>
                 <div class="tl-callout">V&nbsp;této fázi už uvidíte, jak bude web reálně působit na zákazníky.</div>
@@ -4406,102 +4422,77 @@
         <div class="section-eyebrow">Ceník</div>
         <h2 class="section-title">Vyberte si&nbsp;řešení podle toho, kde právě jste.</h2>
       </div>
-      <p class="section-sub">Začínáte od&nbsp;nuly, máte starý web, nebo&nbsp;potřebujete kompletní online start? Vyberte si&nbsp;orientační balíček — finální rozsah a&nbsp;cenu doladíme po&nbsp;krátké konzultaci.</p>
+      <p class="section-sub">Nevíte, co zvolit? Pro&nbsp;většinu menších firem a&nbsp;živnostníků stačí Basic Web, který obsahuje moderní web, kontakt a&nbsp;poptávkový formulář. Pokud začínáte od&nbsp;nuly nebo&nbsp;chcete působit profesionálněji i&nbsp;vizuálně, zvolte Full Brand. E-shopy a&nbsp;větší projekty řeším individuálně podle rozsahu.</p>
     </div>
 
     <div class="pricing">
 
       <!-- BASIC WEB -->
-      <div class="price reveal">
-        <span class="price-label">Bez backendu</span>
-        <h3 class="price-name">Basic Web</h3>
-        <div class="price-amount"><span class="prefix">od</span>9&nbsp;900<span class="currency"> Kč</span></div>
-        <p class="price-best">Pro&nbsp;živnostníky, lokální služby a&nbsp;menší projekty, které potřebují rychle působit důvěryhodně online.</p>
-        <ul class="price-list">
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Jednostránkový web nebo&nbsp;menší prezentace</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Responzivní design</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formulář nebo&nbsp;tlačítko na&nbsp;kontakt</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO struktura</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rychlé načítání</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Napojení na&nbsp;e-mail</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Bez administrace a&nbsp;backendu</li>
-        </ul>
-        <a href="#form" class="btn btn-secondary">Chci Basic Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <div class="price-note">Ideální, pokud chcete jednoduchý web bez&nbsp;složitostí.</div>
-      </div>
-
-      <!-- PREMIUM WEB (featured) -->
       <div class="price featured reveal">
         <span class="price-badge">Nejčastější volba</span>
-        <span class="price-label">Firemní web</span>
-        <h3 class="price-name">Premium Web</h3>
-        <div class="price-amount"><span class="prefix">od</span>24&nbsp;900<span class="currency"> Kč</span></div>
-        <p class="price-best">Pro&nbsp;firmy, služby, studia, restaurace a&nbsp;značky, které chtějí působit profesionálně.</p>
+        <span class="price-label">Jednoduchý web</span>
+        <h3 class="price-name">Basic Web</h3>
+        <div class="price-amount">10&nbsp;000<span class="currency"> Kč</span></div>
+        <div class="price-subtitle">Jednoduchý web pro&nbsp;živnostníky a&nbsp;lokální firmy</div>
+        <p class="price-best">Pro&nbsp;většinu menších firem, služeb a&nbsp;živnostníků, kteří potřebují profesionálně působit online, ukázat služby a&nbsp;získávat poptávky.</p>
         <ul class="price-list">
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>4–8 sekcí nebo&nbsp;podstránek</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Návrh struktury webu</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Design na&nbsp;míru</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Úprava obsahu a&nbsp;textů</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formuláře a&nbsp;CTA prvky</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO nastavení</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Mobilní optimalizace</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pomoc s&nbsp;Google firemním profilem</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Moderní jednostránkový web nebo&nbsp;menší prezentace</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Přehledné představení služeb</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formulář nebo&nbsp;poptávkový formulář</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Možnost napojení na&nbsp;booking / rezervace</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Tlačítko na&nbsp;telefon, e-mail nebo&nbsp;WhatsApp</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Responzivní design pro&nbsp;mobil i&nbsp;počítač</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní lokální SEO nastavení</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rychlé načítání</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Napojení na&nbsp;e-mail</li>
         </ul>
-        <a href="#form" class="btn btn-primary">Chci Premium Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <div class="price-note">Nejlepší volba pro&nbsp;web, který má&nbsp;působit důvěryhodně a&nbsp;přivádět poptávky.</div>
+        <a href="#form" class="btn btn-primary">Chci Basic Web <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price-note">Ideální volba pro&nbsp;většinu menších firem, které chtějí jednoduchý, moderní a&nbsp;funkční web.</div>
       </div>
 
-      <!-- BRAND LAUNCH -->
-      <div class="price reveal">
+      <!-- FULL BRAND -->
+      <div class="price soft reveal">
         <span class="price-label">Nová značka</span>
-        <h3 class="price-name">Brand Launch</h3>
-        <div class="price-amount"><span class="prefix">od</span>39&nbsp;900<span class="currency"> Kč</span></div>
-        <p class="price-best">Pro&nbsp;nové projekty, které potřebují nejen web, ale&nbsp;i&nbsp;základní vizuální směr.</p>
+        <h3 class="price-name">Full Brand</h3>
+        <div class="price-amount">17&nbsp;000<span class="currency"> Kč</span></div>
+        <div class="price-subtitle">Web + základní vizuální identita</div>
+        <p class="price-best">Pro&nbsp;firmy nebo&nbsp;nové projekty, které chtějí nejen web, ale&nbsp;i&nbsp;lepší první dojem, základní styl značky, logo a&nbsp;sjednocenou prezentaci.</p>
         <ul class="price-list">
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní vizuální identita</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Jednoduché logo nebo&nbsp;logo refresh</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Barvy a&nbsp;typografie</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Brand styl pro&nbsp;web</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Web na&nbsp;míru</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Struktura a&nbsp;základní copywriting</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontaktní formuláře</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Google firemní profil</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Příprava podkladů pro&nbsp;sociální sítě</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Vše z&nbsp;balíčku Basic Web</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Jednoduché logo nebo&nbsp;úprava současného loga</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Barvy a&nbsp;typografie značky</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní vizuální směr</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Styl pro&nbsp;web a&nbsp;sociální sítě</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Úprava textů a&nbsp;struktury</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Lepší prezentace důvěryhodnosti</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pomoc s&nbsp;Google firemním profilem</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní podklady pro&nbsp;další propagaci</li>
         </ul>
-        <a href="#form" class="btn btn-secondary">Chci Brand Launch <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <div class="price-note">Pro&nbsp;firmy, které chtějí začít profesionálně od&nbsp;prvního dojmu.</div>
+        <a href="#form" class="btn btn-secondary">Chci Full Brand <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price-note">Vhodné, pokud začínáte od&nbsp;nuly nebo&nbsp;chcete, aby firma působila profesionálněji.</div>
       </div>
 
-    </div>
-
-    <!-- CUSTOM PROJECT / E-SHOP -->
-    <div class="custom reveal">
-      <div class="custom-left">
-        <span class="custom-label">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-          Individuálně
-        </span>
-        <h3>E-shop nebo&nbsp;větší projekt?</h3>
-        <div class="custom-amount">Podle dohody</div>
-        <p>E-shopy, rezervační systémy, členské sekce a&nbsp;složitější weby naceňujeme individuálně podle rozsahu, funkcí a&nbsp;napojení.</p>
-        <a href="#form" class="btn btn-primary custom-cta">
-          Chci nacenit e-shop
-          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="custom-right">
-        <h4>Co je v&nbsp;rozsahu</h4>
-        <ul class="custom-list">
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Návrh struktury e-shopu</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Produktové kategorie</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Košík a&nbsp;objednávkový proces</li>
+      <!-- INDIVIDUAL PROJECT -->
+      <div class="price reveal">
+        <span class="price-label">E-shop / větší web</span>
+        <h3 class="price-name">Individuální projekt</h3>
+        <div class="price-amount is-text">Podle domluvy</div>
+        <div class="price-subtitle">E-shop, více podstránek nebo&nbsp;speciální funkce</div>
+        <p class="price-best">Pro&nbsp;projekty, které potřebují e-shop, více funkcí, větší strukturu webu nebo&nbsp;individuální řešení podle konkrétních požadavků.</p>
+        <ul class="price-list">
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>E-shop nebo&nbsp;katalog produktů</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Více podstránek a&nbsp;kategorií</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Objednávkový proces</li>
           <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Platební a&nbsp;dopravní metody</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Základní SEO kategorií</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Responzivní design</li>
-          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Napojení podle potřeby</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pokročilejší formuláře</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rezervační systém</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Napojení na&nbsp;externí služby</li>
+          <li><span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Individuální návrh podle projektu</li>
         </ul>
+        <a href="#form" class="btn btn-secondary">Chci konzultaci <svg class="arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="price-note">Cena se určuje podle rozsahu, funkcí a&nbsp;náročnosti projektu.</div>
       </div>
+
     </div>
 
     <p class="pricing-note">Ceny jsou orientační a&nbsp;bez&nbsp;DPH. Finální cena záleží na&nbsp;rozsahu, obsahu, funkcích a&nbsp;dodaných podkladech.</p>
@@ -4668,7 +4659,7 @@
       </details>
       <details>
         <summary>Kolik stojí web? <span class="plus"></span></summary>
-        <p>Orientačně od&nbsp;9&nbsp;900&nbsp;Kč. Přesná cena záleží na&nbsp;rozsahu, obsahu a&nbsp;funkcích.</p>
+        <p>Basic Web stojí 10&nbsp;000&nbsp;Kč. Full Brand stojí 17&nbsp;000&nbsp;Kč a&nbsp;e-shopy nebo&nbsp;větší projekty naceňujeme podle rozsahu.</p>
       </details>
       <details>
         <summary>Je poptávka závazná? <span class="plus"></span></summary>
