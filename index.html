@@ -2363,7 +2363,7 @@
       scroll-padding-inline: calc((100% - var(--cs-card-w)) / 2);
       scrollbar-width: thin;
       scrollbar-color: var(--line) transparent;
-      padding: 2px calc((100% - var(--cs-card-w)) / 2) 8px;
+      padding: 8px calc((100% - var(--cs-card-w)) / 2) 10px;
     }
   }
 
@@ -2390,6 +2390,12 @@
     border-color: var(--new);
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--new) 18%, transparent);
     transform: translateY(-3px);
+  }
+  @media (max-width: 520px){
+    .cs-thumb:hover,
+    .cs-thumb.active{
+      transform: none;
+    }
   }
   .cs-thumb.soon{ cursor: default; opacity: .42; pointer-events: none; }
   .cs-thumb img{ width: 100%; flex: 1; object-fit: cover; object-position: top; display: block; }
