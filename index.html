@@ -256,7 +256,10 @@
     position: relative;
   }
   .hero-grid > *{ min-width: 0; }
-  @media (max-width: 1080px){ .hero-grid{ grid-template-columns: 1fr; gap: 56px; } }
+  @media (max-width: 1080px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .transformer{ display: none; }
+  }
 
   .badge{
     display: inline-flex; align-items: center; gap: 10px;
