@@ -2355,12 +2355,15 @@
   .cs-strip::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 2px; }
   @media (max-width: 520px){
     .cs-strip{
+      --cs-card-w: min(76vw, 320px);
       display: flex;
+      gap: 12px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
+      scroll-padding-inline: calc((100% - var(--cs-card-w)) / 2);
       scrollbar-width: thin;
       scrollbar-color: var(--line) transparent;
-      padding-bottom: 6px;
+      padding: 2px calc((100% - var(--cs-card-w)) / 2) 8px;
     }
   }
 
@@ -2374,7 +2377,14 @@
     display: flex; flex-direction: column;
     transition: border-color .22s ease, box-shadow .22s ease, transform .22s cubic-bezier(.2,.7,.2,1);
   }
-  @media (max-width: 520px){ .cs-thumb{ flex: 0 0 78vw; height: 132px; } }
+  @media (max-width: 520px){
+    .cs-thumb{
+      flex: 0 0 var(--cs-card-w);
+      height: 132px;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+    }
+  }
   .cs-thumb:hover{ border-color: var(--ink-3); transform: translateY(-2px); }
   .cs-thumb.active{
     border-color: var(--new);
@@ -5335,6 +5345,11 @@ function updateAttachmentList() {
 
     strip.querySelectorAll('.cs-thumb[data-idx]').forEach(th => {
       th.classList.toggle('active', +th.dataset.idx === idx);
+    });
+    strip.querySelector(`.cs-thumb[data-idx="${idx}"]`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center'
     });
 
     const h2       = document.getElementById('csH2');
